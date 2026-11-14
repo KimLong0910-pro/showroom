@@ -2282,6 +2282,12 @@
                         <i class="fa-solid fa-code-compare"></i> ${isCompared ? "Đang so sánh" : "+ So sánh xe"}
                     </button>
                 </div>
+                
+                <div class="pt-1 text-center">
+                    <a href="detail.html?id=${car.id}" class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 underline underline-offset-4 transition">
+                        <i class="fa-solid fa-up-right-from-square"></i> Mở trang chi tiết đầy đủ (Chia sẻ link)
+                    </a>
+                </div>
             `;
 
         openModal("detailModal");
