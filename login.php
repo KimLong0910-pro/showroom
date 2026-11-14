@@ -2,6 +2,12 @@
 session_start();
 require_once 'db.php';
 
+// Nếu đã đăng nhập rồi thì chuyển thẳng vào trang quản trị
+if (!empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+    header('Location: admin.php');
+    exit();
+}
+
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -9,11 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (!empty($username) && !empty($password)) {
-        // Cho phép đăng nhập nhanh admin/admin123 hoặc so sánh qua CSDL
-        if (($username === 'admin' && ($password === 'admin123' || $password === 'admin'))) {
+        // Tài khoản dự phòng khi chưa bật MySQL
+        if ($username === 'admin' && ($password === 'admin123' || $password === 'admin')) {
+            session_regenerate_id(true);
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_user'] = $username;
-            header('Location: admin.html');
+            header('Location: admin.php');
             exit();
         }
 
@@ -24,9 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user = $stmt->fetch();
 
                 if ($user && (password_verify($password, $user['password']) || $password === $user['password'])) {
+                    session_regenerate_id(true);
                     $_SESSION['admin_logged_in'] = true;
                     $_SESSION['admin_user'] = $user['username'];
-                    header('Location: admin.html');
+                    header('Location: admin.php');
                     exit();
                 } else {
                     $error = 'Tài khoản hoặc mật khẩu không chính xác!';
@@ -42,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi" class="dark">
 <head>

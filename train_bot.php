@@ -1,4 +1,7 @@
 <?php
+require_once 'auth_check.php';
+requireAdminPage();
+
 session_start();
 require_once 'db.php';
 
@@ -51,7 +54,7 @@ try {
     <div class="max-w-4xl mx-auto space-y-6">
         <div class="flex justify-between items-center bg-gray-800 p-4 rounded-xl border border-gray-700">
             <h1 class="text-xl font-bold text-red-500">Huấn Luyện AI Chatbot (Train Bot)</h1>
-            <a href="admin.html" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm transition">Quay về Admin</a>
+            <a href="admin.php" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm transition">Quay về Admin</a>
         </div>
 
         <!-- Form Thêm Tri Thức Mới -->
