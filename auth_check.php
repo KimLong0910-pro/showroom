@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function requireAdminPage() {
     if (empty($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-        header('Location: login.php');
+        header('Location: login.html');
         exit();
     }
 }
@@ -20,5 +20,15 @@ function requireAdminApi() {
         ], JSON_UNESCAPED_UNICODE);
         exit();
     }
+}
+
+// Endpoint cho phép các file HTML kiểm tra phiên đăng nhập qua fetch()
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'auth_check.php') {
+    header("Content-Type: application/json; charset=UTF-8");
+    echo json_encode([
+        "logged_in" => (!empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true),
+        "user" => $_SESSION['admin_user'] ?? null
+    ], JSON_UNESCAPED_UNICODE);
+    exit();
 }
 ?>
