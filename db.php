@@ -23,17 +23,15 @@ $conn = null;
 $pdo = null;
 
 try {
-    // 1. Kết nối tới MySQL Server
-    $pdoInit = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
-
-    // 2. Nếu chạy XAMPP Local -> Tự tạo Database nếu chưa có
     if ($isLocal) {
+        // Chỉ chạy tạo DB tự động khi ở máy cá nhân (XAMPP)
+        $pdoInit = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
         $pdoInit->exec("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     }
 
-    // 3. Kết nối vào Database chính
+    // Kết nối thẳng vào Database (Bắt buộc trên InfinityFree)
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC

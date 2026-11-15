@@ -1173,7 +1173,7 @@
           </div>
           <div class="flex items-center gap-1.5">
             <a
-              href="ai_chat.html"
+              href="bot_train.html"
               target="_blank"
               title="Mở trang tư vấn AI toàn màn hình"
               class="w-7 h-7 rounded-full bg-black/20 text-white hover:bg-black/40 flex items-center justify-center text-xs transition">
@@ -2386,7 +2386,7 @@
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-          const res = await fetch("ai_chat.php", {
+          const res = await fetch("bot_train.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: text }),

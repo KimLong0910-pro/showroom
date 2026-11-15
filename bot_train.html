@@ -131,7 +131,7 @@
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-          const res = await fetch("ai_chat.php", {
+          const res = await fetch("bot_train.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: text }),

@@ -5,12 +5,12 @@
 - một folder chứa các hình ảnh tên là "images". chứa ![alt text](/images/qrcode.jpg)
 - một file index.html
 - một file admin.html
-- một file ai_chat.html
+- một file bot_train.html
 - một file detail.html
 - một file login.html
 - một file login.php
 - một file logout.php
-- một file ai_chat.php
+- một file bot_train.php
 - một file db.php
 - một file delete_car.php
 - một file edit_car.php
@@ -1202,7 +1202,7 @@
           </div>
           <div class="flex items-center gap-1.5">
             <a
-              href="ai_chat.html"
+              href="bot_train.html"
               target="_blank"
               title="Mở trang tư vấn AI toàn màn hình"
               class="w-7 h-7 rounded-full bg-black/20 text-white hover:bg-black/40 flex items-center justify-center text-xs transition">
@@ -2415,7 +2415,7 @@
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-          const res = await fetch("ai_chat.php", {
+          const res = await fetch("bot_train.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: text }),
@@ -3122,7 +3122,7 @@
 </html>
 ```
 
-### file ai_chat.html:
+### file bot_train.html:
 ```html
 <!doctype html>
 <html lang="vi" class="dark">
@@ -3257,7 +3257,7 @@
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-          const res = await fetch("ai_chat.php", {
+          const res = await fetch("bot_train.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: text }),
@@ -3763,7 +3763,7 @@ exit();
 ?>
 ```
 
-### file ai_chat.php:
+### file bot_train.php:
 ```php
 <?php
 require_once 'db.php';
@@ -3775,23 +3775,32 @@ if (!$input && isset($_POST['message'])) {
     $input = $_POST;
 }
 
-$message = mb_strtolower(trim($input['message'] ?? ''), 'UTF-8');
-
-if (empty($message)) {
-    echo json_encode(["reply" => "Chào quý khách! Em là Trợ lý AI Showroom 4TL. Em có thể tư vấn mẫu xe, mức giá, chương trình trả góp hay đăng ký lái thử cho quý khách."], JSON_UNESCAPED_UNICODE);
-    exit();
+function toLowerUtf8($str) {
+    return function_exists('mb_strtolower') ? mb_strtolower($str, 'UTF-8') : strtolower($str);
 }
 
-// Hàm chuẩn hóa tiếng Việt bỏ dấu để tìm kiếm mờ (fuzzy match)
+function strPosUtf8($haystack, $needle) {
+    return function_exists('mb_strpos') ? mb_strpos($haystack, $needle) : strpos($haystack, $needle);
+}
+
 function removeAccents($str) {
-    $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
-    $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", 'e', $str);
-    $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/", 'i', $str);
-    $str = preg_replace("/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/", 'o', $str);
-    $str = preg_replace("/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/", 'u', $str);
-    $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/", 'y', $str);
-    $str = preg_replace("/(đ)/", 'd', $str);
+    $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/u", 'a', $str);
+    $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/u", 'e', $str);
+    $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/u", 'i', $str);
+    $str = preg_replace("/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/u", 'o', $str);
+    $str = preg_replace("/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/u", 'u', $str);
+    $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/u", 'y', $str);
+    $str = preg_replace("/(đ)/u", 'd', $str);
     return $str;
+}
+
+$message = toLowerUtf8(trim($input['message'] ?? ''));
+
+if (empty($message)) {
+    echo json_encode([
+        "reply" => "Chào quý khách! Em là Trợ lý AI Showroom 4TL. Em có thể tư vấn mẫu xe, mức giá, chương trình trả góp hay đăng ký lái thử cho quý khách."
+    ], JSON_UNESCAPED_UNICODE);
+    exit();
 }
 
 $msgNoAccent = removeAccents($message);
@@ -3810,15 +3819,13 @@ if (isset($pdo) && $pdo) {
             $kwList = explode(',', $row['keywords']);
             $score = 0;
             foreach ($kwList as $kw) {
-                $kwClean = mb_strtolower(trim($kw), 'UTF-8');
+                $kwClean = toLowerUtf8(trim($kw));
                 $kwNoAccent = removeAccents($kwClean);
                 if (empty($kwClean)) continue;
 
-                // Khớp chính xác cụm từ khóa (có dấu hoặc không dấu)
-                if (mb_strpos($message, $kwClean) !== false || strpos($msgNoAccent, $kwNoAccent) !== false) {
+                if (strPosUtf8($message, $kwClean) !== false || strpos($msgNoAccent, $kwNoAccent) !== false) {
                     $score += 3;
                 } else {
-                    // Tìm kiếm mờ bằng độ tương đồng từ (similar_text) cho từng từ trong câu
                     $msgWords = explode(' ', $msgNoAccent);
                     foreach ($msgWords as $w) {
                         if (strlen($w) >= 4 && strlen($kwNoAccent) >= 4) {
@@ -3838,38 +3845,50 @@ if (isset($pdo) && $pdo) {
         }
 
         if ($bestScore >= 3) {
-            $reply = nl2br(htmlspecialchars($bestResponse));
+            $reply = nl2br(htmlspecialchars($bestResponse, ENT_QUOTES, 'UTF-8'));
         }
     } catch (Exception $e) {
         // Bỏ qua nếu bảng chưa tồn tại
     }
 }
 
-// ƯU TIÊN 2: TRA CỨU THÔNG TIN XE TỪ BẢNG CARS
+// ƯU TIÊN 2: LẤY DANH SÁCH XE TỪ PDO (CÓ DỮ LIỆU DỰ PHÒNG NẾU LỖI DB)
 $cars = [];
-if (isset($conn) && $conn && !$conn->connect_error) {
-    $result = @$conn->query("SELECT * FROM cars");
-    if ($result && $result->num_rows > 0) {
-        while ($car = $result->fetch_assoc()) {
-            $cars[] = $car;
-        }
+if (isset($pdo) && $pdo) {
+    try {
+        $cars = $pdo->query("SELECT * FROM cars ORDER BY id DESC")->fetchAll();
+    } catch (Exception $e) {
+        $cars = [];
     }
+}
+
+if (empty($cars)) {
+    $cars = [
+        ['name' => 'VinFast VF3', 'brand' => 'VinFast', 'price' => 240000000, 'engine' => 'Động cơ điện đơn (43 HP)', 'fuel' => 'Điện'],
+        ['name' => 'VinFast VF5 Plus', 'brand' => 'VinFast', 'price' => 468000000, 'engine' => 'Động cơ điện (134 HP)', 'fuel' => 'Điện'],
+        ['name' => 'VinFast VF8 Plus', 'brand' => 'VinFast', 'price' => 1270000000, 'engine' => '2 Động cơ điện (402 HP)', 'fuel' => 'Điện'],
+        ['name' => 'Mercedes-Benz C-Class C300 AMG', 'brand' => 'Mercedes-Benz', 'price' => 2099000000, 'engine' => '2.0L Turbo EQ Boost (258 HP)', 'fuel' => 'Xăng Mild-Hybrid'],
+        ['name' => 'Porsche 911 Carrera S', 'brand' => 'Porsche', 'price' => 8500000000, 'engine' => '3.0L Boxer Twin-Turbo (450 HP)', 'fuel' => 'Xăng'],
+        ['name' => 'Mercedes-AMG G63', 'brand' => 'Mercedes-Benz', 'price' => 11750000000, 'engine' => '4.0L V8 Bi-Turbo (585 HP)', 'fuel' => 'Xăng'],
+        ['name' => 'Lamborghini Urus S', 'brand' => 'Lamborghini', 'price' => 16500000000, 'engine' => '4.0L V8 Twin-Turbo (666 HP)', 'fuel' => 'Xăng'],
+        ['name' => 'Ferrari F8 Tributo', 'brand' => 'Ferrari', 'price' => 19000000000, 'engine' => '3.9L V8 Twin-Turbo (710 HP)', 'fuel' => 'Xăng'],
+    ];
 }
 
 if (!$reply && !empty($cars)) {
     foreach ($cars as $car) {
-        $carNameLower = mb_strtolower($car['name'], 'UTF-8');
+        $carNameLower = toLowerUtf8($car['name']);
         $carNameNoAccent = removeAccents($carNameLower);
         $words = explode(' ', $carNameNoAccent);
         $lastWord = end($words);
 
-        if (mb_strpos($message, $carNameLower) !== false ||
+        if (strPosUtf8($message, $carNameLower) !== false ||
             strpos($msgNoAccent, $carNameNoAccent) !== false ||
             (strlen($lastWord) >= 3 && strpos($msgNoAccent, $lastWord) !== false) ||
             ($car['name'] === 'VinFast VF3' && (strpos($msgNoAccent, 'vf3') !== false || strpos($msgNoAccent, 'vf 3') !== false)) ||
             ($car['name'] === 'Mercedes-AMG G63' && (strpos($msgNoAccent, 'g63') !== false || strpos($msgNoAccent, 'g 63') !== false))
         ) {
-            $priceFormatted = number_format($car['price'], 0, ',', '.');
+            $priceFormatted = number_format((float)$car['price'], 0, ',', '.');
             $reply = "Dạ, mẫu xe <strong>{$car['name']}</strong> ({$car['brand']}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$car['engine']} | Nhiên liệu: {$car['fuel']}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
             break;
         }
@@ -3888,10 +3907,10 @@ if (!$reply && (strpos($msgNoAccent, 'duoi') !== false || strpos($msgNoAccent, '
     if ($limitPrice > 0 && !empty($cars)) {
         $matches = array_filter($cars, fn($c) => (float)$c['price'] <= $limitPrice);
         if (!empty($matches)) {
-            usort($matches, fn($a, $b) => $b['price'] - $a['price']);
+            usort($matches, fn($a, $b) => (float)$b['price'] - (float)$a['price']);
             $list = [];
             foreach (array_slice($matches, 0, 4) as $m) {
-                $p = number_format($m['price'], 0, ',', '.');
+                $p = number_format((float)$m['price'], 0, ',', '.');
                 $list[] = "• <strong>{$m['name']}</strong>: {$p} VNĐ";
             }
             $reply = "Dạ với tầm tài chính <strong>{$label}</strong>, Showroom 4TL đề xuất các mẫu xe:<br>" . implode("<br>", $list);
@@ -3940,17 +3959,15 @@ $conn = null;
 $pdo = null;
 
 try {
-    // 1. Kết nối tới MySQL Server
-    $pdoInit = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
-
-    // 2. Nếu chạy XAMPP Local -> Tự tạo Database nếu chưa có
     if ($isLocal) {
+        // Chỉ chạy tạo DB tự động khi ở máy cá nhân (XAMPP)
+        $pdoInit = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
         $pdoInit->exec("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     }
 
-    // 3. Kết nối vào Database chính
+    // Kết nối thẳng vào Database (Bắt buộc trên InfinityFree)
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
