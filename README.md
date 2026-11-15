@@ -1556,48 +1556,6 @@
         }
       });
 
-      // DARK / LIGHT THEME CONTROLLER
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-
-      function setTheme(mode) {
-        if (mode === "light") {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.classList.add("light");
-          localStorage.setItem("theme", "light");
-          if (themeIcon) {
-            themeIcon.className = "fa-solid fa-moon text-slate-700 text-base";
-          }
-          if (themeToggle) {
-            themeToggle.title = "Chuyển sang chế độ Tối (Dark Mode)";
-          }
-        } else {
-          document.documentElement.classList.add("dark");
-          document.documentElement.classList.remove("light");
-          localStorage.setItem("theme", "dark");
-          if (themeIcon) {
-            themeIcon.className = "fa-solid fa-sun text-yellow-400 text-base";
-          }
-          if (themeToggle) {
-            themeToggle.title = "Chuyển sang chế độ Sáng (Light Mode)";
-          }
-        }
-      }
-
-      function toggleTheme() {
-        const isDark = document.documentElement.classList.contains("dark");
-        setTheme(isDark ? "light" : "dark");
-      }
-
-      function initTheme() {
-        const savedTheme = localStorage.getItem("theme") || "dark";
-        setTheme(savedTheme);
-      }
-
-      if (themeToggle) {
-        themeToggle.onclick = toggleTheme;
-      }
-
       // FETCH CARS DỮ LIỆU TỪ SERVER VỚI FALLBACK AN TOÀN
       async function fetchCars() {
         try {
@@ -1732,11 +1690,11 @@
                         
                         <!-- Card Media -->
                         <div class="relative overflow-hidden aspect-[16/10] bg-slate-900">
-                            <img src="${car.image}" alt="${car.name}" 
-                                 loading="lazy"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer"
-                                 onclick="openDetailModal(${carId})"
-                                 onerror="this.src='https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600'">
+                            <img src="${getCarImage(car.image)}" alt="${car.name}" 
+                              loading="lazy"
+                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer"
+                              onclick="openDetailModal(${carId})"
+                              onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                             
                             <!-- Badges -->
                             <div class="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
@@ -2064,7 +2022,7 @@
             .map(
               (c) => `
                     <div class="relative group" title="${c.name}">
-                        <img src="${c.image}" class="w-10 h-10 object-cover rounded-xl border-2 border-indigo-500 shadow" onerror="this.src='https://via.placeholder.com/40'">
+                        <img src="${getCarImage(c.image)}" class="w-10 h-10 object-cover rounded-xl border-2 border-indigo-500 shadow" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                         <button onclick="toggleCompareCar(${c.id})" title="Bỏ xe này" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-indigo-600 hover:bg-violet-700 rounded-full text-[9px] text-white flex items-center justify-center shadow">✕</button>
                     </div>
                 `,
@@ -2137,7 +2095,7 @@
                                 (c) => `
                                 <th class="p-3 text-slate-900 dark:text-white font-bold text-base min-w-[220px]">
                                     <div class="relative group mb-2">
-                                        <img src="${c.image}" class="w-full h-36 object-cover rounded-xl border border-gray-200 dark:border-white/10" onerror="this.src='https://via.placeholder.com/300'">
+                                        <img src="${getCarImage(c.image)}" class="w-full h-36 object-cover rounded-xl border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                                         <button onclick="toggleCompareCar(${c.id}); openCompareModal();" title="Bỏ xe này" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-indigo-600 hover:bg-violet-700 text-white flex items-center justify-center text-xs shadow hover:scale-110 transition">✕</button>
                                     </div>
                                     <div class="leading-tight">${c.name}</div>
@@ -2212,7 +2170,7 @@
 
         document.getElementById("modalContent").innerHTML = `
                 <div class="relative rounded-2xl overflow-hidden mb-5">
-                    <img src="${car.image}" class="w-full h-80 object-cover" onerror="this.src='https://via.placeholder.com/600x350'">
+                    <img src="${getCarImage(car.image)}" class="w-full h-80 object-cover" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                     <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                         ${car.brand}
                     </span>
@@ -2487,7 +2445,6 @@
       }
 
       // Initialize App
-      initTheme();
       fetchCars();
     </script>
   </body>
@@ -2808,35 +2765,7 @@
           window.location.replace("login.html");
         }
       })();
-      // THEME CONTROLLER
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-
-      function setTheme(mode) {
-        if (mode === "light") {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.classList.add("light");
-          localStorage.setItem("theme", "light");
-          if (themeIcon) themeIcon.className = "fa-solid fa-moon text-slate-700 text-base";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Tối (Dark Mode)";
-        } else {
-          document.documentElement.classList.add("dark");
-          document.documentElement.classList.remove("light");
-          localStorage.setItem("theme", "dark");
-          if (themeIcon) themeIcon.className = "fa-solid fa-sun text-yellow-400 text-base";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Sáng (Light Mode)";
-        }
-      }
-
-      function toggleTheme() {
-        const isDark = document.documentElement.classList.contains("dark");
-        setTheme(isDark ? "light" : "dark");
-      }
-
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      setTheme(savedTheme);
-      if (themeToggle) themeToggle.onclick = toggleTheme;
-
+      
       let adminCars = [];
 
       async function loadAdminCars() {
@@ -2959,7 +2888,7 @@
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition">
                     <td class="p-3 text-gray-400 font-mono">#${car.id}</td>
                     <td class="p-3">
-                        <img src="${car.image}" class="w-14 h-9 object-cover rounded-lg border border-gray-200 dark:border-white/10" onerror="this.src='https://via.placeholder.com/60x40'">
+                        <img src="${getCarImage(car.image)}" class="w-14 h-9 object-cover rounded-lg border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                     </td>
                     <td class="p-3 font-bold text-slate-900 dark:text-white">${car.name}</td>
                     <td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 font-bold">${car.brand}</span></td>
@@ -3298,35 +3227,6 @@
     </div>
 
     <script>
-      // THEME CONTROLLER
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-
-      function setTheme(mode) {
-        if (mode === "light") {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.classList.add("light");
-          localStorage.setItem("theme", "light");
-          if (themeIcon) themeIcon.className = "fa-solid fa-moon text-slate-700 text-sm";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Tối (Dark Mode)";
-        } else {
-          document.documentElement.classList.add("dark");
-          document.documentElement.classList.remove("light");
-          localStorage.setItem("theme", "dark");
-          if (themeIcon) themeIcon.className = "fa-solid fa-sun text-yellow-400 text-sm";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Sáng (Light Mode)";
-        }
-      }
-
-      function toggleTheme() {
-        const isDark = document.documentElement.classList.contains("dark");
-        setTheme(isDark ? "light" : "dark");
-      }
-
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      setTheme(savedTheme);
-      if (themeToggle) themeToggle.onclick = toggleTheme;
-
       const chatBox = document.getElementById("chatBox");
       const userInput = document.getElementById("userInput");
       const sendBtn = document.getElementById("sendBtn");
@@ -3459,35 +3359,6 @@
     </div>
 
     <script>
-      // THEME CONTROLLER
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-
-      function setTheme(mode) {
-        if (mode === "light") {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.classList.add("light");
-          localStorage.setItem("theme", "light");
-          if (themeIcon) themeIcon.className = "fa-solid fa-moon text-slate-700 text-sm";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Tối (Dark Mode)";
-        } else {
-          document.documentElement.classList.add("dark");
-          document.documentElement.classList.remove("light");
-          localStorage.setItem("theme", "dark");
-          if (themeIcon) themeIcon.className = "fa-solid fa-sun text-yellow-400 text-sm";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Sáng (Light Mode)";
-        }
-      }
-
-      function toggleTheme() {
-        const isDark = document.documentElement.classList.contains("dark");
-        setTheme(isDark ? "light" : "dark");
-      }
-
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      setTheme(savedTheme);
-      if (themeToggle) themeToggle.onclick = toggleTheme;
-
       const fallbackCars = [
         {
           id: 1,
@@ -3571,7 +3442,7 @@
                     <!-- Left: Image & Badge -->
                     <div class="lg:col-span-7 space-y-4">
                         <div class="relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-900 border border-gray-200 dark:border-white/10 shadow-2xl">
-                            <img src="${car.image}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/600x400'">
+                            <img src="${getCarImage(car.image)}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                             <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
                                 ${car.brand}
                             </span>
@@ -4045,48 +3916,150 @@ echo json_encode(["reply" => $reply], JSON_UNESCAPED_UNICODE);
 ### file db.php:
 ```php
 <?php
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "web_ban_xe";
+// Tự động nhận diện môi trường chạy Local (XAMPP) hay Online (Hosting PHP)
+$hostName = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+$isLocal = in_array($remoteAddr, ['127.0.0.1', '::1']) 
+           || strpos($hostName, 'localhost') !== false 
+           || strpos($hostName, '127.0.0.1') !== false;
 
-// Kết nối MySQLi
-$conn = @new mysqli($host, $user, $pass, $dbname);
-if ($conn && !$conn->connect_error) {
-    $conn->set_charset("utf8mb4");
+if ($isLocal) {
+    $host = "localhost";
+    $user = "root";
+    $pass = "";
+    $dbname = "web_ban_xe";
+} else {
+    // THAY 4 THÔNG SỐ DƯỚI ĐÂY BẰNG THÔNG TIN MYSQL TRÊN HOSTING CỦA BẠN (VD: InfinityFree)
+    $host = "sql305.infinityfree.com";
+    $user = "if0_43447777";
+    $pass = "1oa1wl9IvwkrK";
+    $dbname = "if0_43447777_web_ban_xe";
 }
 
-// Kết nối PDO cho các file login, edit_car
+$conn = null;
+$pdo = null;
+
 try {
+    // 1. Kết nối tới MySQL Server
+    $pdoInit = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
+
+    // 2. Nếu chạy XAMPP Local -> Tự tạo Database nếu chưa có
+    if ($isLocal) {
+        $pdoInit->exec("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    }
+
+    // 3. Kết nối vào Database chính
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
+
+    // 4. Tự động tạo 5 bảng nếu chưa tồn tại (Không cần import schema.sql)
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS cars (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            brand VARCHAR(100) NOT NULL,
+            price DECIMAL(15,2) NOT NULL,
+            image VARCHAR(255) DEFAULT 'default.jpg',
+            engine VARCHAR(100),
+            transmission VARCHAR(100),
+            fuel VARCHAR(50),
+            description TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(50) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+        CREATE TABLE IF NOT EXISTS bot_knowledge (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            keywords VARCHAR(255) NOT NULL,
+            response TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+        CREATE TABLE IF NOT EXISTS bookings (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            customer_name VARCHAR(150) NOT NULL,
+            phone VARCHAR(20) NOT NULL,
+            car_name VARCHAR(255) NOT NULL,
+            booking_date VARCHAR(50) DEFAULT NULL,
+            note TEXT DEFAULT NULL,
+            status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+        CREATE TABLE IF NOT EXISTS deposits (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            car_name VARCHAR(255) NOT NULL,
+            car_price DECIMAL(15,2) NOT NULL,
+            memo VARCHAR(100) NOT NULL,
+            customer_name VARCHAR(150) DEFAULT 'Khách đặt online',
+            customer_phone VARCHAR(20) DEFAULT '',
+            status ENUM('pending', 'verified', 'cancelled') DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+
+    // 5. Nạp tài khoản Admin mặc định (đã mã hóa mật khẩu) nếu bảng users trống
+    if ((int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn() === 0) {
+        $stmtUser = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        $stmtUser->execute(['admin', password_hash('admin123', PASSWORD_DEFAULT)]);
+    }
+
+    // 6. Nạp tri thức AI Chatbot mặc định nếu bảng bot_knowledge trống
+    if ((int)$pdo->query("SELECT COUNT(*) FROM bot_knowledge")->fetchColumn() === 0) {
+        $pdo->exec("
+            INSERT INTO bot_knowledge (keywords, response) VALUES
+            ('gia, bao nhieu, chi phi', 'Giá các dòng xe tại Showroom 4TL dao động từ 240 triệu (VinFast VF3) đến hơn 19 tỷ VNĐ (Ferrari F8 Tributo).'),
+            ('bao hanh, dich vu', 'Tất cả siêu xe và xe sang bán ra đều bảo hành 3 - 10 năm chính hãng, cam kết kiểm định 160 bước không đâm đụng, không ngập nước.'),
+            ('tra gop, vay', 'Showroom 4TL hỗ trợ trả góp qua ngân hàng lên đến 80% giá trị xe trong thời gian tối đa 7 năm với lãi suất ưu đãi chỉ từ 7.5%/năm.')
+        ");
+    }
+
+    // 7. Nạp trọn bộ 20 mẫu xe mặc định từ schema.sql nếu bảng cars trống
+    if ((int)$pdo->query("SELECT COUNT(*) FROM cars")->fetchColumn() === 0) {
+        $pdo->exec("
+            INSERT INTO cars (name, brand, price, image, engine, transmission, fuel, description) VALUES
+            ('VinFast VF3', 'VinFast', 240000000.00, 'https://vinfastquan12.com.vn/wp-content/uploads/2025/02/VinFast_VF3_Mau_trang.webp', 'Động cơ điện đơn (43 HP)', 'Tự động', 'Điện', 'Cơn sốt xe điện mini tại Việt Nam! Kiểu dáng hình hộp cá tính, gầm cao 191mm vượt địa hình ngập nước, Best Seller tại Showroom 4TL.'),
+            ('Mercedes-Benz C-Class C300 AMG', 'Mercedes-Benz', 2099000000.00, 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800', '2.0L Turbo EQ Boost (258 HP)', 'Tự động 9 cấp 9G-TRONIC', 'Xăng Mild-Hybrid', 'Tiểu S-Class với thiết kế thể thao AMG Line, màn hình giải trí trung tâm 11.9 inch định dạng dọc, đèn Digital Light tối tân nhất.'),
+            ('Porsche 911 Carrera S', 'Porsche', 8500000000.00, 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800', '3.0L Boxer Twin-Turbo (450 HP)', 'Tự động 8 cấp PDK', 'Xăng', 'Mẫu xe thể thao huyền thoại mang lại cảm giác lái đỉnh cao, thiết kế timeless vượt thời gian đi cùng gói thể thao Sport Chrono Package.'),
+            ('Mercedes-AMG G63', 'Mercedes-Benz', 11750000000.00, 'https://images.unsplash.com/photo-1520050206274-a1ae44613e6d?w=800', '4.0L V8 Bi-Turbo (585 HP)', 'Tự động 9 cấp AMG Speedshift', 'Xăng', 'Mẫu SUV địa hình hạng sang đẳng cấp biểu tượng hoàng gia. Hệ dẫn động 4 bánh toàn thời gian 4MATIC với 3 khóa vi sai độc lập.'),
+            ('BMW 740i Pure Excellence', 'BMW', 4699000000.00, 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800', '3.0L I6 TwinPower (381 HP)', 'Tự động 8 cấp Steptronic', 'Xăng Mild-Hybrid', 'Sedan hạng sang cao cấp đầy công nghệ của BMW với màn hình Theatre Screen 31.3 inch chuẩn 8K cùng hệ thống âm thanh vòm Bowers & Wilkins Diamond.'),
+            ('VinFast VF8 Plus', 'VinFast', 1270000000.00, 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800', '2 Động cơ điện (402 HP - AWD)', 'Tự động đơn cấp', 'Điện', 'SUV điện thông minh phân khúc D, thiết kế Pininfarina đỉnh cao, tăng tốc 0-100 km/h trong 5.5 giây và trợ lái thông minh ADAS cấp độ 2.'),
+            ('VinFast VF5 Plus', 'VinFast', 468000000.00, 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800', 'Động cơ điện (134 HP - 135 Nm)', 'Tự động đơn cấp', 'Điện', 'A-SUV thuần điện quốc dân nhỏ gọn, chi phí vận hành siêu rẻ chỉ bằng 1/3 xe xăng, thời trang và linh hoạt trong đô thị.'),
+            ('Toyota Camry 2.5Q', 'Toyota', 1405000000.00, 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800', '2.5L Dynamic Force (207 HP)', 'Tự động 8 cấp Direct Shift', 'Xăng', 'Mẫu sedan hạng D chuẩn mực của sự thành đạt, bền bỉ, êm ái bậc nhất phân khúc với gói an toàn Toyota Safety Sense 2.0.'),
+            ('Toyota Corolla Cross 1.8HEV', 'Toyota', 905000000.00, 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800', '1.8L Hybrid Xăng + Điện (122 HP)', 'Vô cấp e-CVT', 'Xăng Hybrid', 'Mẫu Urban SUV tiết kiệm nhiên liệu tối ưu với động cơ Hybrid tiên tiến, khung gầm TNGA vững chắc và vận hành êm ái nhẹ nhàng.'),
+            ('Ford Ranger Raptor 3.0 V6', 'Ford', 1299000000.00, 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800', '3.0L V6 EcoBoost Twin-Turbo (392 HP)', 'Tự động 10 cấp', 'Xăng', 'Vua bán tải hiệu năng cao, trang bị bộ giảm xóc FOX 2.5 inch Live Valve thích ứng theo thời gian thực và chế độ lái sa mạc Baja Mode.'),
+            ('Ford Everest Titanium+ 4x4', 'Ford', 1468000000.00, 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800', '2.0L Bi-Turbo Diesel (210 HP)', 'Tự động 10 cấp điện tử', 'Dầu (Diesel)', 'SUV 7 chỗ thực thụ đậm chất cơ bắp Mỹ, khả năng lội nước 800mm, camera 360 độ và công nghệ đỗ xe tự động 2.0.'),
+            ('Hyundai Tucson 2.0 Diesel', 'Hyundai', 959000000.00, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800', '2.0L Smartstream D2.0 (186 HP)', 'Tự động 8 cấp số nút bấm', 'Dầu (Diesel)', 'Crossover thiết kế tương lai Parametric Jewel, nội thất mở dạng phi thuyền, máy dầu bốc và tiết kiệm bậc nhất.'),
+            ('Hyundai Accent 1.5 AT', 'Hyundai', 489000000.00, 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800', '1.5L Smartstream G (115 HP)', 'Vô cấp thông minh iVT', 'Xăng', 'Sedan hạng B thế hệ hoàn toàn mới, kích thước lớn nhất phân khúc, trang bị gói SmartSense vượt tầm giá.'),
+            ('Honda CR-V e:HEV RS', 'Honda', 1259000000.00, 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800', '2.0L Hybrid Xăng + Điện (204 HP)', 'E-CVT thể thao', 'Xăng Hybrid', 'SUV thể thao thế hệ mới nhập khẩu nguyên chiếc, tiết kiệm nhiên liệu chỉ 3.4L/100km đô thị, gói an toàn Honda SENSING đầy đủ.'),
+            ('Mazda CX-5 2.0 Premium', 'Mazda', 829000000.00, 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800', '2.0L SkyActiv-G (154 HP)', 'Tự động 6 cấp', 'Xăng', 'Mẫu Crossover bán chạy nhất phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế, 10 loa Bose cao cấp và hệ thống an toàn i-Activsense.'),
+            ('Kia Carnival 2.2D Signature', 'Kia', 1759000000.00, 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800', '2.2L Smartstream D2.2 (199 HP)', 'Tự động 8 cấp', 'Dầu (Diesel)', 'Chuyên cơ mặt đất MPV 7 chỗ thương gia siêu tiện nghi, hàng ghế thứ 2 sưởi/làm mát và chế độ thư giãn không trọng lực VIP.'),
+            ('Audi Q7 45 TFSI quattro', 'Audi', 3700000000.00, 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800', '2.0L Turbo Mild-Hybrid (252 HP)', 'Tự động 8 cấp Tiptronic', 'Xăng Mild-Hybrid', 'SUV hạng sang 7 chỗ cỡ lớn dẫn động 4 bánh toàn thời gian quattro danh tiếng, đèn Matrix LED thông minh và buồng lái ảo Audi Virtual Cockpit.'),
+            ('Lexus RX350 Luxury', 'Lexus', 4330000000.00, 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800', '2.4L Turbo T24A-FTS (275 HP)', 'Tự động 8 cấp Direct Shift', 'Xăng', 'Mẫu SUV xe sang Nhật Bản êm ái, cách âm tĩnh lặng đỉnh cao, nội thất da Semi-Aniline cao cấp và hệ thống an toàn Lexus Safety System+ 3.0.'),
+            ('Lamborghini Urus S', 'Lamborghini', 16500000000.00, 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800', '4.0L V8 Twin-Turbo (666 HP)', 'Tự động 8 cấp thể thao', 'Xăng', 'Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Thiết kế góc cạnh đậm chất chiến đấu của hãng xe bò tót Sant\'Agata Bolognese.'),
+            ('Ferrari F8 Tributo', 'Ferrari', 19000000000.00, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800', '3.9L V8 Twin-Turbo (710 HP)', 'Tự động 7 cấp ly hợp kép', 'Xăng', 'Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm Ý. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h.')
+        ");
+    }
+
+    // 8. Giữ biến $conn (MySQLi) để các file add_car.php, delete_car.php, get_cars.php hoạt động bình thường
+    $conn = @new mysqli($host, $user, $pass, $dbname);
+    if ($conn && !$conn->connect_error) {
+        $conn->set_charset("utf8mb4");
+    }
+
 } catch (Exception $e) {
     $pdo = null;
-}
-?>
-```
-
-### file delete_car.php:
-```php
-<?php
-require_once 'auth_check.php';
-requireAdminApi();
-
-require_once 'db.php';
-header("Content-Type: application/json; charset=UTF-8");
-
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $stmt = $conn->prepare("DELETE FROM cars WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(["status" => "success", "message" => "Xóa xe thành công"]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "Lỗi xóa bản ghi"]);
-    }
+    $conn = null;
 }
 ?>
 ```
@@ -4145,27 +4118,43 @@ requireAdminApi();
 require_once 'db.php';
 header("Content-Type: application/json; charset=UTF-8");
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'] ?? '';
-    $brand = $_POST['brand'] ?? '';
-    $price = $_POST['price'] ?? 0;
-    $engine = $_POST['engine'] ?? '';
-    $transmission = $_POST['transmission'] ?? '';
-    $fuel = $_POST['fuel'] ?? '';
-    $image = $_POST['image'] ?? 'default.jpg';
-    $description = $_POST['description'] ?? '';
-
-    if (!empty($name) && !empty($brand)) {
-        $stmt = $conn->prepare("INSERT INTO cars (name, brand, price, engine, transmission, fuel, image, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssdsssss", $name, $brand, $price, $engine, $transmission, $fuel, $image, $description);
-
-        if ($stmt->execute()) {
-            echo json_encode(["status" => "success", "message" => "Thêm xe thành công"]);
-        } else {
-            echo json_encode(["status" => "error", "message" => "Lỗi: " . $stmt->error]);
-        }
-    }
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(["status" => "error", "message" => "Phương thức không hợp lệ"], JSON_UNESCAPED_UNICODE);
+    exit();
 }
+
+$name = trim($_POST['name'] ?? '');
+$brand = trim($_POST['brand'] ?? '');
+$price = floatval($_POST['price'] ?? 0);
+$engine = trim($_POST['engine'] ?? '');
+$transmission = trim($_POST['transmission'] ?? '');
+$fuel = trim($_POST['fuel'] ?? '');
+$image = trim($_POST['image'] ?? '');
+$description = trim($_POST['description'] ?? '');
+
+if (empty($image)) {
+    $image = 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800';
+}
+
+if (empty($name) || empty($brand)) {
+    echo json_encode(["status" => "error", "message" => "Vui lòng nhập đầy đủ tên xe và hãng xe!"], JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+if (!$pdo) {
+    echo json_encode(["status" => "error", "message" => "Chưa kết nối được CSDL MySQL"], JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+try {
+    $stmt = $pdo->prepare("INSERT INTO cars (name, brand, price, engine, transmission, fuel, image, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$name, $brand, $price, $engine, $transmission, $fuel, $image, $description]);
+    echo json_encode(["status" => "success", "message" => "Thêm xe thành công"], JSON_UNESCAPED_UNICODE);
+} catch (Exception $e) {
+    echo json_encode(["status" => "error", "message" => "Lỗi CSDL: " . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+}
+?>
 ```
 
 ### file get_cars.php:
@@ -4679,16 +4668,17 @@ try {
 
 ### file style.css:
 ```css
-/* SHOWROOM 4TL - LUXURY & SUPERCAR AUTOMOTIVE DESIGN SYSTEM */
+/* SHOWROOM 4TL - INDIGO & VIOLET LUXURY AUTOMOTIVE DESIGN SYSTEM */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Montserrat:wght@600;700;800;900&display=swap');
 
 :root {
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-    --primary: #ef4444;
-    --primary-hover: #dc2626;
-    --primary-glow: rgba(239, 68, 68, 0.4);
+    --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Montserrat', 'Be Vietnam Pro', sans-serif;
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --accent-violet: #8b5cf6;
+    --primary-glow: rgba(99, 102, 241, 0.45);
     --gold: #f59e0b;
 }
 
@@ -4720,7 +4710,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #ef4444;
+    background: #6366f1;
 }
 
 /* Custom Scrollbar - Light Mode */
@@ -4731,24 +4721,24 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     background: #cbd5e1;
 }
 .light ::-webkit-scrollbar-thumb:hover {
-    background: #ef4444;
+    background: #6366f1;
 }
 
 /* Glassmorphism Classes */
 .glass-panel {
-    background: rgba(15, 23, 42, 0.75);
+    background: rgba(15, 23, 42, 0.78);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.15);
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .light .glass-panel {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(226, 232, 240, 0.9);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(224, 231, 255, 0.95);
+    box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.08);
 }
 
 .glass-card {
@@ -4764,38 +4754,38 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
 }
 
 .glass-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(239, 68, 68, 0.4);
-    box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px 2px rgba(239, 68, 68, 0.15);
+    border-color: rgba(129, 140, 248, 0.5);
+    box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 0 22px 2px rgba(99, 102, 241, 0.22);
 }
 
 .light .glass-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(239, 68, 68, 0.4);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border-color: rgba(99, 102, 241, 0.45);
+    box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.12), 0 8px 10px -6px rgba(124, 58, 237, 0.08);
 }
 
-/* Luxury Glow & Gradients */
+/* Luxury Glow & Gradients (Blue-Violet) */
 .glow-red {
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.45);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.45);
 }
 
 .glow-red-sm {
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
 }
 
 .text-gradient-red {
-    background: linear-gradient(135deg, #ffffff 20%, #fca5a5 60%, #ef4444 100%);
+    background: linear-gradient(135deg, #ffffff 15%, #a5b4fc 55%, #8b5cf6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .light .text-gradient-red {
-    background: linear-gradient(135deg, #0f172a 20%, #b91c1c 70%, #ef4444 100%);
+    background: linear-gradient(135deg, #1e1b4b 15%, #4f46e5 60%, #7c3aed 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -4806,26 +4796,26 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     -webkit-text-fill-color: transparent;
 }
 
-/* Background Gradients */
+/* Background Gradients - Xanh dương pha tím */
 .hero-gradient-mesh {
     background-image: 
-        radial-gradient(at 0% 0%, rgba(220, 38, 38, 0.18) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(185, 28, 28, 0.12) 0px, transparent 50%),
+        radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.24) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.20) 0px, transparent 50%),
         radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.95) 0px, transparent 80%);
 }
 
 .light .hero-gradient-mesh {
     background-image: 
-        radial-gradient(at 0% 0%, rgba(254, 226, 226, 0.9) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(254, 202, 202, 0.5) 0px, transparent 50%),
+        radial-gradient(at 0% 0%, rgba(224, 231, 255, 0.95) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(237, 233, 254, 0.85) 0px, transparent 50%),
         radial-gradient(at 50% 50%, #f8fafc 0px, transparent 80%);
 }
 
 /* Pulse Glow Animation */
 @keyframes pulse-ring {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 12px rgba(99, 102, 241, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
 }
 
 .pulse-ring {
@@ -4878,9 +4868,9 @@ input[type=range]::-webkit-slider-thumb {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #ef4444;
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.65);
     transition: transform 0.15s ease;
 }
 input[type=range]::-webkit-slider-thumb:hover {
@@ -4893,10 +4883,10 @@ input[type=range]::-webkit-slider-thumb:hover {
     user-select: none;
 }
 .brand-pill.active {
-    background: #ef4444 !important;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
     color: #ffffff !important;
-    border-color: #ef4444 !important;
-    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    border-color: #6366f1 !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 .light .brand-pill:not(.active) {
     background: #ffffff;
@@ -4904,8 +4894,8 @@ input[type=range]::-webkit-slider-thumb:hover {
     border-color: #e2e8f0;
 }
 .light .brand-pill:not(.active):hover {
-    border-color: #ef4444;
-    color: #dc2626;
+    border-color: #6366f1;
+    color: #4f46e5;
 }
 
 /* Category Filter Pills */
@@ -4913,9 +4903,9 @@ input[type=range]::-webkit-slider-thumb:hover {
     transition: all 0.2s ease;
 }
 .cat-pill.active {
-    background: #ef4444 !important;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
     color: #ffffff !important;
-    border-color: #ef4444 !important;
+    border-color: #6366f1 !important;
 }
 .light .cat-pill:not(.active) {
     background: #ffffff;
@@ -4923,8 +4913,8 @@ input[type=range]::-webkit-slider-thumb:hover {
     border-color: #e2e8f0;
 }
 .light .cat-pill:not(.active):hover {
-    background: #f8fafc;
-    color: #dc2626;
+    background: #eef2ff;
+    color: #4f46e5;
 }
 
 /* Custom Dropdown Animation */
@@ -5256,4 +5246,20 @@ window.addEventListener("storage", (e) => {
     applyGlobalTheme(e.newValue);
   }
 });
+
+// 7. Hàm chuẩn hóa đường dẫn ảnh xe (Hỗ trợ cả link online lẫn ảnh trong thư mục images/)
+const FALLBACK_CAR_IMG = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800";
+
+function getCarImage(img) {
+  if (!img || String(img).trim() === "" || img === "default.jpg") {
+    return FALLBACK_CAR_IMG;
+  }
+  const cleanImg = String(img).trim();
+  // Nếu là link online (http/https) hoặc đã có sẵn tiền tố images/ thì giữ nguyên
+  if (cleanImg.startsWith("http://") || cleanImg.startsWith("https://") || cleanImg.startsWith("images/")) {
+    return cleanImg;
+  }
+  // Nếu chỉ nhập tên file (vd: porsche.jpg) -> tự động nối vào thư mục images/
+  return "images/" + cleanImg.replace(/^\/+/, "");
+}
 ```

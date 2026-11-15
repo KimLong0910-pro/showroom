@@ -310,35 +310,7 @@
           window.location.replace("login.html");
         }
       })();
-      // THEME CONTROLLER
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-
-      function setTheme(mode) {
-        if (mode === "light") {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.classList.add("light");
-          localStorage.setItem("theme", "light");
-          if (themeIcon) themeIcon.className = "fa-solid fa-moon text-slate-700 text-base";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Tối (Dark Mode)";
-        } else {
-          document.documentElement.classList.add("dark");
-          document.documentElement.classList.remove("light");
-          localStorage.setItem("theme", "dark");
-          if (themeIcon) themeIcon.className = "fa-solid fa-sun text-yellow-400 text-base";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Sáng (Light Mode)";
-        }
-      }
-
-      function toggleTheme() {
-        const isDark = document.documentElement.classList.contains("dark");
-        setTheme(isDark ? "light" : "dark");
-      }
-
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      setTheme(savedTheme);
-      if (themeToggle) themeToggle.onclick = toggleTheme;
-
+      
       let adminCars = [];
 
       async function loadAdminCars() {
@@ -461,7 +433,7 @@
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition">
                     <td class="p-3 text-gray-400 font-mono">#${car.id}</td>
                     <td class="p-3">
-                        <img src="${car.image}" class="w-14 h-9 object-cover rounded-lg border border-gray-200 dark:border-white/10" onerror="this.src='https://via.placeholder.com/60x40'">
+                        <img src="${getCarImage(car.image)}" class="w-14 h-9 object-cover rounded-lg border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                     </td>
                     <td class="p-3 font-bold text-slate-900 dark:text-white">${car.name}</td>
                     <td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 font-bold">${car.brand}</span></td>

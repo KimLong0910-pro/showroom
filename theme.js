@@ -77,3 +77,19 @@ window.addEventListener("storage", (e) => {
     applyGlobalTheme(e.newValue);
   }
 });
+
+// 7. Hàm chuẩn hóa đường dẫn ảnh xe (Hỗ trợ cả link online lẫn ảnh trong thư mục images/)
+const FALLBACK_CAR_IMG = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800";
+
+function getCarImage(img) {
+  if (!img || String(img).trim() === "" || img === "default.jpg") {
+    return FALLBACK_CAR_IMG;
+  }
+  const cleanImg = String(img).trim();
+  // Nếu là link online (http/https) hoặc đã có sẵn tiền tố images/ thì giữ nguyên
+  if (cleanImg.startsWith("http://") || cleanImg.startsWith("https://") || cleanImg.startsWith("images/")) {
+    return cleanImg;
+  }
+  // Nếu chỉ nhập tên file (vd: porsche.jpg) -> tự động nối vào thư mục images/
+  return "images/" + cleanImg.replace(/^\/+/, "");
+}

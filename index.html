@@ -1527,48 +1527,6 @@
         }
       });
 
-      // DARK / LIGHT THEME CONTROLLER
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-
-      function setTheme(mode) {
-        if (mode === "light") {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.classList.add("light");
-          localStorage.setItem("theme", "light");
-          if (themeIcon) {
-            themeIcon.className = "fa-solid fa-moon text-slate-700 text-base";
-          }
-          if (themeToggle) {
-            themeToggle.title = "Chuyển sang chế độ Tối (Dark Mode)";
-          }
-        } else {
-          document.documentElement.classList.add("dark");
-          document.documentElement.classList.remove("light");
-          localStorage.setItem("theme", "dark");
-          if (themeIcon) {
-            themeIcon.className = "fa-solid fa-sun text-yellow-400 text-base";
-          }
-          if (themeToggle) {
-            themeToggle.title = "Chuyển sang chế độ Sáng (Light Mode)";
-          }
-        }
-      }
-
-      function toggleTheme() {
-        const isDark = document.documentElement.classList.contains("dark");
-        setTheme(isDark ? "light" : "dark");
-      }
-
-      function initTheme() {
-        const savedTheme = localStorage.getItem("theme") || "dark";
-        setTheme(savedTheme);
-      }
-
-      if (themeToggle) {
-        themeToggle.onclick = toggleTheme;
-      }
-
       // FETCH CARS DỮ LIỆU TỪ SERVER VỚI FALLBACK AN TOÀN
       async function fetchCars() {
         try {
@@ -1703,11 +1661,11 @@
                         
                         <!-- Card Media -->
                         <div class="relative overflow-hidden aspect-[16/10] bg-slate-900">
-                            <img src="${car.image}" alt="${car.name}" 
-                                 loading="lazy"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer"
-                                 onclick="openDetailModal(${carId})"
-                                 onerror="this.src='https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600'">
+                            <img src="${getCarImage(car.image)}" alt="${car.name}" 
+                              loading="lazy"
+                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer"
+                              onclick="openDetailModal(${carId})"
+                              onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                             
                             <!-- Badges -->
                             <div class="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
@@ -2035,7 +1993,7 @@
             .map(
               (c) => `
                     <div class="relative group" title="${c.name}">
-                        <img src="${c.image}" class="w-10 h-10 object-cover rounded-xl border-2 border-indigo-500 shadow" onerror="this.src='https://via.placeholder.com/40'">
+                        <img src="${getCarImage(c.image)}" class="w-10 h-10 object-cover rounded-xl border-2 border-indigo-500 shadow" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                         <button onclick="toggleCompareCar(${c.id})" title="Bỏ xe này" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-indigo-600 hover:bg-violet-700 rounded-full text-[9px] text-white flex items-center justify-center shadow">✕</button>
                     </div>
                 `,
@@ -2108,7 +2066,7 @@
                                 (c) => `
                                 <th class="p-3 text-slate-900 dark:text-white font-bold text-base min-w-[220px]">
                                     <div class="relative group mb-2">
-                                        <img src="${c.image}" class="w-full h-36 object-cover rounded-xl border border-gray-200 dark:border-white/10" onerror="this.src='https://via.placeholder.com/300'">
+                                        <img src="${getCarImage(c.image)}" class="w-full h-36 object-cover rounded-xl border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                                         <button onclick="toggleCompareCar(${c.id}); openCompareModal();" title="Bỏ xe này" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-indigo-600 hover:bg-violet-700 text-white flex items-center justify-center text-xs shadow hover:scale-110 transition">✕</button>
                                     </div>
                                     <div class="leading-tight">${c.name}</div>
@@ -2183,7 +2141,7 @@
 
         document.getElementById("modalContent").innerHTML = `
                 <div class="relative rounded-2xl overflow-hidden mb-5">
-                    <img src="${car.image}" class="w-full h-80 object-cover" onerror="this.src='https://via.placeholder.com/600x350'">
+                    <img src="${getCarImage(car.image)}" class="w-full h-80 object-cover" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                     <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                         ${car.brand}
                     </span>
@@ -2458,7 +2416,6 @@
       }
 
       // Initialize App
-      initTheme();
       fetchCars();
     </script>
   </body>

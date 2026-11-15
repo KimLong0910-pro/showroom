@@ -101,35 +101,6 @@
     </div>
 
     <script>
-      // THEME CONTROLLER
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-
-      function setTheme(mode) {
-        if (mode === "light") {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.classList.add("light");
-          localStorage.setItem("theme", "light");
-          if (themeIcon) themeIcon.className = "fa-solid fa-moon text-slate-700 text-sm";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Tối (Dark Mode)";
-        } else {
-          document.documentElement.classList.add("dark");
-          document.documentElement.classList.remove("light");
-          localStorage.setItem("theme", "dark");
-          if (themeIcon) themeIcon.className = "fa-solid fa-sun text-yellow-400 text-sm";
-          if (themeToggle) themeToggle.title = "Chuyển sang chế độ Sáng (Light Mode)";
-        }
-      }
-
-      function toggleTheme() {
-        const isDark = document.documentElement.classList.contains("dark");
-        setTheme(isDark ? "light" : "dark");
-      }
-
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      setTheme(savedTheme);
-      if (themeToggle) themeToggle.onclick = toggleTheme;
-
       const chatBox = document.getElementById("chatBox");
       const userInput = document.getElementById("userInput");
       const sendBtn = document.getElementById("sendBtn");
