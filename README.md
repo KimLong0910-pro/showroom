@@ -5275,6 +5275,11 @@ try {
         $cusName = trim($data['customer_name'] ?? 'Khách quét QR');
         $cusPhone = trim($data['customer_phone'] ?? '');
 
+        if (empty($carName) || empty($cusPhone)) {
+            echo json_encode(["status" => "error", "message" => "Thiếu tên xe hoặc số điện thoại xác nhận đặt cọc!"], JSON_UNESCAPED_UNICODE);
+            exit();
+        }
+
         $stmt = $pdo->prepare("INSERT INTO deposits (car_name, car_price, memo, customer_name, customer_phone) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$carName, $carPrice, $memo, $cusName, $cusPhone]);
 
@@ -5312,6 +5317,12 @@ try {
         $table = (($_GET['table'] ?? '') === 'deposits') ? 'deposits' : 'bookings';
         $id = intval($_GET['id'] ?? 0);
         $status = $_GET['status'] ?? 'pending';
+
+        $allowedStatuses = ['pending', 'confirmed', 'verified', 'cancelled'];
+        if ($id <= 0 || !in_array($status, $allowedStatuses, true)) {
+            echo json_encode(["status" => "error", "message" => "Tham số ID hoặc trạng thái không hợp lệ!"], JSON_UNESCAPED_UNICODE);
+            exit();
+        }
 
         $stmt = $pdo->prepare("UPDATE {$table} SET status = ? WHERE id = ?");
         $stmt->execute([$status, $id]);
