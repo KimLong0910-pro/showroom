@@ -124,9 +124,9 @@ if (isset($pdo) && $pdo) {
             foreach ($kwList as $kw) {
                 $kwClean = toLowerUtf8(trim($kw));
                 $kwNoAccent = removeAccents($kwClean);
-                if (empty($kwClean)) continue;
+                if (empty($kwNoAccent)) continue;
 
-                if (strPosUtf8($message, $kwClean) !== false || strpos($msgNoAccent, $kwNoAccent) !== false) {
+                if (hasWord($msgNoAccent, $kwNoAccent)) {
                     $score += 3;
                 } else {
                     $msgWords = explode(' ', $msgNoAccent);
