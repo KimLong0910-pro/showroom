@@ -472,15 +472,20 @@
         formData.append("description", document.getElementById("description").value);
 
         try {
-          await fetch("../php/add_car.php", {
+          const res = await fetch("../php/add_car.php", {
             method: "POST",
             body: formData,
           });
-          alert("Đã lưu thông tin xe thành công!");
-          this.reset();
-          loadAdminCars();
+          const data = await res.json();
+          if (data.status === "success") {
+            alert("✅ Đã lưu thông tin xe thành công!");
+            this.reset();
+            loadAdminCars();
+          } else {
+            alert("❌ " + (data.message || "Thêm xe thất bại!"));
+          }
         } catch (err) {
-          alert("Lỗi khi thêm xe: " + err);
+          alert("Lỗi kết nối máy chủ khi thêm xe: " + err);
         }
       };
 

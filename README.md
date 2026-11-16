@@ -2103,7 +2103,7 @@
                                         <img src="${getCarImage(c.image)}" class="w-full h-36 object-cover rounded-xl border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                                         <button onclick="toggleCompareCar(${c.id}); openCompareModal();" title="Bỏ xe này" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-indigo-600 hover:bg-violet-700 text-white flex items-center justify-center text-xs shadow hover:scale-110 transition">✕</button>
                                     </div>
-                                    <div class="leading-tight">${c.name}</div>
+                                    <div class="leading-tight">${escapeHtml(c.name)}</div>
                                     <div class="text-indigo-600 dark:text-indigo-500 font-heading text-lg mt-1">${formatCurrency(c.price)}</div>
                                 </th>
                             `,
@@ -2979,15 +2979,20 @@
         formData.append("description", document.getElementById("description").value);
 
         try {
-          await fetch("../php/add_car.php", {
+          const res = await fetch("../php/add_car.php", {
             method: "POST",
             body: formData,
           });
-          alert("Đã lưu thông tin xe thành công!");
-          this.reset();
-          loadAdminCars();
+          const data = await res.json();
+          if (data.status === "success") {
+            alert("✅ Đã lưu thông tin xe thành công!");
+            this.reset();
+            loadAdminCars();
+          } else {
+            alert("❌ " + (data.message || "Thêm xe thất bại!"));
+          }
         } catch (err) {
-          alert("Lỗi khi thêm xe: " + err);
+          alert("Lỗi kết nối máy chủ khi thêm xe: " + err);
         }
       };
 
@@ -3176,6 +3181,7 @@
     </div>
   </body>
 </html>
+
 ```
 
 ### file bot_train.html:
