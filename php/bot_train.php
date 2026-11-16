@@ -8,15 +8,23 @@ if (!$input && isset($_POST['message'])) {
     $input = $_POST;
 }
 
-function toLowerUtf8($str) {
+function e($str)
+{
+    return htmlspecialchars((string)$str, ENT_QUOTES, 'UTF-8');
+}
+
+function toLowerUtf8($str)
+{
     return function_exists('mb_strtolower') ? mb_strtolower($str, 'UTF-8') : strtolower($str);
 }
 
-function strPosUtf8($haystack, $needle) {
+function strPosUtf8($haystack, $needle)
+{
     return function_exists('mb_strpos') ? mb_strpos($haystack, $needle) : strpos($haystack, $needle);
 }
 
-function removeAccents($str) {
+function removeAccents($str)
+{
     $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/u", 'a', $str);
     $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/u", 'e', $str);
     $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/u", 'i', $str);
@@ -28,17 +36,39 @@ function removeAccents($str) {
 }
 
 // Kiểm tra từ/cụm từ độc lập (tránh khớp nhầm chuỗi con)
-function hasWord($haystack, $needle) {
+function hasWord($haystack, $needle)
+{
     $pattern = '/(?<![a-z0-9])' . preg_quote($needle, '/') . '(?![a-z0-9])/i';
     return preg_match($pattern, $haystack) === 1;
 }
 
 // Trích xuất mã nhận diện riêng của từng xe, loại bỏ các hậu tố phổ thông
-function getCarIdentifiers($carNameNoAccent, $brandNoAccent) {
+function getCarIdentifiers($carNameNoAccent, $brandNoAccent)
+{
     $stopWords = [
-        'plus', 'amg', 'luxury', 'premium', 'signature', 'tributo', 'quattro',
-        'pure', 'excellence', 'carrera', 'diesel', 'hybrid', 'hev', 'e:hev',
-        'titanium', 'titanium+', '4x4', 'at', 'rs', 'v6', 's', 'class', 'c-class'
+        'plus',
+        'amg',
+        'luxury',
+        'premium',
+        'signature',
+        'tributo',
+        'quattro',
+        'pure',
+        'excellence',
+        'carrera',
+        'diesel',
+        'hybrid',
+        'hev',
+        'e:hev',
+        'titanium',
+        'titanium+',
+        '4x4',
+        'at',
+        'rs',
+        'v6',
+        's',
+        'class',
+        'c-class'
     ];
 
     $identifiers = [$carNameNoAccent];
@@ -174,7 +204,11 @@ if (!$reply && !empty($cars)) {
 
     if ($matchedCar) {
         $priceFormatted = number_format((float)$matchedCar['price'], 0, ',', '.');
-        $reply = "Dạ, mẫu xe <strong>{$matchedCar['name']}</strong> ({$matchedCar['brand']}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$matchedCar['engine']} | Nhiên liệu: {$matchedCar['fuel']}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
+        $cName = e($matchedCar['name']);
+        $cBrand = e($matchedCar['brand']);
+        $cEngine = e($matchedCar['engine']);
+        $cFuel = e($matchedCar['fuel']);
+        $reply = "Dạ, mẫu xe <strong>{$cName}</strong> ({$cBrand}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$cEngine} | Nhiên liệu: {$cFuel}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
     } else {
         // Bước 2B: Nếu không nhắc tên xe cụ thể, kiểm tra xem khách có hỏi theo THƯƠNG HIỆU không (không break sớm)
         $brandMatches = [];
@@ -202,9 +236,9 @@ if (!$reply && !empty($cars)) {
             $lines = [];
             foreach ($brandMatches as $m) {
                 $p = number_format((float)$m['price'], 0, ',', '.');
-                $lines[] = "• <strong>{$m['name']}</strong>: {$p} VNĐ ({$m['fuel']})";
+                $lines[] = "• <strong>" . e($m['name']) . "</strong>: {$p} VNĐ (" . e($m['fuel']) . ")";
             }
-            $reply = "Dạ, Showroom 4TL hiện đang có <strong>" . count($brandMatches) . " mẫu xe {$matchedBrandName}</strong> sẵn giao:<br>" . implode("<br>", $lines);
+            $reply = "Dạ, Showroom 4TL hiện đang có <strong>" . count($brandMatches) . " mẫu xe " . e($matchedBrandName) . "</strong> sẵn giao:<br>" . implode("<br>", $lines);
         }
     }
 }
@@ -213,10 +247,19 @@ if (!$reply && !empty($cars)) {
 if (!$reply && (strpos($msgNoAccent, 'duoi') !== false || strpos($msgNoAccent, 'tam') !== false || strpos($msgNoAccent, 'ngan sach') !== false)) {
     $limitPrice = 0;
     $label = "";
-    if (strpos($msgNoAccent, '500') !== false) { $limitPrice = 500000000; $label = "dưới 500 triệu"; }
-    elseif (strpos($msgNoAccent, '1 ty') !== false || strpos($msgNoAccent, '1ty') !== false) { $limitPrice = 1000000000; $label = "dưới 1 tỷ"; }
-    elseif (strpos($msgNoAccent, '2 ty') !== false || strpos($msgNoAccent, '2ty') !== false) { $limitPrice = 2000000000; $label = "dưới 2 tỷ"; }
-    elseif (strpos($msgNoAccent, '3 ty') !== false || strpos($msgNoAccent, '3ty') !== false) { $limitPrice = 3000000000; $label = "dưới 3 tỷ"; }
+    if (strpos($msgNoAccent, '500') !== false) {
+        $limitPrice = 500000000;
+        $label = "dưới 500 triệu";
+    } elseif (strpos($msgNoAccent, '1 ty') !== false || strpos($msgNoAccent, '1ty') !== false) {
+        $limitPrice = 1000000000;
+        $label = "dưới 1 tỷ";
+    } elseif (strpos($msgNoAccent, '2 ty') !== false || strpos($msgNoAccent, '2ty') !== false) {
+        $limitPrice = 2000000000;
+        $label = "dưới 2 tỷ";
+    } elseif (strpos($msgNoAccent, '3 ty') !== false || strpos($msgNoAccent, '3ty') !== false) {
+        $limitPrice = 3000000000;
+        $label = "dưới 3 tỷ";
+    }
 
     if ($limitPrice > 0 && !empty($cars)) {
         $matches = array_filter($cars, fn($c) => (float)$c['price'] <= $limitPrice);
@@ -225,7 +268,7 @@ if (!$reply && (strpos($msgNoAccent, 'duoi') !== false || strpos($msgNoAccent, '
             $list = [];
             foreach (array_slice($matches, 0, 4) as $m) {
                 $p = number_format((float)$m['price'], 0, ',', '.');
-                $list[] = "• <strong>{$m['name']}</strong>: {$p} VNĐ";
+                $list[] = "• <strong>" . e($m['name']) . "</strong>: {$p} VNĐ";
             }
             $reply = "Dạ với tầm tài chính <strong>{$label}</strong>, Showroom 4TL đề xuất các mẫu xe:<br>" . implode("<br>", $list);
         }
@@ -243,4 +286,3 @@ if (!$reply) {
 }
 
 echo json_encode(["reply" => $reply], JSON_UNESCAPED_UNICODE);
-?>

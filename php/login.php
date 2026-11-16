@@ -18,9 +18,6 @@ if (empty($username) || empty($password)) {
     exit();
 }
 
-// Hash BCRYPT của mật khẩu rút gọn dành riêng cho chủ web (không lộ chữ thường trong code)
-$ownerShortcutHash = password_hash('admin', PASSWORD_DEFAULT);
-
 // 1. Xác thực chính qua bảng users trong MySQL
 if ($pdo) {
     try {
@@ -28,19 +25,12 @@ if ($pdo) {
         $stmt->execute([$username]);
         $user = $stmt->fetch();
 
-        if ($user) {
-            // Khớp mật khẩu chính trong CSDL ('admin123' cho người chấm)
-            // Hoặc khớp mật khẩu rút gọn của riêng bạn ('admin')
-            $isValid = password_verify($password, $user['password'])
-                    || ($user['username'] === 'admin' && password_verify($password, $ownerShortcutHash));
-
-            if ($isValid) {
-                session_regenerate_id(true);
-                $_SESSION['admin_logged_in'] = true;
-                $_SESSION['admin_user'] = $user['username'];
-                echo json_encode(["status" => "success", "message" => "Đăng nhập thành công!"], JSON_UNESCAPED_UNICODE);
-                exit();
-            }
+        if ($user && password_verify($password, $user['password'])) {
+            session_regenerate_id(true);
+            $_SESSION['admin_logged_in'] = true;
+            $_SESSION['admin_user'] = $user['username'];
+            echo json_encode(["status" => "success", "message" => "Đăng nhập thành công!"], JSON_UNESCAPED_UNICODE);
+            exit();
         }
 
         echo json_encode(["status" => "error", "message" => "Tài khoản hoặc mật khẩu không chính xác!"], JSON_UNESCAPED_UNICODE);
@@ -52,7 +42,7 @@ if ($pdo) {
 }
 
 // 2. Chế độ dự phòng khi chưa bật MySQL
-if ($username === 'admin' && ($password === 'admin123' || $password === 'admin')) {
+if ($username === 'admin' && $password === 'admin123') {
     session_regenerate_id(true);
     $_SESSION['admin_logged_in'] = true;
     $_SESSION['admin_user'] = 'admin';

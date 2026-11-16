@@ -116,7 +116,7 @@
 
         chatBox.innerHTML += `
                 <div class="bg-indigo-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-xs shadow-md leading-relaxed">
-                    ${text}
+                    ${escapeHtml(text)}
                 </div>
             `;
         userInput.value = "";

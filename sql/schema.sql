@@ -1,10 +1,3 @@
--- HƯỚNG DẪN IMPORT:
--- 1. Trên Hosting (InfinityFree): Chọn sẵn Database ở cột trái -> tab Import -> Chọn file này.
--- 2. Trên XAMPP Local: Tạo database tên 'web_ban_xe' trước, chọn vào nó rồi Import
---    (hoặc bỏ dấu '-- ' ở 2 dòng dưới đây trước khi chạy).
--- CREATE DATABASE IF NOT EXISTS web_ban_xe DEFAULT CHARACER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
--- USE web_ban_xe;
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 

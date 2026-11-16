@@ -145,7 +145,7 @@
                         <div class="relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-900 border border-gray-200 dark:border-white/10 shadow-2xl">
                             <img src="${getCarImage(car.image)}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                             <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
-                                ${car.brand}
+                                ${escapeHtml(car.brand)}
                             </span>
                         </div>
 
@@ -154,17 +154,17 @@
                             <div class="bg-gray-50 dark:bg-slate-900/80 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                                 <i class="fa-solid fa-gauge-high text-indigo-600 dark:text-indigo-500 mb-1"></i>
                                 <div class="text-[10px] text-gray-500 dark:text-gray-400">Động cơ</div>
-                                <div class="font-bold text-slate-900 dark:text-white truncate">${car.engine || "N/A"}</div>
+                                <div class="font-bold text-slate-900 dark:text-white truncate">${escapeHtml(car.engine || "N/A")}</div>
                             </div>
                             <div class="bg-gray-50 dark:bg-slate-900/80 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                                 <i class="fa-solid fa-sliders text-indigo-600 dark:text-indigo-500 mb-1"></i>
                                 <div class="text-[10px] text-gray-500 dark:text-gray-400">Hộp số</div>
-                                <div class="font-bold text-slate-900 dark:text-white truncate">${car.transmission || "Tự động"}</div>
+                                <div class="font-bold text-slate-900 dark:text-white truncate">${escapeHtml(car.transmission || "Tự động")}</div>
                             </div>
                             <div class="bg-gray-50 dark:bg-slate-900/80 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                                 <i class="fa-solid fa-gas-pump text-indigo-600 dark:text-indigo-500 mb-1"></i>
                                 <div class="text-[10px] text-gray-500 dark:text-gray-400">Nhiên liệu</div>
-                                <div class="font-bold text-slate-900 dark:text-white truncate">${car.fuel || "Xăng"}</div>
+                                <div class="font-bold text-slate-900 dark:text-white truncate">${escapeHtml(car.fuel || "Xăng")}</div>
                             </div>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                     <div class="lg:col-span-5 space-y-6">
                         <div>
                             <span class="text-xs text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-widest">${car.brand} Supercar</span>
-                            <h1 class="text-3xl font-black font-heading text-slate-900 dark:text-white mt-1">${car.name}</h1>
+                            <h1 class="text-3xl font-black font-heading text-slate-900 dark:text-white mt-1">${escapeHtml(car.name)}</h1>
                             <div class="text-3xl font-black text-indigo-600 dark:text-indigo-500 font-heading mt-2">
                                 ${Number(car.price).toLocaleString("vi-VN")} VNĐ
                             </div>
@@ -181,7 +181,7 @@
 
                         <div class="bg-gray-50 dark:bg-slate-900/80 p-4 rounded-2xl border border-gray-200 dark:border-white/10 space-y-2 text-xs">
                             <div class="text-gray-500 dark:text-gray-400 uppercase font-bold text-[10px]">Giới thiệu mẫu xe</div>
-                            <p class="text-slate-700 dark:text-gray-300 leading-relaxed">${car.description || "Mẫu xe sở hữu thiết kế tuyệt hảo, trang bị động cơ hiệu năng cao và công nghệ an toàn hàng đầu thế giới."}</p>
+                            <p class="text-slate-700 dark:text-gray-300 leading-relaxed">${escapeHtml(car.description || "Mẫu xe sở hữu thiết kế tuyệt hảo, trang bị động cơ hiệu năng cao và công nghệ an toàn hàng đầu thế giới.")}</p>
                         </div>
 
                         <!-- Loan Preview -->

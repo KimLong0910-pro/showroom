@@ -28,7 +28,7 @@
 - một file auth_check.php
 - một file theme.js
 
-### file index.html:
+### file index.html: 
 ```html
 <!doctype html>
 <html lang="vi" class="dark">
@@ -1522,6 +1522,19 @@
       let comparedCars = [];
       let currentCategory = "all";
 
+      // 2. Hàm mở Modal Lái thử bằng ID xe (tránh truyền chuỗi car.name vào onclick)
+      function openBookingModalById(id) {
+        const car = allCars.find((c) => Number(c.id) === Number(id));
+        openBookingModal(car ? car.name : "Tất cả mẫu xe");
+      }
+
+      // 3. Hàm mở Modal Đặt cọc QR bằng ID xe
+      function openQRModalById(id) {
+        const car = allCars.find((c) => Number(c.id) === Number(id));
+        if (!car) return;
+        openQRModal(car.name, car.price);
+      }
+
       // MODAL MANAGEMENT HELPER (100% immune to CSS class cascade quirks)
       function openModal(modalId) {
         const el = document.getElementById(modalId);
@@ -1602,10 +1615,10 @@
         container.innerHTML = brands
           .map(
             (b, idx) => `
-                <button onclick="filterByBrandQuick('${b}')" class="brand-pill px-4 py-1.5 rounded-full text-xs font-bold border border-gray-200 dark:border-white/10 ${idx === 0 ? "active" : "bg-white text-slate-700 dark:bg-slate-900 dark:text-gray-300 hover:border-indigo-500"}">
-                    ${b}
-                </button>
-            `,
+        <button data-brand="${escapeHtml(b)}" onclick="filterByBrandQuick(this.dataset.brand)" class="brand-pill px-4 py-1.5 rounded-full text-xs font-bold border border-gray-200 dark:border-white/10 ${idx === 0 ? "active" : "bg-white text-slate-700 dark:bg-slate-900 dark:text-gray-300 hover:border-indigo-500"}">
+            ${escapeHtml(b)}
+        </button>
+      `,
           )
           .join("");
       }
@@ -1693,7 +1706,7 @@
                         
                         <!-- Card Media -->
                         <div class="relative overflow-hidden aspect-[16/10] bg-slate-900">
-                            <img src="${getCarImage(car.image)}" alt="${car.name}" 
+                            <img src="${getCarImage(car.image)}" alt="${escapeHtml(car.name)}" 
                               loading="lazy"
                               class="w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer"
                               onclick="openDetailModal(${carId})"
@@ -1702,7 +1715,7 @@
                             <!-- Badges -->
                             <div class="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
                                 <span class="bg-indigo-600/90 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">
-                                    ${car.brand}
+                                    ${escapeHtml(car.brand)}
                                 </span>
                                 ${
                                   car.fuel && car.fuel.includes("Điện")
@@ -1727,7 +1740,7 @@
                         <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
                             <div>
                                 <h3 onclick="openDetailModal(${carId})" class="text-xl font-black text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition leading-snug cursor-pointer">
-                                    ${car.name}
+                                    ${escapeHtml(car.name)}
                                 </h3>
                                 
                                 <div class="text-indigo-600 font-heading text-2xl font-black my-1">
@@ -1736,17 +1749,17 @@
 
                                 <!-- Key Specs Chips -->
                                 <div class="grid grid-cols-3 gap-1.5 text-[11px] bg-gray-50 dark:bg-slate-950/70 p-2.5 rounded-2xl border border-gray-100 dark:border-white/5 text-slate-600 dark:text-gray-300 mt-3">
-                                    <div class="text-center truncate" title="${car.engine || "N/A"}">
+                                    <div class="text-center truncate" title="${escapeHtml(car.engine || "N/A")}">
                                         <i class="fa-solid fa-gauge-high text-indigo-600 dark:text-indigo-500 block mb-1"></i>
-                                        <span class="text-[10px]">${car.engine ? car.engine.split(" ")[0] : "Động cơ"}</span>
+                                        <span class="text-[10px]">${escapeHtml(car.engine ? car.engine.split(" ")[0] : "Động cơ")}</span>
                                     </div>
-                                    <div class="text-center truncate" title="${car.transmission || "Tự động"}">
+                                    <div class="text-center truncate" title="${escapeHtml(car.transmission || "Tự động")}">
                                         <i class="fa-solid fa-sliders text-indigo-600 dark:text-indigo-500 block mb-1"></i>
-                                        <span class="text-[10px]">${car.transmission ? (car.transmission.includes("8") ? "8 cấp" : car.transmission.includes("9") ? "9 cấp" : "Tự động") : "Tự động"}</span>
+                                        <span class="text-[10px]">${escapeHtml(car.transmission ? (car.transmission.includes("8") ? "8 cấp" : car.transmission.includes("9") ? "9 cấp" : "Tự động") : "Tự động")}</span>
                                     </div>
-                                    <div class="text-center truncate" title="${car.fuel || "Xăng"}">
+                                    <div class="text-center truncate" title="${escapeHtml(car.fuel || "Xăng")}">
                                         <i class="fa-solid ${fuelIcon} block mb-1"></i>
-                                        <span class="text-[10px]">${car.fuel || "Xăng"}</span>
+                                        <span class="text-[10px]">${escapeHtml(car.fuel || "Xăng")}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1763,10 +1776,10 @@
                                 </div>
                                 
                                 <div class="grid grid-cols-2 gap-2">
-                                    <button onclick="openBookingModal('${car.name}')" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs border border-gray-200 dark:border-white/10 hover:border-indigo-500/40 transition flex items-center justify-center gap-1">
+                                    <button onclick="openBookingModalById(${carId})" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs border border-gray-200 dark:border-white/10 hover:border-indigo-500/40 transition flex items-center justify-center gap-1">
                                         <i class="fa-solid fa-steering-wheel text-indigo-600 dark:text-indigo-400"></i> Lái Thử
                                     </button>
-                                    <button onclick="openQRModal('${car.name}', ${car.price})" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs border border-gray-200 dark:border-white/10 hover:border-indigo-500/40 transition flex items-center justify-center gap-1">
+                                    <button onclick="openQRModalById(${carId})" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs border border-gray-200 dark:border-white/10 hover:border-indigo-500/40 transition flex items-center justify-center gap-1">
                                         <i class="fa-solid fa-qrcode text-indigo-600 dark:text-indigo-400"></i> Đặt Cọc
                                     </button>
                                 </div>
@@ -1851,7 +1864,6 @@
         carSec.scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
-      // Category Tab Filter
       // Category Tab Filter
       function setCategoryFilter(cat, el) {
         currentCategory = cat;
@@ -1961,15 +1973,6 @@
         attributeFilter: ["class"],
       });
 
-      // function requestLoanConsult() {
-      //   const price = formatCurrency(document.getElementById("calcPriceInput").value);
-      //   const downPercent = document.getElementById("calcDownPercent").value;
-      //   const months = document.getElementById("calcMonths").value;
-      //   alert(
-      //     `Dạ chuyên viên tín dụng Showroom 4TL đã ghi nhận thông số vay xe giá ${price}, trả trước ${downPercent}%, thời hạn ${months} tháng. Quý khách vui lòng để lại số Zalo để nhận file Excel bảng tính chi tiết từng tháng!`,
-      //   );
-      // }
-
       // CAR COMPARISON LOGIC
       function toggleCompareCar(id) {
         const targetId = Number(id);
@@ -1991,7 +1994,7 @@
         }
 
         updateCompareDock();
-        renderCars(allCars);
+        filterCars();
       }
 
       function updateCompareDock() {
@@ -2024,11 +2027,11 @@
           thumbs.innerHTML = comparedCars
             .map(
               (c) => `
-                    <div class="relative group" title="${c.name}">
-                        <img src="${getCarImage(c.image)}" class="w-10 h-10 object-cover rounded-xl border-2 border-indigo-500 shadow" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
-                        <button onclick="toggleCompareCar(${c.id})" title="Bỏ xe này" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-indigo-600 hover:bg-violet-700 rounded-full text-[9px] text-white flex items-center justify-center shadow">✕</button>
-                    </div>
-                `,
+              <div class="relative group" title="${escapeHtml(c.name)}">
+                  <img src="${getCarImage(c.image)}" class="w-10 h-10 object-cover rounded-xl border-2 border-indigo-500 shadow" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
+                  <button onclick="toggleCompareCar(${Number(c.id)})" title="Bỏ xe này" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-indigo-600 hover:bg-violet-700 rounded-full text-[9px] text-white flex items-center justify-center shadow">✕</button>
+              </div>
+          `,
             )
             .join("");
         }
@@ -2037,20 +2040,19 @@
       function clearComparison() {
         comparedCars = [];
         updateCompareDock();
-        renderCars(allCars);
+        filterCars();
       }
 
       function toggleCompareModal() {
         if (comparedCars.length === 0) {
-          // If user clicks compare on navbar without cars selected, auto-suggest the top 2 supercars!
           if (allCars.length >= 2) {
             comparedCars = [allCars[0], allCars[1]];
             updateCompareDock();
-            renderCars(allCars);
+            filterCars();
           } else if (allCars.length === 1) {
             comparedCars = [allCars[0]];
             updateCompareDock();
-            renderCars(allCars);
+            filterCars();
           }
         }
         openCompareModal();
@@ -2061,7 +2063,7 @@
           if (allCars.length >= 2) {
             comparedCars = [allCars[0], allCars[1]];
             updateCompareDock();
-            renderCars(allCars);
+            filterCars();
           }
         }
 
@@ -2078,7 +2080,7 @@
                               .filter((c) => !comparedCars.some((cc) => Number(cc.id) === Number(c.id)))
                               .map(
                                 (c) => `
-                                <option value="${c.id}">${c.name} (${formatBillion(c.price)})</option>
+                                <option value="${c.id}">${escapeHtml(c.name)} (${formatBillion(c.price)})</option>
                             `,
                               )
                               .join("")}
@@ -2112,23 +2114,23 @@
                     <tbody class="divide-y divide-gray-200 dark:divide-white/10 text-slate-700 dark:text-gray-300">
                         <tr>
                             <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Hãng Sản Xuất</td>
-                            ${comparedCars.map((c) => `<td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 dark:bg-indigo-600/30 text-indigo-600 dark:text-red-300 font-bold">${c.brand}</span></td>`).join("")}
+                            ${comparedCars.map((c) => `<td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 dark:bg-indigo-600/30 text-indigo-600 dark:text-red-300 font-bold">${escapeHtml(c.brand)}</span></td>`).join("")}
                         </tr>
                         <tr>
                             <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Động Cơ & Công Suất</td>
-                            ${comparedCars.map((c) => `<td class="p-3 font-medium">${c.engine || "Đang cập nhật"}</td>`).join("")}
+                            ${comparedCars.map((c) => `<td class="p-3 font-medium">${escapeHtml(c.engine || "Đang cập nhật")}</td>`).join("")}
                         </tr>
                         <tr>
                             <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Hộp Số</td>
-                            ${comparedCars.map((c) => `<td class="p-3 font-medium">${c.transmission || "Tự động"}</td>`).join("")}
+                            ${comparedCars.map((c) => `<td class="p-3 font-medium">${escapeHtml(c.transmission || "Tự động")}</td>`).join("")}
                         </tr>
                         <tr>
                             <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Nhiên Liệu</td>
-                            ${comparedCars.map((c) => `<td class="p-3 font-semibold text-slate-900 dark:text-white">${c.fuel || "Xăng"}</td>`).join("")}
+                            ${comparedCars.map((c) => `<td class="p-3 font-semibold text-slate-900 dark:text-white">${escapeHtml(c.fuel || "Xăng")}</td>`).join("")}
                         </tr>
                         <tr>
                             <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Mô Tả & Điểm Nhấn</td>
-                            ${comparedCars.map((c) => `<td class="p-3 leading-relaxed text-[11px] text-gray-600 dark:text-gray-400">${c.description || "Chưa có thông tin"}</td>`).join("")}
+                            ${comparedCars.map((c) => `<td class="p-3 leading-relaxed text-[11px] text-gray-600 dark:text-gray-400">${escapeHtml(c.description || "Chưa có thông tin")}</td>`).join("")}
                         </tr>
                         <tr>
                             <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Thao Tác</td>
@@ -2136,7 +2138,7 @@
                               .map(
                                 (c) => `
                                 <td class="p-3 space-y-1.5">
-                                    <button onclick="closeModal('compareModal'); openBookingModal('${c.name}')" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-2 rounded-xl text-xs transition shadow">
+                                    <button onclick="closeModal('compareModal'); openBookingModalById(${c.id})" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-2 rounded-xl text-xs transition shadow">
                                         Đăng Ký Lái Thử
                                     </button>
                                     <button onclick="closeModal('compareModal'); openDetailModal(${c.id})" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs transition border border-gray-300 dark:border-white/10">
@@ -2175,13 +2177,13 @@
                 <div class="relative rounded-2xl overflow-hidden mb-5">
                     <img src="${getCarImage(car.image)}" class="w-full h-80 object-cover" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                     <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                        ${car.brand}
+                        ${escapeHtml(car.brand)}
                     </span>
                 </div>
 
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-gray-200 dark:border-white/10 pb-4">
                     <div>
-                        <h2 class="text-2xl sm:text-3xl font-black font-heading text-slate-900 dark:text-white">${car.name}</h2>
+                        <h2 class="text-2xl sm:text-3xl font-black font-heading text-slate-900 dark:text-white">${escapeHtml(car.name)}</h2>
                         <span class="text-xs text-gray-500 dark:text-gray-400">Mã SKU: 4TL-00${car.id} | Tình trạng: Xe mới có sẵn giao ngay</span>
                     </div>
                     <div class="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-500 font-heading">
@@ -2192,30 +2194,30 @@
                 <div class="grid grid-cols-3 gap-3 my-4">
                     <div class="bg-gray-50 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                         <span class="text-gray-500 dark:text-gray-400 text-[10px] uppercase font-bold block mb-1">Động cơ</span>
-                        <strong class="text-xs text-slate-900 dark:text-white">${car.engine || "N/A"}</strong>
+                        <strong class="text-xs text-slate-900 dark:text-white">${escapeHtml(car.engine || "N/A")}</strong>
                     </div>
                     <div class="bg-gray-50 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                         <span class="text-gray-500 dark:text-gray-400 text-[10px] uppercase font-bold block mb-1">Hộp số</span>
-                        <strong class="text-xs text-slate-900 dark:text-white">${car.transmission || "Tự động"}</strong>
+                        <strong class="text-xs text-slate-900 dark:text-white">${escapeHtml(car.transmission || "Tự động")}</strong>
                     </div>
                     <div class="bg-gray-50 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                         <span class="text-gray-500 dark:text-gray-400 text-[10px] uppercase font-bold block mb-1">Nhiên liệu</span>
-                        <strong class="text-xs text-slate-900 dark:text-white">${car.fuel || "Xăng"}</strong>
+                        <strong class="text-xs text-slate-900 dark:text-white">${escapeHtml(car.fuel || "Xăng")}</strong>
                     </div>
                 </div>
 
                 <div class="space-y-2">
                     <h4 class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Giới thiệu tổng quan & Trang bị nổi bật</h4>
                     <p class="text-gray-600 dark:text-gray-300 text-xs sm:text-sm leading-relaxed bg-gray-50 dark:bg-slate-950/50 p-4 rounded-2xl border border-gray-200 dark:border-white/5">
-                        ${car.description || "Mẫu xe sở hữu thiết kế thể thao đột phá, vật liệu nội thất cao cấp cùng hệ thống trợ lái và an toàn tối tân hàng đầu phân khúc."}
+                        ${escapeHtml(car.description || "Mẫu xe sở hữu thiết kế thể thao đột phá, vật liệu nội thất cao cấp cùng hệ thống trợ lái và an toàn tối tân hàng đầu phân khúc.")}
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
-                    <button onclick="closeModal('detailModal'); openQRModal('${car.name}', ${car.price})" class="bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3 rounded-2xl text-xs transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+                    <button onclick="closeModal('detailModal'); openQRModalById(${car.id})" class="bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3 rounded-2xl text-xs transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-qrcode"></i> Đặt Cọc Giữ Xe
                     </button>
-                    <button onclick="closeModal('detailModal'); openBookingModal('${car.name}')" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white font-bold py-3 rounded-2xl text-xs border border-gray-300 dark:border-white/10 transition flex items-center justify-center gap-2">
+                    <button onclick="closeModal('detailModal'); openBookingModalById(${car.id})" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white font-bold py-3 rounded-2xl text-xs border border-gray-300 dark:border-white/10 transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-car-side"></i> Lái Thử Tận Nơi
                     </button>
                     <button onclick="toggleCompareCar(${car.id}); closeModal('detailModal');" class="${isCompared ? "bg-emerald-600 text-white" : "bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-800 dark:text-white"} font-bold py-3 rounded-2xl text-xs border border-gray-300 dark:border-white/10 transition flex items-center justify-center gap-2">
@@ -2236,13 +2238,12 @@
       function openQRModal(carName, price) {
         window.currentDepositCar = { name: carName, price: price };
         document.getElementById("qrCarName").innerText = `Đặt cọc ưu tiên mẫu: ${carName}`;
-        const memo = `COC ${carName.replace(/\s+/g, "").toUpperCase()}`;
+        const memo = `COC ${carName.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`;
         document.getElementById("qrMemo").innerText = memo;
 
         const qrImg = document.getElementById("qrImage");
         qrImg.src = "images/qrcode.jpg";
 
-        // Dự phòng tự động nếu file images/qrcode.jpg bị thiếu hoặc sai tên trên server
         qrImg.onerror = function () {
           this.onerror = null;
           // Thay MÃ_NGÂN_HÀNG (vd: VCB, TCB, MB, ACB, BIDV...) và SỐ_TÀI_KHOẢN_THẬT của bạn vào dưới đây
@@ -2274,25 +2275,37 @@
           return;
         }
 
-        await fetch("php/save_order.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "deposit",
-            car_name: window.currentDepositCar?.name || "Xe Showroom 4TL",
-            car_price: window.currentDepositCar?.price || 0,
-            memo: memo,
-            customer_name: cusName,
-            customer_phone: cusPhone,
-          }),
-        });
+        try {
+          const res = await fetch("php/save_order.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "deposit",
+              car_name: window.currentDepositCar?.name || "Xe Showroom 4TL",
+              car_price: window.currentDepositCar?.price || 0,
+              memo: memo,
+              customer_name: cusName,
+              customer_phone: cusPhone,
+            }),
+          });
 
-        alert(
-          "🎉 Showroom 4TL đã lưu thông tin giao dịch cọc! Kế toán sẽ gọi xác nhận qua SĐT " +
-            cusPhone +
-            " trong 15 phút.",
-        );
-        closeModal("qrModal");
+          const result = await res.json();
+          if (result.status !== "success") {
+            alert("❌ " + (result.message || "Lỗi lưu giao dịch đặt cọc!"));
+            return;
+          }
+
+          alert(
+            "🎉 Showroom 4TL đã lưu thông tin giao dịch cọc! Kế toán sẽ gọi xác nhận qua SĐT " +
+              cusPhone +
+              " trong 15 phút.",
+          );
+          document.getElementById("qrCustomerName").value = "";
+          document.getElementById("qrCustomerPhone").value = "";
+          closeModal("qrModal");
+        } catch (err) {
+          alert("❌ Lỗi kết nối máy chủ: Không thể lưu giao dịch lúc này.");
+        }
       }
 
       async function handleModalBooking(e) {
@@ -2302,15 +2315,25 @@
         const phone = document.getElementById("modalBookingPhone").value;
         const date = document.getElementById("modalBookingDate").value;
 
-        await fetch("php/save_order.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type: "booking", name, phone, car, date, note: "Đặt từ Modal Lái thử" }),
-        });
+        try {
+          const res = await fetch("php/save_order.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ type: "booking", name, phone, car, date, note: "Đặt từ Modal Lái thử" }),
+          });
 
-        alert(`✅ Đã lưu lịch lái thử vào hệ thống!\nKhách hàng: ${name} (${phone})\nMẫu xe: ${car} - Ngày: ${date}`);
-        e.target.reset();
-        closeModal("bookingModal");
+          const result = await res.json();
+          if (result.status !== "success") {
+            alert("❌ " + (result.message || "Không thể lưu lịch lái thử!"));
+            return;
+          }
+
+          alert(`✅ Đã lưu lịch lái thử vào hệ thống!\nKhách hàng: ${name} (${phone})\nMẫu xe: ${car} - Ngày: ${date}`);
+          e.target.reset();
+          closeModal("bookingModal");
+        } catch (err) {
+          alert("❌ Lỗi kết nối máy chủ: Không thể gửi đăng ký lái thử.");
+        }
       }
 
       async function handleTestDriveSubmit(e) {
@@ -2319,43 +2342,69 @@
         const phone = document.getElementById("drivePhone").value;
         const car = document.getElementById("driveCar").value;
 
-        await fetch("php/save_order.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "booking",
-            name,
-            phone,
-            car,
-            date: new Date().toISOString().split("T")[0],
-            note: "Đặt từ Form chân trang",
-          }),
-        });
+        try {
+          const res = await fetch("php/save_order.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "booking",
+              name,
+              phone,
+              car,
+              date: new Date().toISOString().split("T")[0],
+              note: "Đặt từ Form chân trang",
+            }),
+          });
 
-        alert(`✅ Đã tiếp nhận & lưu lịch hẹn của quý khách ${name} (${phone}) đối với mẫu xe "${car}"!`);
-        e.target.reset();
+          const result = await res.json();
+          if (result.status !== "success") {
+            alert("❌ " + (result.message || "Không thể lưu lịch hẹn!"));
+            return;
+          }
+
+          alert(`✅ Đã tiếp nhận & lưu lịch hẹn của quý khách ${name} (${phone}) đối với mẫu xe "${car}"!`);
+          e.target.reset();
+        } catch (err) {
+          alert("❌ Lỗi kết nối máy chủ: Không thể gửi lịch hẹn.");
+        }
       }
 
       async function requestLoanConsult() {
         const phone = prompt("Quý khách vui lòng nhập Số điện thoại / Zalo để nhận bảng tính trả góp chi tiết:");
-        if (!phone) return;
+        if (!phone || !phone.trim()) return;
+
         const price = formatCurrency(document.getElementById("calcPriceInput").value);
         const downPercent = document.getElementById("calcDownPercent").value;
         const months = document.getElementById("calcMonths").value;
 
-        await fetch("php/save_order.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "booking",
-            name: "Khách tư vấn trả góp",
-            phone: phone,
-            car: `Gói vay xe ${price}`,
-            date: new Date().toISOString().split("T")[0],
-            note: `Trả trước ${downPercent}%, kỳ hạn ${months} tháng`,
-          }),
-        });
-        alert("✅ Đã gửi yêu cầu thành công! Chuyên viên tín dụng 4TL sẽ gửi bảng tính qua Zalo " + phone + " ngay.");
+        try {
+          const res = await fetch("php/save_order.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "booking",
+              name: "Khách tư vấn trả góp",
+              phone: phone.trim(),
+              car: `Gói vay xe ${price}`,
+              date: new Date().toISOString().split("T")[0],
+              note: `Trả trước ${downPercent}%, kỳ hạn ${months} tháng`,
+            }),
+          });
+
+          const result = await res.json();
+          if (result.status !== "success") {
+            alert("❌ " + (result.message || "Không thể gửi yêu cầu tư vấn!"));
+            return;
+          }
+
+          alert(
+            "✅ Đã gửi yêu cầu thành công! Chuyên viên tín dụng 4TL sẽ gửi bảng tính qua Zalo " +
+              phone.trim() +
+              " ngay.",
+          );
+        } catch (err) {
+          alert("❌ Lỗi kết nối máy chủ: Không thể gửi yêu cầu tư vấn.");
+        }
       }
 
       // CHATBOT ASSISTANT
@@ -2401,10 +2450,10 @@
 
         // Add user message
         chatBox.innerHTML += `
-                <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-xs shadow-md leading-relaxed">
-                    ${text}
-                </div>
-            `;
+              <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-xs shadow-md leading-relaxed">
+                  ${escapeHtml(text)}
+              </div>
+          `;
         input.value = "";
         chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -2797,11 +2846,11 @@
                   .map(
                     (d) => `
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50">
-                    <td class="p-3 font-mono text-gray-400">#${d.id}</td>
-                    <td class="p-3 font-bold">${d.customer_name}</td>
-                    <td class="p-3 font-mono text-indigo-500 font-bold">${d.customer_phone}</td>
-                    <td class="p-3 font-semibold">${d.car_name}</td>
-                    <td class="p-3 font-mono text-amber-500">${d.memo}</td>
+                    <td class="p-3 font-mono text-gray-400">#${Number(d.id)}</td>
+                    <td class="p-3 font-bold">${escapeHtml(d.customer_name)}</td>
+                    <td class="p-3 font-mono text-indigo-500 font-bold">${escapeHtml(d.customer_phone)}</td>
+                    <td class="p-3 font-semibold">${escapeHtml(d.car_name)}</td>
+                    <td class="p-3 font-mono text-amber-500">${escapeHtml(d.memo)}</td>
                     <td class="p-3">
                         <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${d.status === "verified" ? "bg-emerald-500/20 text-emerald-400" : d.status === "cancelled" ? "bg-indigo-500/20 text-indigo-400" : "bg-amber-500/20 text-amber-400"}">
                             ${d.status === "verified" ? "Đã nhận tiền" : d.status === "cancelled" ? "Đã hủy" : "Chờ đối soát"}
@@ -2826,11 +2875,11 @@
                   .map(
                     (b) => `
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50">
-                    <td class="p-3 font-mono text-gray-400">#${b.id}</td>
-                    <td class="p-3 font-bold">${b.customer_name}</td>
-                    <td class="p-3 font-mono text-blue-400 font-bold">${b.phone}</td>
-                    <td class="p-3 font-semibold">${b.car_name}</td>
-                    <td class="p-3 text-gray-400">${b.booking_date} — <span class="italic">${b.note || ""}</span></td>
+                    <td class="p-3 font-mono text-gray-400">#${Number(b.id)}</td>
+                    <td class="p-3 font-bold">${escapeHtml(b.customer_name)}</td>
+                    <td class="p-3 font-mono text-blue-400 font-bold">${escapeHtml(b.phone)}</td>
+                    <td class="p-3 font-semibold">${escapeHtml(b.car_name)}</td>
+                    <td class="p-3 text-gray-400">${escapeHtml(b.booking_date)} — <span class="italic">${escapeHtml(b.note || "")}</span></td>
                     <td class="p-3">
                         <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${b.status === "confirmed" ? "bg-emerald-500/20 text-emerald-400" : b.status === "cancelled" ? "bg-indigo-500/20 text-indigo-400" : "bg-amber-500/20 text-amber-400"}">
                             ${b.status === "confirmed" ? "Đã chốt lịch" : b.status === "cancelled" ? "Đã hủy" : "Chờ gọi xác nhận"}
@@ -2889,13 +2938,13 @@
           .map(
             (car) => `
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition">
-                    <td class="p-3 text-gray-400 font-mono">#${car.id}</td>
+                    <td class="p-3 text-gray-400 font-mono">#${Number(car.id)}</td>
                     <td class="p-3">
                         <img src="${getCarImage(car.image)}" class="w-14 h-9 object-cover rounded-lg border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                     </td>
-                    <td class="p-3 font-bold text-slate-900 dark:text-white">${car.name}</td>
-                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 font-bold">${car.brand}</span></td>
-                    <td class="p-3 text-gray-500 dark:text-gray-400">${car.fuel || "Xăng"}</td>
+                    <td class="p-3 font-bold text-slate-900 dark:text-white">${escapeHtml(car.name)}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 font-bold">${escapeHtml(car.brand)}</span></td>
+                    <td class="p-3 text-gray-500 dark:text-gray-400">${escapeHtml(car.fuel || "Xăng")}</td>
                     <td class="p-3 text-indigo-600 dark:text-indigo-400 font-bold font-mono">${Number(car.price).toLocaleString("vi-VN")} đ</td>
                     <td class="p-3 text-right space-x-2">
                         <button onclick="openEditModal(${car.id})" class="text-blue-600 dark:text-blue-400 hover:underline font-bold inline-flex items-center gap-1">
@@ -3249,7 +3298,7 @@
 
         chatBox.innerHTML += `
                 <div class="bg-indigo-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-xs shadow-md leading-relaxed">
-                    ${text}
+                    ${escapeHtml(text)}
                 </div>
             `;
         userInput.value = "";
@@ -3451,7 +3500,7 @@
                         <div class="relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-900 border border-gray-200 dark:border-white/10 shadow-2xl">
                             <img src="${getCarImage(car.image)}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
                             <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
-                                ${car.brand}
+                                ${escapeHtml(car.brand)}
                             </span>
                         </div>
 
@@ -3460,17 +3509,17 @@
                             <div class="bg-gray-50 dark:bg-slate-900/80 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                                 <i class="fa-solid fa-gauge-high text-indigo-600 dark:text-indigo-500 mb-1"></i>
                                 <div class="text-[10px] text-gray-500 dark:text-gray-400">Động cơ</div>
-                                <div class="font-bold text-slate-900 dark:text-white truncate">${car.engine || "N/A"}</div>
+                                <div class="font-bold text-slate-900 dark:text-white truncate">${escapeHtml(car.engine || "N/A")}</div>
                             </div>
                             <div class="bg-gray-50 dark:bg-slate-900/80 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                                 <i class="fa-solid fa-sliders text-indigo-600 dark:text-indigo-500 mb-1"></i>
                                 <div class="text-[10px] text-gray-500 dark:text-gray-400">Hộp số</div>
-                                <div class="font-bold text-slate-900 dark:text-white truncate">${car.transmission || "Tự động"}</div>
+                                <div class="font-bold text-slate-900 dark:text-white truncate">${escapeHtml(car.transmission || "Tự động")}</div>
                             </div>
                             <div class="bg-gray-50 dark:bg-slate-900/80 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                                 <i class="fa-solid fa-gas-pump text-indigo-600 dark:text-indigo-500 mb-1"></i>
                                 <div class="text-[10px] text-gray-500 dark:text-gray-400">Nhiên liệu</div>
-                                <div class="font-bold text-slate-900 dark:text-white truncate">${car.fuel || "Xăng"}</div>
+                                <div class="font-bold text-slate-900 dark:text-white truncate">${escapeHtml(car.fuel || "Xăng")}</div>
                             </div>
                         </div>
                     </div>
@@ -3479,7 +3528,7 @@
                     <div class="lg:col-span-5 space-y-6">
                         <div>
                             <span class="text-xs text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-widest">${car.brand} Supercar</span>
-                            <h1 class="text-3xl font-black font-heading text-slate-900 dark:text-white mt-1">${car.name}</h1>
+                            <h1 class="text-3xl font-black font-heading text-slate-900 dark:text-white mt-1">${escapeHtml(car.name)}</h1>
                             <div class="text-3xl font-black text-indigo-600 dark:text-indigo-500 font-heading mt-2">
                                 ${Number(car.price).toLocaleString("vi-VN")} VNĐ
                             </div>
@@ -3487,7 +3536,7 @@
 
                         <div class="bg-gray-50 dark:bg-slate-900/80 p-4 rounded-2xl border border-gray-200 dark:border-white/10 space-y-2 text-xs">
                             <div class="text-gray-500 dark:text-gray-400 uppercase font-bold text-[10px]">Giới thiệu mẫu xe</div>
-                            <p class="text-slate-700 dark:text-gray-300 leading-relaxed">${car.description || "Mẫu xe sở hữu thiết kế tuyệt hảo, trang bị động cơ hiệu năng cao và công nghệ an toàn hàng đầu thế giới."}</p>
+                            <p class="text-slate-700 dark:text-gray-300 leading-relaxed">${escapeHtml(car.description || "Mẫu xe sở hữu thiết kế tuyệt hảo, trang bị động cơ hiệu năng cao và công nghệ an toàn hàng đầu thế giới.")}</p>
                         </div>
 
                         <!-- Loan Preview -->
@@ -3713,9 +3762,6 @@ if (empty($username) || empty($password)) {
     exit();
 }
 
-// Hash BCRYPT của mật khẩu rút gọn dành riêng cho chủ web (không lộ chữ thường trong code)
-$ownerShortcutHash = password_hash('admin', PASSWORD_DEFAULT);
-
 // 1. Xác thực chính qua bảng users trong MySQL
 if ($pdo) {
     try {
@@ -3723,19 +3769,12 @@ if ($pdo) {
         $stmt->execute([$username]);
         $user = $stmt->fetch();
 
-        if ($user) {
-            // Khớp mật khẩu chính trong CSDL ('admin123' cho người chấm)
-            // Hoặc khớp mật khẩu rút gọn của riêng bạn ('admin')
-            $isValid = password_verify($password, $user['password'])
-                    || ($user['username'] === 'admin' && password_verify($password, $ownerShortcutHash));
-
-            if ($isValid) {
-                session_regenerate_id(true);
-                $_SESSION['admin_logged_in'] = true;
-                $_SESSION['admin_user'] = $user['username'];
-                echo json_encode(["status" => "success", "message" => "Đăng nhập thành công!"], JSON_UNESCAPED_UNICODE);
-                exit();
-            }
+        if ($user && password_verify($password, $user['password'])) {
+            session_regenerate_id(true);
+            $_SESSION['admin_logged_in'] = true;
+            $_SESSION['admin_user'] = $user['username'];
+            echo json_encode(["status" => "success", "message" => "Đăng nhập thành công!"], JSON_UNESCAPED_UNICODE);
+            exit();
         }
 
         echo json_encode(["status" => "error", "message" => "Tài khoản hoặc mật khẩu không chính xác!"], JSON_UNESCAPED_UNICODE);
@@ -3747,7 +3786,7 @@ if ($pdo) {
 }
 
 // 2. Chế độ dự phòng khi chưa bật MySQL
-if ($username === 'admin' && ($password === 'admin123' || $password === 'admin')) {
+if ($username === 'admin' && $password === 'admin123') {
     session_regenerate_id(true);
     $_SESSION['admin_logged_in'] = true;
     $_SESSION['admin_user'] = 'admin';
@@ -3796,15 +3835,23 @@ if (!$input && isset($_POST['message'])) {
     $input = $_POST;
 }
 
-function toLowerUtf8($str) {
+function e($str)
+{
+    return htmlspecialchars((string)$str, ENT_QUOTES, 'UTF-8');
+}
+
+function toLowerUtf8($str)
+{
     return function_exists('mb_strtolower') ? mb_strtolower($str, 'UTF-8') : strtolower($str);
 }
 
-function strPosUtf8($haystack, $needle) {
+function strPosUtf8($haystack, $needle)
+{
     return function_exists('mb_strpos') ? mb_strpos($haystack, $needle) : strpos($haystack, $needle);
 }
 
-function removeAccents($str) {
+function removeAccents($str)
+{
     $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/u", 'a', $str);
     $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/u", 'e', $str);
     $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/u", 'i', $str);
@@ -3816,17 +3863,39 @@ function removeAccents($str) {
 }
 
 // Kiểm tra từ/cụm từ độc lập (tránh khớp nhầm chuỗi con)
-function hasWord($haystack, $needle) {
+function hasWord($haystack, $needle)
+{
     $pattern = '/(?<![a-z0-9])' . preg_quote($needle, '/') . '(?![a-z0-9])/i';
     return preg_match($pattern, $haystack) === 1;
 }
 
 // Trích xuất mã nhận diện riêng của từng xe, loại bỏ các hậu tố phổ thông
-function getCarIdentifiers($carNameNoAccent, $brandNoAccent) {
+function getCarIdentifiers($carNameNoAccent, $brandNoAccent)
+{
     $stopWords = [
-        'plus', 'amg', 'luxury', 'premium', 'signature', 'tributo', 'quattro',
-        'pure', 'excellence', 'carrera', 'diesel', 'hybrid', 'hev', 'e:hev',
-        'titanium', 'titanium+', '4x4', 'at', 'rs', 'v6', 's', 'class', 'c-class'
+        'plus',
+        'amg',
+        'luxury',
+        'premium',
+        'signature',
+        'tributo',
+        'quattro',
+        'pure',
+        'excellence',
+        'carrera',
+        'diesel',
+        'hybrid',
+        'hev',
+        'e:hev',
+        'titanium',
+        'titanium+',
+        '4x4',
+        'at',
+        'rs',
+        'v6',
+        's',
+        'class',
+        'c-class'
     ];
 
     $identifiers = [$carNameNoAccent];
@@ -3962,7 +4031,11 @@ if (!$reply && !empty($cars)) {
 
     if ($matchedCar) {
         $priceFormatted = number_format((float)$matchedCar['price'], 0, ',', '.');
-        $reply = "Dạ, mẫu xe <strong>{$matchedCar['name']}</strong> ({$matchedCar['brand']}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$matchedCar['engine']} | Nhiên liệu: {$matchedCar['fuel']}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
+        $cName = e($matchedCar['name']);
+        $cBrand = e($matchedCar['brand']);
+        $cEngine = e($matchedCar['engine']);
+        $cFuel = e($matchedCar['fuel']);
+        $reply = "Dạ, mẫu xe <strong>{$cName}</strong> ({$cBrand}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$cEngine} | Nhiên liệu: {$cFuel}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
     } else {
         // Bước 2B: Nếu không nhắc tên xe cụ thể, kiểm tra xem khách có hỏi theo THƯƠNG HIỆU không (không break sớm)
         $brandMatches = [];
@@ -3990,9 +4063,9 @@ if (!$reply && !empty($cars)) {
             $lines = [];
             foreach ($brandMatches as $m) {
                 $p = number_format((float)$m['price'], 0, ',', '.');
-                $lines[] = "• <strong>{$m['name']}</strong>: {$p} VNĐ ({$m['fuel']})";
+                $lines[] = "• <strong>" . e($m['name']) . "</strong>: {$p} VNĐ (" . e($m['fuel']) . ")";
             }
-            $reply = "Dạ, Showroom 4TL hiện đang có <strong>" . count($brandMatches) . " mẫu xe {$matchedBrandName}</strong> sẵn giao:<br>" . implode("<br>", $lines);
+            $reply = "Dạ, Showroom 4TL hiện đang có <strong>" . count($brandMatches) . " mẫu xe " . e($matchedBrandName) . "</strong> sẵn giao:<br>" . implode("<br>", $lines);
         }
     }
 }
@@ -4001,10 +4074,19 @@ if (!$reply && !empty($cars)) {
 if (!$reply && (strpos($msgNoAccent, 'duoi') !== false || strpos($msgNoAccent, 'tam') !== false || strpos($msgNoAccent, 'ngan sach') !== false)) {
     $limitPrice = 0;
     $label = "";
-    if (strpos($msgNoAccent, '500') !== false) { $limitPrice = 500000000; $label = "dưới 500 triệu"; }
-    elseif (strpos($msgNoAccent, '1 ty') !== false || strpos($msgNoAccent, '1ty') !== false) { $limitPrice = 1000000000; $label = "dưới 1 tỷ"; }
-    elseif (strpos($msgNoAccent, '2 ty') !== false || strpos($msgNoAccent, '2ty') !== false) { $limitPrice = 2000000000; $label = "dưới 2 tỷ"; }
-    elseif (strpos($msgNoAccent, '3 ty') !== false || strpos($msgNoAccent, '3ty') !== false) { $limitPrice = 3000000000; $label = "dưới 3 tỷ"; }
+    if (strpos($msgNoAccent, '500') !== false) {
+        $limitPrice = 500000000;
+        $label = "dưới 500 triệu";
+    } elseif (strpos($msgNoAccent, '1 ty') !== false || strpos($msgNoAccent, '1ty') !== false) {
+        $limitPrice = 1000000000;
+        $label = "dưới 1 tỷ";
+    } elseif (strpos($msgNoAccent, '2 ty') !== false || strpos($msgNoAccent, '2ty') !== false) {
+        $limitPrice = 2000000000;
+        $label = "dưới 2 tỷ";
+    } elseif (strpos($msgNoAccent, '3 ty') !== false || strpos($msgNoAccent, '3ty') !== false) {
+        $limitPrice = 3000000000;
+        $label = "dưới 3 tỷ";
+    }
 
     if ($limitPrice > 0 && !empty($cars)) {
         $matches = array_filter($cars, fn($c) => (float)$c['price'] <= $limitPrice);
@@ -4013,7 +4095,7 @@ if (!$reply && (strpos($msgNoAccent, 'duoi') !== false || strpos($msgNoAccent, '
             $list = [];
             foreach (array_slice($matches, 0, 4) as $m) {
                 $p = number_format((float)$m['price'], 0, ',', '.');
-                $list[] = "• <strong>{$m['name']}</strong>: {$p} VNĐ";
+                $list[] = "• <strong>" . e($m['name']) . "</strong>: {$p} VNĐ";
             }
             $reply = "Dạ với tầm tài chính <strong>{$label}</strong>, Showroom 4TL đề xuất các mẫu xe:<br>" . implode("<br>", $list);
         }
@@ -4031,7 +4113,6 @@ if (!$reply) {
 }
 
 echo json_encode(["reply" => $reply], JSON_UNESCAPED_UNICODE);
-?>
 ```
 
 ### file db.php:
@@ -5056,13 +5137,6 @@ input[type=range]::-webkit-slider-thumb:hover {
 
 ### file schema.sql:
 ```sql
--- HƯỚNG DẪN IMPORT:
--- 1. Trên Hosting (InfinityFree): Chọn sẵn Database ở cột trái -> tab Import -> Chọn file này.
--- 2. Trên XAMPP Local: Tạo database tên 'web_ban_xe' trước, chọn vào nó rồi Import
---    (hoặc bỏ dấu '-- ' ở 2 dòng dưới đây trước khi chạy).
--- CREATE DATABASE IF NOT EXISTS web_ban_xe DEFAULT CHARACER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
--- USE web_ban_xe;
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -5298,8 +5372,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'auth_check.php') {
 
 ### file theme.js:
 ```js
-// SHOWROOM 4TL - GLOBAL THEME & FONT CONTROLLER (theme.js)
-
 // 1. Cấu hình Tailwind CSS dùng chung cho toàn bộ các trang HTML
 if (typeof tailwind !== "undefined") {
   tailwind.config = {
@@ -5394,6 +5466,18 @@ function getCarImage(img) {
     return prefix + cleanImg;
   }
   return prefix + "images/" + cleanImg.replace(/^\/+/, "");
+}
+
+// 8. Hàm chống XSS dùng chung cho toàn bộ website
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str).replace(/[&<>"']/g, (m) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[m]));
 }
 ```
 
