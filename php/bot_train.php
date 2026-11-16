@@ -27,6 +27,46 @@ function removeAccents($str) {
     return $str;
 }
 
+// Kiểm tra từ/cụm từ độc lập (tránh khớp nhầm chuỗi con)
+function hasWord($haystack, $needle) {
+    $pattern = '/(?<![a-z0-9])' . preg_quote($needle, '/') . '(?![a-z0-9])/i';
+    return preg_match($pattern, $haystack) === 1;
+}
+
+// Trích xuất mã nhận diện riêng của từng xe, loại bỏ các hậu tố phổ thông
+function getCarIdentifiers($carNameNoAccent, $brandNoAccent) {
+    $stopWords = [
+        'plus', 'amg', 'luxury', 'premium', 'signature', 'tributo', 'quattro',
+        'pure', 'excellence', 'carrera', 'diesel', 'hybrid', 'hev', 'e:hev',
+        'titanium', 'titanium+', '4x4', 'at', 'rs', 'v6', 's', 'class', 'c-class'
+    ];
+
+    $identifiers = [$carNameNoAccent];
+    // Bỏ tên hãng khỏi tên xe để lấy phần tên dòng/mã xe
+    $modelPart = trim(str_replace($brandNoAccent, '', $carNameNoAccent));
+    if (strlen($modelPart) >= 2 && !in_array($modelPart, $stopWords)) {
+        $identifiers[] = $modelPart;
+    }
+
+    $tokens = preg_split('/[\s\/]+/', $modelPart);
+    foreach ($tokens as $token) {
+        $tokenClean = trim($token, '+-');
+        if (strlen($tokenClean) >= 2 && !in_array($tokenClean, $stopWords)) {
+            // Ưu tiên token có chứa chữ số (vf3, c300, g63, 911, cx-5...) hoặc tên riêng >= 4 ký tự (camry, urus...)
+            if (preg_match('/\d/', $tokenClean) || strlen($tokenClean) >= 4) {
+                $identifiers[] = $tokenClean;
+            }
+        }
+    }
+
+    // Bổ sung biến thể có dấu cách cho mã VF (vd: "vf 3", "vf 5", "vf 8")
+    if (preg_match('/\bvf(\d+)\b/', $carNameNoAccent, $m)) {
+        $identifiers[] = 'vf ' . $m[1];
+    }
+
+    return array_unique($identifiers);
+}
+
 $message = toLowerUtf8(trim($input['message'] ?? ''));
 
 if (empty($message)) {
@@ -85,7 +125,7 @@ if (isset($pdo) && $pdo) {
     }
 }
 
-// ƯU TIÊN 2: LẤY DANH SÁCH XE TỪ PDO (CÓ DỮ LIỆU DỰ PHÒNG NẾU LỖI DB)
+// ƯU TIÊN 2: LẤY DANH SÁCH XE TỪ PDO
 $cars = [];
 if (isset($pdo) && $pdo) {
     try {
@@ -109,21 +149,62 @@ if (empty($cars)) {
 }
 
 if (!$reply && !empty($cars)) {
-    foreach ($cars as $car) {
-        $carNameLower = toLowerUtf8($car['name']);
-        $carNameNoAccent = removeAccents($carNameLower);
-        $words = explode(' ', $carNameNoAccent);
-        $lastWord = end($words);
+    // Bước 2A: Tìm theo MẪU XE CỤ THỂ (chọn xe khớp chính xác nhất)
+    $matchedCar = null;
+    $bestCarScore = 0;
 
-        if (strPosUtf8($message, $carNameLower) !== false ||
-            strpos($msgNoAccent, $carNameNoAccent) !== false ||
-            (strlen($lastWord) >= 3 && strpos($msgNoAccent, $lastWord) !== false) ||
-            ($car['name'] === 'VinFast VF3' && (strpos($msgNoAccent, 'vf3') !== false || strpos($msgNoAccent, 'vf 3') !== false)) ||
-            ($car['name'] === 'Mercedes-AMG G63' && (strpos($msgNoAccent, 'g63') !== false || strpos($msgNoAccent, 'g 63') !== false))
-        ) {
-            $priceFormatted = number_format((float)$car['price'], 0, ',', '.');
-            $reply = "Dạ, mẫu xe <strong>{$car['name']}</strong> ({$car['brand']}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$car['engine']} | Nhiên liệu: {$car['fuel']}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
-            break;
+    foreach ($cars as $car) {
+        $carNameNoAccent = removeAccents(toLowerUtf8($car['name']));
+        $brandNoAccent = removeAccents(toLowerUtf8($car['brand']));
+        $identifiers = getCarIdentifiers($carNameNoAccent, $brandNoAccent);
+
+        $carScore = 0;
+        foreach ($identifiers as $idx => $idStr) {
+            if (hasWord($msgNoAccent, $idStr)) {
+                // Khớp nguyên tên xe điểm cao nhất (10), khớp mã dòng xe điểm 5
+                $carScore = max($carScore, $idx === 0 ? 10 : 5);
+            }
+        }
+
+        if ($carScore > $bestCarScore) {
+            $bestCarScore = $carScore;
+            $matchedCar = $car;
+        }
+    }
+
+    if ($matchedCar) {
+        $priceFormatted = number_format((float)$matchedCar['price'], 0, ',', '.');
+        $reply = "Dạ, mẫu xe <strong>{$matchedCar['name']}</strong> ({$matchedCar['brand']}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$matchedCar['engine']} | Nhiên liệu: {$matchedCar['fuel']}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
+    } else {
+        // Bước 2B: Nếu không nhắc tên xe cụ thể, kiểm tra xem khách có hỏi theo THƯƠNG HIỆU không (không break sớm)
+        $brandMatches = [];
+        $matchedBrandName = "";
+
+        foreach ($cars as $car) {
+            $brandNoAccent = removeAccents(toLowerUtf8($car['brand']));
+            // Hỗ trợ gõ tắt "mercedes" cho "mercedes-benz"
+            $brandAliases = [$brandNoAccent];
+            if (strpos($brandNoAccent, 'mercedes') !== false) {
+                $brandAliases[] = 'mercedes';
+                $brandAliases[] = 'mec';
+            }
+
+            foreach ($brandAliases as $alias) {
+                if (hasWord($msgNoAccent, $alias)) {
+                    $brandMatches[] = $car;
+                    $matchedBrandName = $car['brand'];
+                    break;
+                }
+            }
+        }
+
+        if (!empty($brandMatches)) {
+            $lines = [];
+            foreach ($brandMatches as $m) {
+                $p = number_format((float)$m['price'], 0, ',', '.');
+                $lines[] = "• <strong>{$m['name']}</strong>: {$p} VNĐ ({$m['fuel']})";
+            }
+            $reply = "Dạ, Showroom 4TL hiện đang có <strong>" . count($brandMatches) . " mẫu xe {$matchedBrandName}</strong> sẵn giao:<br>" . implode("<br>", $lines);
         }
     }
 }
@@ -157,7 +238,7 @@ if (!$reply) {
     } elseif (strpos($msgNoAccent, 'lai thu') !== false) {
         $reply = "Quý khách hãy bấm nút <strong>'Lái Thử'</strong> trên bất kỳ mẫu xe nào, điền tên và SĐT, hệ thống sẽ lưu lịch hẹn ngay để chuyên viên mang xe tới tận nơi ạ!";
     } else {
-        $reply = "Cảm ơn quý khách đã nhắn tin! Quý khách có thể hỏi về giá xe cụ thể (VD: <em>giá VF3, G63, Porsche 911</em>), ngân sách (<em>xe dưới 2 tỷ</em>) hoặc gọi Hotline VIP <strong>0706.850.014</strong> ạ!";
+        $reply = "Cảm ơn quý khách đã nhắn tin! Quý khách có thể hỏi về giá xe cụ thể (VD: <em>giá VF3, G63, Porsche 911</em>), theo hãng (<em>xe VinFast, Mercedes</em>), ngân sách (<em>xe dưới 2 tỷ</em>) hoặc gọi Hotline VIP <strong>0706.850.014</strong> ạ!";
     }
 }
 

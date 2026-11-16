@@ -86,10 +86,12 @@ function getCarImage(img) {
     return FALLBACK_CAR_IMG;
   }
   const cleanImg = String(img).trim();
-  // Nếu là link online (http/https) hoặc đã có sẵn tiền tố images/ thì giữ nguyên
-  if (cleanImg.startsWith("http://") || cleanImg.startsWith("https://") || cleanImg.startsWith("images/")) {
+  if (cleanImg.startsWith("http://") || cleanImg.startsWith("https://")) {
     return cleanImg;
   }
-  // Nếu chỉ nhập tên file (vd: porsche.jpg) -> tự động nối vào thư mục images/
-  return "images/" + cleanImg.replace(/^\/+/, "");
+  const prefix = window.location.pathname.includes("/html/") ? "../" : "";
+  if (cleanImg.startsWith("images/")) {
+    return prefix + cleanImg;
+  }
+  return prefix + "images/" + cleanImg.replace(/^\/+/, "");
 }

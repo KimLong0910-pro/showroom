@@ -10,8 +10,8 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body
     class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 min-h-screen p-4 sm:p-8 font-sans transition-colors duration-300">
@@ -20,7 +20,7 @@
       <div
         class="flex justify-between items-center bg-white/90 dark:bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-gray-200 dark:border-white/10 shadow-lg">
         <a
-          href="index.html"
+          href="../index.html"
           class="text-xs font-bold text-slate-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white flex items-center gap-2 transition">
           <i class="fa-solid fa-arrow-left text-indigo-600 dark:text-indigo-500"></i>
           Quay Lại Showroom
@@ -129,7 +129,7 @@
 
         let cars = [];
         try {
-          const res = await fetch("get_cars.php");
+          const res = await fetch("../php/get_cars.php");
           cars = await res.json();
         } catch (e) {
           cars = fallbackCars;
@@ -201,7 +201,7 @@
                             <a href="tel:0706850014" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-600/30">
                                 <i class="fa-solid fa-phone"></i> Gọi Hotline Tư Vấn Ngay: 0706.850.014
                             </a>
-                            <a href="index.html#car-section" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-gray-300 font-bold py-3 rounded-2xl text-xs flex items-center justify-center gap-2 border border-gray-200 dark:border-white/10 transition">
+                            <a href="../index.html#car-section" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-gray-300 font-bold py-3 rounded-2xl text-xs flex items-center justify-center gap-2 border border-gray-200 dark:border-white/10 transition">
                                 <i class="fa-solid fa-car"></i> Xem Các Mẫu Xe Khác
                             </a>
                         </div>

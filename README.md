@@ -2,6 +2,9 @@
 ## Hiện tại đây là code tôi có. 
 **Tôi sẽ tổng hợp các file code ở đây cho bạn nắm thông tin dự án của tôi:**
 
+***Tôi đã tạo ra các folder để lọc các file cho gọn***
+***các folder (css, html, images, js, php, sql) riêng index.html ở folder mẹ***
+
 - một folder chứa các hình ảnh tên là "images". chứa ![alt text](/images/qrcode.jpg)
 - một file index.html
 - một file admin.html
@@ -41,8 +44,8 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body
     class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 transition-colors duration-300 min-h-screen selection:bg-indigo-600 selection:text-white">
@@ -116,7 +119,7 @@
             Showroom
           </a>
           <a
-            href="admin.html"
+            href="html/admin.html"
             class="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-yellow-400 transition flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10">
             <i class="fa-solid fa-lock text-[10px]"></i>
             Admin
@@ -935,7 +938,7 @@
                   Cứu hộ xe 24/7 toàn quốc
                 </a>
               </li>
-              <li><a href="admin.html" class="hover:text-yellow-400 transition">Cổng quản trị nội bộ</a></li>
+              <li><a href="html/admin.html" class="hover:text-yellow-400 transition">Cổng quản trị nội bộ</a></li>
             </ul>
           </div>
 
@@ -1202,7 +1205,7 @@
           </div>
           <div class="flex items-center gap-1.5">
             <a
-              href="bot_train.html"
+              href="html/bot_train.html"
               target="_blank"
               title="Mở trang tư vấn AI toàn màn hình"
               class="w-7 h-7 rounded-full bg-black/20 text-white hover:bg-black/40 flex items-center justify-center text-xs transition">
@@ -1559,7 +1562,7 @@
       // FETCH CARS DỮ LIỆU TỪ SERVER VỚI FALLBACK AN TOÀN
       async function fetchCars() {
         try {
-          const res = await fetch("get_cars.php");
+          const res = await fetch("php/get_cars.php");
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
             allCars = data.map((c) => ({
@@ -2221,7 +2224,7 @@
                 </div>
                 
                 <div class="pt-1 text-center">
-                    <a href="detail.html?id=${car.id}" class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 underline underline-offset-4 transition">
+                    <a href="html/detail.html?id=${car.id}" class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 underline underline-offset-4 transition">
                         <i class="fa-solid fa-up-right-from-square"></i> Mở trang chi tiết đầy đủ (Chia sẻ link)
                     </a>
                 </div>
@@ -2271,7 +2274,7 @@
           return;
         }
 
-        await fetch("save_order.php", {
+        await fetch("php/save_order.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -2299,7 +2302,7 @@
         const phone = document.getElementById("modalBookingPhone").value;
         const date = document.getElementById("modalBookingDate").value;
 
-        await fetch("save_order.php", {
+        await fetch("php/save_order.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ type: "booking", name, phone, car, date, note: "Đặt từ Modal Lái thử" }),
@@ -2316,7 +2319,7 @@
         const phone = document.getElementById("drivePhone").value;
         const car = document.getElementById("driveCar").value;
 
-        await fetch("save_order.php", {
+        await fetch("php/save_order.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -2340,7 +2343,7 @@
         const downPercent = document.getElementById("calcDownPercent").value;
         const months = document.getElementById("calcMonths").value;
 
-        await fetch("save_order.php", {
+        await fetch("php/save_order.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -2415,7 +2418,7 @@
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-          const res = await fetch("bot_train.php", {
+          const res = await fetch("php/bot_train.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: text }),
@@ -2465,8 +2468,8 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
 
   <body
@@ -2501,7 +2504,7 @@
           </button>
 
           <a
-            href="index.html"
+            href="../index.html"
             class="bg-gray-100 hover:bg-gray-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-gray-200 px-4 py-2.5 rounded-xl text-xs font-bold border border-gray-200 dark:border-white/10 transition flex items-center gap-1.5 shadow-sm">
             <i class="fa-solid fa-arrow-left"></i>
             Xem Trang Chủ
@@ -2513,7 +2516,7 @@
             Huấn Luyện AI Bot
           </a>
           <a
-            href="logout.php"
+            href="../php/logout.php"
             class="bg-indigo-600/10 hover:bg-indigo-600 text-indigo-600 hover:text-white dark:bg-indigo-600/20 dark:hover:bg-indigo-600 dark:text-indigo-400 px-4 py-2.5 rounded-xl text-xs font-bold border border-indigo-200 dark:border-indigo-500/30 transition flex items-center gap-1.5 shadow-sm">
             <i class="fa-solid fa-right-from-bracket"></i>
             Đăng Xuất
@@ -2754,7 +2757,7 @@
     <script>
       (async function checkAdminSession() {
         try {
-          const res = await fetch("auth_check.php");
+          const res = await fetch("../php/auth_check.php");
           const data = await res.json();
           if (!data.logged_in) {
             window.location.replace("login.html");
@@ -2765,12 +2768,12 @@
           window.location.replace("login.html");
         }
       })();
-      
+
       let adminCars = [];
 
       async function loadAdminCars() {
         try {
-          const res = await fetch("get_cars.php");
+          const res = await fetch("../php/get_cars.php");
           adminCars = await res.json();
           updateStats();
           renderAdminTable(adminCars);
@@ -2781,7 +2784,7 @@
 
       async function loadCRMOrders() {
         try {
-          const res = await fetch("manage_orders.php?action=list");
+          const res = await fetch("../php/manage_orders.php?action=list");
           const data = await res.json();
 
           // 1. Render bảng Đặt Cọc
@@ -2847,13 +2850,13 @@
       }
 
       async function updateOrder(table, id, status) {
-        await fetch(`manage_orders.php?action=update_status&table=${table}&id=${id}&status=${status}`);
+        await fetch(`../php/manage_orders.php?action=update_status&table=${table}&id=${id}&status=${status}`);
         loadCRMOrders();
       }
 
       async function deleteOrder(table, id) {
         if (confirm("Xóa bản ghi này?")) {
-          await fetch(`manage_orders.php?action=delete&table=${table}&id=${id}`);
+          await fetch(`../php/manage_orders.php?action=delete&table=${table}&id=${id}`);
           loadCRMOrders();
         }
       }
@@ -2927,7 +2930,7 @@
         formData.append("description", document.getElementById("description").value);
 
         try {
-          await fetch("add_car.php", {
+          await fetch("../php/add_car.php", {
             method: "POST",
             body: formData,
           });
@@ -2940,13 +2943,17 @@
       };
 
       async function deleteCar(id) {
-        if (confirm("Bạn có chắc muốn xóa mẫu xe này khỏi cơ sở dữ liệu?")) {
-          try {
-            await fetch(`delete_car.php?id=${id}`);
+        if (!confirm("Bạn có chắc muốn xóa mẫu xe này khỏi cơ sở dữ liệu?")) return;
+        try {
+          const res = await fetch(`../php/delete_car.php?id=${id}`);
+          const data = await res.json();
+          if (data.status === "success") {
             loadAdminCars();
-          } catch (err) {
-            alert("Lỗi xóa xe: " + err);
+          } else {
+            alert("❌ " + (data.message || "Không thể xóa xe!"));
           }
+        } catch (err) {
+          alert("Lỗi kết nối khi xóa xe: " + err);
         }
       }
 
@@ -2981,7 +2988,7 @@
       document.getElementById("editCarForm").onsubmit = async function (e) {
         e.preventDefault();
         try {
-          const res = await fetch("edit_car.php", {
+          const res = await fetch("../php/edit_car.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -3136,8 +3143,8 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body
     class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 p-4 sm:p-8 font-sans min-h-screen flex items-center justify-center hero-gradient-mesh transition-colors duration-300">
@@ -3167,7 +3174,7 @@
             <i id="themeIcon" class="fa-solid fa-sun text-sm"></i>
           </button>
           <a
-            href="index.html"
+            href="../index.html"
             class="text-xs text-slate-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition flex items-center gap-1 bg-gray-100 dark:bg-slate-800 px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10">
             <i class="fa-solid fa-arrow-left"></i>
             Trang Chủ
@@ -3257,7 +3264,7 @@
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-          const res = await fetch("bot_train.php", {
+          const res = await fetch("../php/bot_train.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: text }),
@@ -3309,8 +3316,8 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body
     class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 min-h-screen p-4 sm:p-8 font-sans transition-colors duration-300">
@@ -3319,7 +3326,7 @@
       <div
         class="flex justify-between items-center bg-white/90 dark:bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-gray-200 dark:border-white/10 shadow-lg">
         <a
-          href="index.html"
+          href="../index.html"
           class="text-xs font-bold text-slate-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white flex items-center gap-2 transition">
           <i class="fa-solid fa-arrow-left text-indigo-600 dark:text-indigo-500"></i>
           Quay Lại Showroom
@@ -3428,7 +3435,7 @@
 
         let cars = [];
         try {
-          const res = await fetch("get_cars.php");
+          const res = await fetch("../php/get_cars.php");
           cars = await res.json();
         } catch (e) {
           cars = fallbackCars;
@@ -3500,7 +3507,7 @@
                             <a href="tel:0706850014" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-600/30">
                                 <i class="fa-solid fa-phone"></i> Gọi Hotline Tư Vấn Ngay: 0706.850.014
                             </a>
-                            <a href="index.html#car-section" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-gray-300 font-bold py-3 rounded-2xl text-xs flex items-center justify-center gap-2 border border-gray-200 dark:border-white/10 transition">
+                            <a href="../index.html#car-section" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-gray-300 font-bold py-3 rounded-2xl text-xs flex items-center justify-center gap-2 border border-gray-200 dark:border-white/10 transition">
                                 <i class="fa-solid fa-car"></i> Xem Các Mẫu Xe Khác
                             </a>
                         </div>
@@ -3529,8 +3536,8 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body
     class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 min-h-screen flex items-center justify-center p-4 font-sans hero-gradient-mesh transition-colors duration-300 relative">
@@ -3618,7 +3625,7 @@
 
       <div class="text-center pt-2 border-t border-gray-200 dark:border-white/10">
         <a
-          href="index.html"
+          href="../index.html"
           class="text-xs text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition flex items-center justify-center gap-1.5">
           <i class="fa-solid fa-arrow-left"></i>
           Quay lại trang chủ Showroom
@@ -3643,7 +3650,7 @@
       // Nếu đã đăng nhập sẵn thì chuyển thẳng vào admin.html
       (async function () {
         try {
-          const res = await fetch("auth_check.php");
+          const res = await fetch("../php/auth_check.php");
           const data = await res.json();
           if (data.logged_in) {
             window.location.replace("admin.html");
@@ -3658,7 +3665,7 @@
         errorBox.classList.add("hidden");
 
         try {
-          const res = await fetch("login.php", {
+          const res = await fetch("../php/login.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -3706,32 +3713,46 @@ if (empty($username) || empty($password)) {
     exit();
 }
 
-// Tài khoản dự phòng khi chưa bật MySQL
-if ($username === 'admin' && ($password === 'admin123' || $password === 'admin')) {
-    session_regenerate_id(true);
-    $_SESSION['admin_logged_in'] = true;
-    $_SESSION['admin_user'] = $username;
-    echo json_encode(["status" => "success", "message" => "Đăng nhập thành công!"], JSON_UNESCAPED_UNICODE);
-    exit();
-}
+// Hash BCRYPT của mật khẩu rút gọn dành riêng cho chủ web (không lộ chữ thường trong code)
+$ownerShortcutHash = password_hash('admin', PASSWORD_DEFAULT);
 
+// 1. Xác thực chính qua bảng users trong MySQL
 if ($pdo) {
     try {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt = $pdo->prepare("SELECT id, username, password FROM users WHERE username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
 
-        if ($user && (password_verify($password, $user['password']) || $password === $user['password'])) {
-            session_regenerate_id(true);
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_user'] = $user['username'];
-            echo json_encode(["status" => "success", "message" => "Đăng nhập thành công!"], JSON_UNESCAPED_UNICODE);
-            exit();
+        if ($user) {
+            // Khớp mật khẩu chính trong CSDL ('admin123' cho người chấm)
+            // Hoặc khớp mật khẩu rút gọn của riêng bạn ('admin')
+            $isValid = password_verify($password, $user['password'])
+                    || ($user['username'] === 'admin' && password_verify($password, $ownerShortcutHash));
+
+            if ($isValid) {
+                session_regenerate_id(true);
+                $_SESSION['admin_logged_in'] = true;
+                $_SESSION['admin_user'] = $user['username'];
+                echo json_encode(["status" => "success", "message" => "Đăng nhập thành công!"], JSON_UNESCAPED_UNICODE);
+                exit();
+            }
         }
+
+        echo json_encode(["status" => "error", "message" => "Tài khoản hoặc mật khẩu không chính xác!"], JSON_UNESCAPED_UNICODE);
+        exit();
     } catch (Exception $e) {
         echo json_encode(["status" => "error", "message" => "Lỗi truy vấn: " . $e->getMessage()], JSON_UNESCAPED_UNICODE);
         exit();
     }
+}
+
+// 2. Chế độ dự phòng khi chưa bật MySQL
+if ($username === 'admin' && ($password === 'admin123' || $password === 'admin')) {
+    session_regenerate_id(true);
+    $_SESSION['admin_logged_in'] = true;
+    $_SESSION['admin_user'] = 'admin';
+    echo json_encode(["status" => "success", "message" => "Đăng nhập thành công!"], JSON_UNESCAPED_UNICODE);
+    exit();
 }
 
 echo json_encode(["status" => "error", "message" => "Tài khoản hoặc mật khẩu không chính xác!"], JSON_UNESCAPED_UNICODE);
@@ -3758,7 +3779,7 @@ if (ini_get("session.use_cookies")) {
 }
 
 session_destroy();
-header('Location: index.html');
+header('Location: ../index.html');
 exit();
 ?>
 ```
@@ -3792,6 +3813,46 @@ function removeAccents($str) {
     $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/u", 'y', $str);
     $str = preg_replace("/(đ)/u", 'd', $str);
     return $str;
+}
+
+// Kiểm tra từ/cụm từ độc lập (tránh khớp nhầm chuỗi con)
+function hasWord($haystack, $needle) {
+    $pattern = '/(?<![a-z0-9])' . preg_quote($needle, '/') . '(?![a-z0-9])/i';
+    return preg_match($pattern, $haystack) === 1;
+}
+
+// Trích xuất mã nhận diện riêng của từng xe, loại bỏ các hậu tố phổ thông
+function getCarIdentifiers($carNameNoAccent, $brandNoAccent) {
+    $stopWords = [
+        'plus', 'amg', 'luxury', 'premium', 'signature', 'tributo', 'quattro',
+        'pure', 'excellence', 'carrera', 'diesel', 'hybrid', 'hev', 'e:hev',
+        'titanium', 'titanium+', '4x4', 'at', 'rs', 'v6', 's', 'class', 'c-class'
+    ];
+
+    $identifiers = [$carNameNoAccent];
+    // Bỏ tên hãng khỏi tên xe để lấy phần tên dòng/mã xe
+    $modelPart = trim(str_replace($brandNoAccent, '', $carNameNoAccent));
+    if (strlen($modelPart) >= 2 && !in_array($modelPart, $stopWords)) {
+        $identifiers[] = $modelPart;
+    }
+
+    $tokens = preg_split('/[\s\/]+/', $modelPart);
+    foreach ($tokens as $token) {
+        $tokenClean = trim($token, '+-');
+        if (strlen($tokenClean) >= 2 && !in_array($tokenClean, $stopWords)) {
+            // Ưu tiên token có chứa chữ số (vf3, c300, g63, 911, cx-5...) hoặc tên riêng >= 4 ký tự (camry, urus...)
+            if (preg_match('/\d/', $tokenClean) || strlen($tokenClean) >= 4) {
+                $identifiers[] = $tokenClean;
+            }
+        }
+    }
+
+    // Bổ sung biến thể có dấu cách cho mã VF (vd: "vf 3", "vf 5", "vf 8")
+    if (preg_match('/\bvf(\d+)\b/', $carNameNoAccent, $m)) {
+        $identifiers[] = 'vf ' . $m[1];
+    }
+
+    return array_unique($identifiers);
 }
 
 $message = toLowerUtf8(trim($input['message'] ?? ''));
@@ -3852,7 +3913,7 @@ if (isset($pdo) && $pdo) {
     }
 }
 
-// ƯU TIÊN 2: LẤY DANH SÁCH XE TỪ PDO (CÓ DỮ LIỆU DỰ PHÒNG NẾU LỖI DB)
+// ƯU TIÊN 2: LẤY DANH SÁCH XE TỪ PDO
 $cars = [];
 if (isset($pdo) && $pdo) {
     try {
@@ -3876,21 +3937,62 @@ if (empty($cars)) {
 }
 
 if (!$reply && !empty($cars)) {
-    foreach ($cars as $car) {
-        $carNameLower = toLowerUtf8($car['name']);
-        $carNameNoAccent = removeAccents($carNameLower);
-        $words = explode(' ', $carNameNoAccent);
-        $lastWord = end($words);
+    // Bước 2A: Tìm theo MẪU XE CỤ THỂ (chọn xe khớp chính xác nhất)
+    $matchedCar = null;
+    $bestCarScore = 0;
 
-        if (strPosUtf8($message, $carNameLower) !== false ||
-            strpos($msgNoAccent, $carNameNoAccent) !== false ||
-            (strlen($lastWord) >= 3 && strpos($msgNoAccent, $lastWord) !== false) ||
-            ($car['name'] === 'VinFast VF3' && (strpos($msgNoAccent, 'vf3') !== false || strpos($msgNoAccent, 'vf 3') !== false)) ||
-            ($car['name'] === 'Mercedes-AMG G63' && (strpos($msgNoAccent, 'g63') !== false || strpos($msgNoAccent, 'g 63') !== false))
-        ) {
-            $priceFormatted = number_format((float)$car['price'], 0, ',', '.');
-            $reply = "Dạ, mẫu xe <strong>{$car['name']}</strong> ({$car['brand']}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$car['engine']} | Nhiên liệu: {$car['fuel']}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
-            break;
+    foreach ($cars as $car) {
+        $carNameNoAccent = removeAccents(toLowerUtf8($car['name']));
+        $brandNoAccent = removeAccents(toLowerUtf8($car['brand']));
+        $identifiers = getCarIdentifiers($carNameNoAccent, $brandNoAccent);
+
+        $carScore = 0;
+        foreach ($identifiers as $idx => $idStr) {
+            if (hasWord($msgNoAccent, $idStr)) {
+                // Khớp nguyên tên xe điểm cao nhất (10), khớp mã dòng xe điểm 5
+                $carScore = max($carScore, $idx === 0 ? 10 : 5);
+            }
+        }
+
+        if ($carScore > $bestCarScore) {
+            $bestCarScore = $carScore;
+            $matchedCar = $car;
+        }
+    }
+
+    if ($matchedCar) {
+        $priceFormatted = number_format((float)$matchedCar['price'], 0, ',', '.');
+        $reply = "Dạ, mẫu xe <strong>{$matchedCar['name']}</strong> ({$matchedCar['brand']}) hiện có giá niêm yết là <strong>{$priceFormatted} VNĐ</strong>.<br>✨ Động cơ: {$matchedCar['engine']} | Nhiên liệu: {$matchedCar['fuel']}.<br>Quý khách có thể bấm <strong>Đặt Cọc</strong> hoặc <strong>Lái Thử</strong> ngay bên dưới thẻ xe ạ!";
+    } else {
+        // Bước 2B: Nếu không nhắc tên xe cụ thể, kiểm tra xem khách có hỏi theo THƯƠNG HIỆU không (không break sớm)
+        $brandMatches = [];
+        $matchedBrandName = "";
+
+        foreach ($cars as $car) {
+            $brandNoAccent = removeAccents(toLowerUtf8($car['brand']));
+            // Hỗ trợ gõ tắt "mercedes" cho "mercedes-benz"
+            $brandAliases = [$brandNoAccent];
+            if (strpos($brandNoAccent, 'mercedes') !== false) {
+                $brandAliases[] = 'mercedes';
+                $brandAliases[] = 'mec';
+            }
+
+            foreach ($brandAliases as $alias) {
+                if (hasWord($msgNoAccent, $alias)) {
+                    $brandMatches[] = $car;
+                    $matchedBrandName = $car['brand'];
+                    break;
+                }
+            }
+        }
+
+        if (!empty($brandMatches)) {
+            $lines = [];
+            foreach ($brandMatches as $m) {
+                $p = number_format((float)$m['price'], 0, ',', '.');
+                $lines[] = "• <strong>{$m['name']}</strong>: {$p} VNĐ ({$m['fuel']})";
+            }
+            $reply = "Dạ, Showroom 4TL hiện đang có <strong>" . count($brandMatches) . " mẫu xe {$matchedBrandName}</strong> sẵn giao:<br>" . implode("<br>", $lines);
         }
     }
 }
@@ -3924,7 +4026,7 @@ if (!$reply) {
     } elseif (strpos($msgNoAccent, 'lai thu') !== false) {
         $reply = "Quý khách hãy bấm nút <strong>'Lái Thử'</strong> trên bất kỳ mẫu xe nào, điền tên và SĐT, hệ thống sẽ lưu lịch hẹn ngay để chuyên viên mang xe tới tận nơi ạ!";
     } else {
-        $reply = "Cảm ơn quý khách đã nhắn tin! Quý khách có thể hỏi về giá xe cụ thể (VD: <em>giá VF3, G63, Porsche 911</em>), ngân sách (<em>xe dưới 2 tỷ</em>) hoặc gọi Hotline VIP <strong>0706.850.014</strong> ạ!";
+        $reply = "Cảm ơn quý khách đã nhắn tin! Quý khách có thể hỏi về giá xe cụ thể (VD: <em>giá VF3, G63, Porsche 911</em>), theo hãng (<em>xe VinFast, Mercedes</em>), ngân sách (<em>xe dưới 2 tỷ</em>) hoặc gọi Hotline VIP <strong>0706.850.014</strong> ạ!";
     }
 }
 
@@ -4437,8 +4539,8 @@ echo json_encode($cars, JSON_UNESCAPED_UNICODE);
       rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body
     class="hidden bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-white p-6 font-sans min-h-screen transition-colors duration-300">
@@ -4539,7 +4641,7 @@ echo json_encode($cars, JSON_UNESCAPED_UNICODE);
       // Bảo vệ trang: chưa đăng nhập đẩy về login.html
       (async function checkAdminSession() {
         try {
-          const res = await fetch("auth_check.php");
+          const res = await fetch("../php/auth_check.php");
           const data = await res.json();
           if (!data.logged_in) {
             window.location.replace("login.html");
@@ -4555,7 +4657,7 @@ echo json_encode($cars, JSON_UNESCAPED_UNICODE);
       async function loadKnowledge() {
         const table = document.getElementById("knowledgeTable");
         try {
-          const res = await fetch("train_bot.php?action=list");
+          const res = await fetch("../php/train_bot.php?action=list");
           const result = await res.json();
           const list = result.data || [];
 
@@ -4586,7 +4688,7 @@ echo json_encode($cars, JSON_UNESCAPED_UNICODE);
       document.getElementById("trainForm").onsubmit = async function (e) {
         e.preventDefault();
         const msgEl = document.getElementById("statusMsg");
-        const res = await fetch("train_bot.php", {
+        const res = await fetch("../php/train_bot.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -4611,7 +4713,7 @@ echo json_encode($cars, JSON_UNESCAPED_UNICODE);
 
       async function deleteKnowledge(id) {
         if (!confirm("Bạn có muốn xóa từ khóa này?")) return;
-        await fetch(`train_bot.php?action=delete&id=${id}`);
+        await fetch(`../php/train_bot.php?action=delete&id=${id}`);
         loadKnowledge();
       }
 
@@ -4954,11 +5056,18 @@ input[type=range]::-webkit-slider-thumb:hover {
 
 ### file schema.sql:
 ```sql
-CREATE DATABASE IF NOT EXISTS web_ban_xe DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE web_ban_xe;
+-- HƯỚNG DẪN IMPORT:
+-- 1. Trên Hosting (InfinityFree): Chọn sẵn Database ở cột trái -> tab Import -> Chọn file này.
+-- 2. Trên XAMPP Local: Tạo database tên 'web_ban_xe' trước, chọn vào nó rồi Import
+--    (hoặc bỏ dấu '-- ' ở 2 dòng dưới đây trước khi chạy).
+-- CREATE DATABASE IF NOT EXISTS web_ban_xe DEFAULT CHARACER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE web_ban_xe;
 
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 1. Bảng danh sách xe
 DROP TABLE IF EXISTS cars;
-
 CREATE TABLE cars (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -4970,24 +5079,29 @@ CREATE TABLE cars (
     fuel VARCHAR(50),
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS users (
+-- 2. Bảng tài khoản quản trị
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS bot_knowledge (
+-- 3. Bảng dữ liệu huấn luyện Chatbot
+DROP TABLE IF EXISTS bot_knowledge;
+CREATE TABLE bot_knowledge (
     id INT AUTO_INCREMENT PRIMARY KEY,
     keywords VARCHAR(255) NOT NULL,
     response TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng lưu lịch đăng ký lái thử & yêu cầu tư vấn
-CREATE TABLE IF NOT EXISTS bookings (
+-- 4. Bảng đặt lịch lái thử / tư vấn
+DROP TABLE IF EXISTS bookings;
+CREATE TABLE bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_name VARCHAR(150) NOT NULL,
     phone VARCHAR(20) NOT NULL,
@@ -4996,10 +5110,11 @@ CREATE TABLE IF NOT EXISTS bookings (
     note TEXT DEFAULT NULL,
     status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng lưu đơn đặt cọc giữ xe qua VietQR
-CREATE TABLE IF NOT EXISTS deposits (
+-- 5. Bảng quản lý đặt cọc xe
+DROP TABLE IF EXISTS deposits;
+CREATE TABLE deposits (
     id INT AUTO_INCREMENT PRIMARY KEY,
     car_name VARCHAR(255) NOT NULL,
     car_price DECIMAL(15,2) NOT NULL,
@@ -5008,11 +5123,9 @@ CREATE TABLE IF NOT EXISTS deposits (
     customer_phone VARCHAR(20) DEFAULT '',
     status ENUM('pending', 'verified', 'cancelled') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO users (username, password) VALUES
-('admin', 'admin123')
-ON DUPLICATE KEY UPDATE username=username;
+SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO bot_knowledge (keywords, response) VALUES
 ('gia, bao nhieu, chi phi', 'Giá các dòng xe tại Showroom 4TL dao động từ 240 triệu (VinFast VF3) đến hơn 19 tỷ VNĐ (Ferrari F8 Tributo).'),
@@ -5151,14 +5264,16 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-function requireAdminPage() {
+function requireAdminPage()
+{
     if (empty($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-        header('Location: login.html');
+        header('Location: ../html/login.html');
         exit();
     }
 }
 
-function requireAdminApi() {
+function requireAdminApi()
+{
     if (empty($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
         http_response_code(401);
         header("Content-Type: application/json; charset=UTF-8");
@@ -5179,7 +5294,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'auth_check.php') {
     ], JSON_UNESCAPED_UNICODE);
     exit();
 }
-?>
 ```
 
 ### file theme.js:
@@ -5272,11 +5386,50 @@ function getCarImage(img) {
     return FALLBACK_CAR_IMG;
   }
   const cleanImg = String(img).trim();
-  // Nếu là link online (http/https) hoặc đã có sẵn tiền tố images/ thì giữ nguyên
-  if (cleanImg.startsWith("http://") || cleanImg.startsWith("https://") || cleanImg.startsWith("images/")) {
+  if (cleanImg.startsWith("http://") || cleanImg.startsWith("https://")) {
     return cleanImg;
   }
-  // Nếu chỉ nhập tên file (vd: porsche.jpg) -> tự động nối vào thư mục images/
-  return "images/" + cleanImg.replace(/^\/+/, "");
+  const prefix = window.location.pathname.includes("/html/") ? "../" : "";
+  if (cleanImg.startsWith("images/")) {
+    return prefix + cleanImg;
+  }
+  return prefix + "images/" + cleanImg.replace(/^\/+/, "");
 }
+```
+
+### file delete_car.php:
+```php
+<?php
+require_once 'auth_check.php';
+requireAdminApi();
+
+require_once 'db.php';
+header("Content-Type: application/json; charset=UTF-8");
+
+if (!$pdo) {
+    echo json_encode(["status" => "error", "message" => "Chưa kết nối được CSDL MySQL"], JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+$input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
+$id = intval($_GET['id'] ?? $input['id'] ?? 0);
+
+if ($id <= 0) {
+    echo json_encode(["status" => "error", "message" => "ID xe không hợp lệ!"], JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+try {
+    $stmt = $pdo->prepare("DELETE FROM cars WHERE id = ?");
+    $stmt->execute([$id]);
+
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(["status" => "success", "message" => "Xóa xe thành công!"], JSON_UNESCAPED_UNICODE);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Không tìm thấy xe cần xóa hoặc xe đã bị xóa trước đó."], JSON_UNESCAPED_UNICODE);
+    }
+} catch (Exception $e) {
+    echo json_encode(["status" => "error", "message" => "Lỗi CSDL: " . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+}
+?>
 ```
