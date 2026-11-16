@@ -4138,7 +4138,6 @@ if ($isLocal) {
     $dbname = "if0_43447777_web_ban_xe";
 }
 
-$conn = null;
 $pdo = null;
 
 try {
@@ -4251,15 +4250,9 @@ try {
         ");
     }
 
-    // 8. Giữ biến $conn (MySQLi) để các file add_car.php, delete_car.php, get_cars.php hoạt động bình thường
-    $conn = @new mysqli($host, $user, $pass, $dbname);
-    if ($conn && !$conn->connect_error) {
-        $conn->set_charset("utf8mb4");
-    }
 
 } catch (Exception $e) {
     $pdo = null;
-    $conn = null;
 }
 ?>
 ```
@@ -4365,15 +4358,16 @@ header("Content-Type: application/json; charset=UTF-8");
 
 $cars = [];
 
-if (isset($conn) && $conn && !$conn->connect_error) {
-    $sql = "SELECT * FROM cars ORDER BY id DESC";
-    $result = @$conn->query($sql);
-    if ($result && $result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
+if (isset($pdo) && $pdo) {
+    try {
+        $stmt = $pdo->query("SELECT * FROM cars ORDER BY id DESC");
+        while ($row = $stmt->fetch()) {
             $row['id'] = (int)$row['id'];
             $row['price'] = (float)$row['price'];
             $cars[] = $row;
         }
+    } catch (Exception $e) {
+        $cars = [];
     }
 }
 

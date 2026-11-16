@@ -19,7 +19,6 @@ if ($isLocal) {
     $dbname = "if0_43447777_web_ban_xe";
 }
 
-$conn = null;
 $pdo = null;
 
 try {
@@ -132,14 +131,8 @@ try {
         ");
     }
 
-    // 8. Giữ biến $conn (MySQLi) để các file add_car.php, delete_car.php, get_cars.php hoạt động bình thường
-    $conn = @new mysqli($host, $user, $pass, $dbname);
-    if ($conn && !$conn->connect_error) {
-        $conn->set_charset("utf8mb4");
-    }
 
 } catch (Exception $e) {
     $pdo = null;
-    $conn = null;
 }
 ?>
