@@ -400,13 +400,13 @@
 
           <!-- Result Dashboard Card -->
           <div
-            class="lg:col-span-5 bg-gradient-to-b from-indigo-50 via-white to-gray-50 dark:bg-gradient-to-b dark:from-indigo-600/20 dark:via-slate-900 dark:to-slate-900 p-6 sm:p-8 rounded-3xl border border-indigo-200 dark:border-indigo-500/30 space-y-6 shadow-xl">
+            class="lg:col-span-5 glass-card bg-gradient-to-b from-indigo-50/90 via-white/95 to-purple-50/80 dark:from-indigo-950/50 dark:via-slate-900/60 dark:to-purple-950/40 p-6 sm:p-8 rounded-3xl border border-indigo-200 dark:border-indigo-500/30 space-y-6 shadow-xl">
             <div class="border-b border-gray-200 dark:border-white/10 pb-4">
               <span class="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">
                 Ước tính trả hàng tháng (Gốc + Lãi)
               </span>
               <div
-                class="text-3xl sm:text-4xl font-black text-indigo-600 dark:text-indigo-500 font-heading mt-1"
+                class="text-3xl sm:text-4xl font-black text-indigo-600 dark:text-indigo-400 font-heading mt-1"
                 id="resMonthlyPayment">
                 -- VNĐ
               </div>
@@ -828,7 +828,7 @@
           class="pt-8 border-t border-gray-800 dark:border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-gray-500">
           <p>© 2026 SHOWROOM 4TL. Bản quyền phát triển bởi Sinh viên ĐH Văn Lang.</p>
           <div class="flex gap-4">
-            <span>Đẳng Cấp • Minh Bạch • Tận Tâm</span>
+            <span>Đẳng Cấp • Minh Bạch • Tận Tâm • Thanh Lịch</span>
           </div>
         </div>
       </div>
@@ -1516,9 +1516,8 @@
           const percent = ((val - min) / (max - min)) * 100;
 
           const isLight = document.documentElement.classList.contains("light");
-          const trackBg = isLight ? "#cbd5e1" : "#334155";
-
-          slider.style.background = `linear-gradient(to right, #6366f1 0%, #6366f1 ${percent}%, ${trackBg} ${percent}%, ${trackBg} 100%)`;
+          const trackBg = isLight ? "#ddd6fe" : "#2e1065";
+          slider.style.background = `linear-gradient(to right, #6d28d9 0%, #a78bfa ${percent}%, ${trackBg} ${percent}%, ${trackBg} 100%)`;
         });
 
         const price = parseFloat(document.getElementById("calcPriceInput").value) || 0;
