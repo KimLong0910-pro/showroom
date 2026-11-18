@@ -3,40 +3,39 @@
 **Tôi sẽ tổng hợp các file code ở đây cho bạn nắm thông tin dự án của tôi:**
 
 ```bash
-showroom/
-├── .gitignore                # Quy tắc bỏ qua tệp khi dùng Git
-├── .vscode/                  # Cấu hình Visual Studio Code
-│   └── settings.json         # Cấu hình cổng Live Server
-├── README.md                 # Giới thiệu dự án
-├── Website_introduction.md   # Nhật ký và ghi chú phát triển
-├── css/                      # Giao diện và kiểu dáng
-│   └── style.css             # Bộ kiểu dùng chung cho website
-├── html/                     # Các trang chức năng
-│   ├── admin.html            # Trang quản trị xe và đơn hàng
-│   ├── bot_train.html        # Giao diện chatbot tư vấn xe
-│   ├── detail.html           # Trang chi tiết xe
-│   ├── login.html            # Trang đăng nhập quản trị
-│   └── train_bot.html        # Trang huấn luyện chatbot
-├── images/                   # Hình ảnh của dự án
-│   └── qrcode.jpg            # Mã QR đặt cọc
-├── index.html                # Trang chủ showroom
-├── js/                       # Mã JavaScript dùng chung
-│   └── theme.js              # Cấu hình giao diện và tiện ích chung
-├── php/                      # API và xử lý phía máy chủ
-│   ├── add_car.php           # Thêm xe vào cơ sở dữ liệu
-│   ├── auth_check.php        # Kiểm tra phiên đăng nhập quản trị
-│   ├── bot_train.php         # Xử lý câu hỏi tư vấn của chatbot
-│   ├── db.php                # Kết nối và khởi tạo cơ sở dữ liệu
-│   ├── delete_car.php        # Xóa xe khỏi cơ sở dữ liệu
-│   ├── edit_car.php          # Cập nhật thông tin xe
-│   ├── get_cars.php          # Lấy danh sách xe
-│   ├── login.php             # Xác thực tài khoản quản trị
-│   ├── logout.php            # Đăng xuất quản trị
-│   ├── manage_orders.php     # Quản lý lịch hẹn và đơn đặt cọc
-│   ├── save_order.php        # Lưu lịch hẹn và thông tin đặt cọc
-│   └── train_bot.php         # Quản lý dữ liệu huấn luyện chatbot
-└── sql/                      # Lược đồ cơ sở dữ liệu
-    └── schema.sql            # Tạo bảng và dữ liệu mẫu
+webbanxe/
+├── .gitignore                          # Quy tắc bỏ qua tệp khi dùng Git
+├── README.md                            # Giới thiệu và ghi chú dự án
+├── css/
+│   └── style.css                        # Kiểu dáng dùng chung cho website
+├── html/
+│   ├── admin.html                       # Trang quản trị xe và đơn hàng
+│   ├── bo_suu_tap_xe.html               # Trang danh sách, lọc và so sánh xe
+│   ├── bot_train.html                   # Giao diện chatbot tư vấn xe
+│   ├── detail.html                      # Trang thông tin chi tiết xe
+│   ├── login.html                       # Trang đăng nhập quản trị
+│   └── train_bot.html                   # Trang quản lý dữ liệu huấn luyện chatbot
+├── images/
+│   └── qrcode.jpg                       # Mã QR đặt cọc
+├── index.html                           # Trang chủ showroom
+├── js/
+│   └── theme.js                         # Cấu hình giao diện và tiện ích dùng chung
+├── php/
+│   ├── add_car.php                      # Thêm xe vào cơ sở dữ liệu
+│   ├── auth_check.php                   # Kiểm tra phiên đăng nhập quản trị
+│   ├── bot_train.php                    # Xử lý câu hỏi và phản hồi chatbot
+│   ├── db.php                           # Kết nối và khởi tạo cơ sở dữ liệu
+│   ├── delete_car.php                   # Xóa xe khỏi cơ sở dữ liệu
+│   ├── edit_car.php                     # Cập nhật thông tin xe
+│   ├── get_cars.php                     # Lấy danh sách xe
+│   ├── login.php                        # Xác thực tài khoản quản trị
+│   ├── logout.php                       # Đăng xuất quản trị
+│   ├── manage_orders.php                # Quản lý lịch hẹn và đơn đặt cọc
+│   ├── save_order.php                   # Lưu lịch hẹn và thông tin đặt cọc
+│   └── train_bot.php                    # Quản lý dữ liệu huấn luyện chatbot
+├── sql/
+│   └── schema.sql                       # Tạo bảng và nạp dữ liệu mẫu
+└── thongtinxe.md                        # Thông số và mô tả các mẫu xe
 ```
 
 ### file index.html: 
@@ -58,8 +57,14 @@ showroom/
     <script src="js/theme.js"></script>
     <link rel="stylesheet" href="css/style.css" />
   </head>
+
   <body
     class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 transition-colors duration-300 min-h-screen selection:bg-indigo-600 selection:text-white">
+    <!-- KHUNG CHỨA TOAST -->
+    <div
+      id="toastContainer"
+      class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none"></div>
+
     <!-- TOP PROMOTION BAR -->
     <div
       class="bg-gradient-to-r from-indigo-900 via-indigo-600 to-indigo-900 text-white text-xs font-semibold py-2 px-4 text-center tracking-wide border-b border-indigo-500/30 flex items-center justify-center gap-2">
@@ -67,7 +72,7 @@ showroom/
         Ưu Đãi Đặc Biệt
       </span>
       <span>Tặng gói bảo hiểm thân vỏ 2 năm + Gói phủ Ceramic VIP khi cọc xe online trong tháng</span>
-      <a href="#car-section" class="underline ml-2 hover:text-yellow-200">Khám Phá Ngay &rarr;</a>
+      <a href="html/bo_suu_tap_xe.html" class="underline ml-2 hover:text-yellow-200">Khám Phá Ngay &rarr;</a>
     </div>
 
     <!-- MAIN HEADER / NAVBAR -->
@@ -102,7 +107,7 @@ showroom/
             Trang Chủ
           </a>
           <a
-            href="#car-section"
+            href="html/bo_suu_tap_xe.html"
             class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
             <i class="fa-solid fa-car text-xs"></i>
             Bộ Sưu Tập Xe
@@ -150,284 +155,172 @@ showroom/
 
           <!-- Hotline VIP Button -->
           <a
-            href="tel:0706850014"
+            href="tel:0765650114"
             class="shine-hover relative group bg-gradient-to-r from-indigo-600 to-violet-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <i class="fa-solid fa-phone-volume"></i>
-            <span class="hidden sm:inline">0706.850.014</span>
+            <span class="hidden sm:inline">0765.650.114</span>
             <span class="sm:hidden">Gọi VIP</span>
           </a>
         </div>
       </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section
-      class="relative min-h-[580px] lg:min-h-[640px] flex items-center hero-gradient-mesh overflow-hidden border-b border-gray-200 dark:border-white/10 py-12 lg:py-16">
-      <!-- Ambient Blur Glows -->
+    <!-- HERO SECTION (CHIA 2 CỘT CÂN ĐỐI: TRÁI GIỚI THIỆU - PHẢI THÔNG SỐ & CTA) -->
+    <!-- HERO SECTION (BỐ CỤC 2 CỘT CHUẨN UX/UI) -->
+    <section class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28">
+      <!-- Hiệu ứng ánh sáng nền (Ambient Glow) -->
       <div
-        class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/10 dark:bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
+        class="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-indigo-600/20 blur-[120px]"></div>
       <div
-        class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        class="pointer-events-none absolute top-1/3 right-0 h-80 w-80 rounded-full bg-purple-600/15 blur-[120px]"></div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          <!-- Left Hero Content -->
-          <div class="lg:col-span-7 space-y-6">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-10">
+          <!-- CỘT TRÁI (7/12): TIÊU ĐỀ, CTA & CHỈ SỐ CAM KẾT -->
+          <div class="lg:col-span-7">
+            <!-- Badge nhỏ phía trên -->
             <div
-              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider">
-              <i class="fa-solid fa-bolt text-indigo-600 dark:text-indigo-500"></i>
-              <span>Showroom Siêu Xe & Xe Sang Uy Tín Hàng Đầu</span>
+              class="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 backdrop-blur-md">
+              <span class="text-xs font-semibold tracking-wider text-indigo-400 uppercase">
+                ⚡ SHOWROOM SIÊU XE &amp; XE SANG UY TÍN HÀNG ĐẦU
+              </span>
             </div>
 
+            <!-- Tiêu đề chính (Đã tối ưu kích thước chữ để không bị rớt dòng lẻ) -->
             <h1
-              class="text-4xl sm:text-5xl lg:text-6xl font-black font-heading leading-tight tracking-tight text-slate-900 dark:text-white">
+              class="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl xl:text-[54px] xl:leading-[1.15]">
               ĐẲNG CẤP
-              <span class="text-gradient-red">THƯỢNG LƯU</span>
-              <br />
+              <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+                THƯỢNG LƯU
+              </span>
+              <br class="hidden sm:inline" />
               BỨT PHÁ MỌI GIỚI HẠN
             </h1>
 
-            <p class="text-gray-600 dark:text-gray-300 text-base sm:text-lg max-w-xl font-normal leading-relaxed">
+            <!-- Mô tả ngắn -->
+            <p class="mt-6 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg">
               Khám phá bộ sưu tập hơn
-              <strong class="text-slate-900 dark:text-white">
-                50+ siêu xe thể thao, SUV cao cấp & xe điện thế hệ mới
+              <strong class="font-semibold text-slate-900 dark:text-white">
+                50+ siêu xe thể thao, SUV cao cấp &amp; xe điện thế hệ mới
               </strong>
               sẵn sàng bàn giao trong 24h. Cam kết kiểm định 160 bước nghiêm ngặt, hỗ trợ trả góp đến 80%.
             </p>
 
-            <!-- CTAs -->
-            <div class="flex flex-wrap items-center gap-4 pt-2">
+            <!-- Cụm 3 nút hành động (CTA) -->
+            <div class="mt-8 flex flex-wrap items-center gap-4">
+              <!-- Nút chính -->
               <a
-                href="#car-section"
-                class="bg-indigo-600 hover:bg-violet-700 text-white font-bold px-7 py-3.5 rounded-2xl text-sm shadow-xl shadow-indigo-600/30 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                href="html/bo_suu_tap_xe.html"
+                class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:scale-[1.02] hover:from-indigo-500 hover:to-purple-500">
                 <span>Khám Phá Bộ Sưu Tập</span>
-                <i class="fa-solid fa-arrow-right"></i>
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
               </a>
+
+              <!-- Nút phụ (Dự toán trả góp) -->
               <a
                 href="#loan-calculator"
-                class="bg-white hover:bg-gray-100 text-gray-800 dark:bg-slate-900/80 dark:hover:bg-slate-800 dark:text-gray-200 font-bold px-6 py-3.5 rounded-2xl text-sm border border-gray-300 dark:border-white/10 hover:border-indigo-500/40 transition flex items-center gap-2 shadow-sm">
-                <i class="fa-solid fa-calculator text-indigo-600 dark:text-indigo-400"></i>
+                class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white/70 px-6 py-3.5 text-sm font-semibold text-slate-800 backdrop-blur-md transition-all duration-300 hover:bg-slate-100 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
+                <svg class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
                 <span>Dự Toán Trả Góp</span>
               </a>
+
+              <!-- Link phụ (Đăng ký lái thử) -->
               <button
                 onclick="openBookingModal('Tất cả mẫu xe')"
-                class="text-xs text-gray-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white underline underline-offset-4 transition">
-                Đăng ký lái thử tận nhà &rarr;
+                class="inline-flex items-center gap-1.5 px-2 py-2 text-sm font-medium text-slate-500 underline-offset-4 transition-colors hover:text-indigo-500 hover:underline dark:text-slate-400 dark:hover:text-indigo-300">
+                <span>Đăng ký lái thử tận nhà &rarr;</span>
               </button>
             </div>
 
-            <!-- Trust Stats Bar -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-gray-200 dark:border-white/10">
+            <!-- Đường kẻ phân cách mờ -->
+            <div
+              class="my-9 h-px w-full bg-gradient-to-r from-slate-200 via-slate-300 to-transparent dark:from-white/15 dark:via-white/10 dark:to-transparent"></div>
+
+            <!-- Hàng 4 chỉ số cam kết phía dưới -->
+            <div class="grid grid-cols-2 gap-6 sm:grid-cols-4">
               <div>
-                <div class="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white font-heading">50+</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">Siêu xe có sẵn</div>
+                <div class="text-2xl font-extrabold text-slate-900 dark:text-white sm:text-3xl">50+</div>
+                <div class="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">Siêu xe có sẵn</div>
               </div>
               <div>
-                <div class="text-2xl lg:text-3xl font-black text-indigo-600 dark:text-indigo-400 font-heading">
+                <div
+                  class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
                   100%
                 </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">Kiểm định chính hãng</div>
+                <div class="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">Kiểm định chính hãng</div>
               </div>
               <div>
-                <div class="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white font-heading">80%</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">Hỗ trợ vay trả góp</div>
+                <div class="text-2xl font-extrabold text-slate-900 dark:text-white sm:text-3xl">80%</div>
+                <div class="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">Hỗ trợ vay trả góp</div>
               </div>
               <div>
-                <div class="text-2xl lg:text-3xl font-black text-indigo-600 dark:text-indigo-400 font-heading">
+                <div
+                  class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
                   24/7
                 </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">Cứu hộ & Giao xe VIP</div>
+                <div class="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">Cứu hộ &amp; Giao xe VIP</div>
               </div>
             </div>
           </div>
 
-          <!-- Right Hero Visual Spotlight -->
-          <div class="lg:col-span-5 relative">
-            <div
-              class="relative rounded-3xl p-2 bg-gradient-to-b from-indigo-500/20 via-black/5 to-transparent dark:from-indigo-500/30 dark:via-white/5 shadow-2xl">
-              <div
-                class="relative rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 group shadow-lg">
+          <!-- CỘT PHẢI (5/12): CARD XE SPOTLIGHT NỔI BẬT -->
+          <div class="lg:col-span-5">
+            <a
+              href="html/detail.html?id=3"
+              class="group relative block overflow-hidden rounded-3xl border border-slate-200/80 bg-slate-900 shadow-2xl shadow-indigo-950/40 transition-all duration-500 hover:-translate-y-1.5 hover:border-indigo-500/50 dark:border-white/15">
+              <!-- Ảnh xe tỷ lệ vuông/4:3 lớn -->
+              <div class="relative aspect-[4/3] w-full overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800"
                   alt="Porsche 911 Carrera S"
-                  class="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition duration-700" />
+                  class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
 
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10"></div>
+                <!-- Lớp phủ gradient tối dần ở đáy để làm nổi chữ -->
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent"></div>
 
-                <!-- Floating Spec Badges -->
-                <div class="absolute top-4 left-4 flex gap-2">
-                  <span
-                    class="bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                    ★ Spotlight Mới Về
-                  </span>
-                </div>
-
+                <!-- Nhãn góc trên trái -->
                 <div
-                  class="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-black/70 backdrop-blur-md border border-white/15 text-white">
-                  <div class="flex justify-between items-end">
-                    <div>
-                      <span class="text-xs text-indigo-400 font-bold uppercase tracking-wider">Porsche Series</span>
-                      <h3 class="text-xl font-black text-white">Porsche 911 Carrera S</h3>
-                      <p class="text-xs text-gray-300">0-100 km/h: 3.5s | 450 HP | Hộp số PDK 8 cấp</p>
-                    </div>
-                    <div class="text-right">
-                      <span class="text-[10px] text-gray-300 block">Giá niêm yết</span>
-                      <span class="text-lg font-black text-indigo-400">8,5 Tỷ VNĐ</span>
-                    </div>
+                  class="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-indigo-600/90 px-3.5 py-1 text-[11px] font-bold tracking-wider text-white uppercase shadow-md backdrop-blur-md">
+                  <span>★ SPOTLIGHT MỚI VỀ</span>
+                </div>
+              </div>
+
+              <!-- Khung thông tin Glassmorphism ở đáy card -->
+              <div
+                class="relative -mt-20 mx-3 mb-3 rounded-2xl border border-white/15 bg-slate-950/75 p-5 backdrop-blur-xl">
+                <div class="flex items-end justify-between gap-4">
+                  <div>
+                    <p class="text-[11px] font-bold tracking-widest text-indigo-400 uppercase">PORSCHE SERIES</p>
+                    <h2 class="mt-0.5 text-xl font-bold text-white sm:text-2xl">Porsche 911 Carrera S</h2>
+                    <p class="mt-1.5 text-xs text-slate-300">
+                      0-100 km/h: 3.7s
+                      <span class="mx-1 text-slate-500">|</span>
+                      450 HP
+                      <span class="mx-1 text-slate-500">|</span>
+                      Hộp số PDK 8 cấp
+                    </p>
+                  </div>
+
+                  <div class="text-right shrink-0">
+                    <span class="block text-[11px] text-slate-400">Giá niêm yết</span>
+                    <span class="text-lg font-extrabold text-indigo-400 sm:text-xl">8,5 Tỷ VNĐ</span>
                   </div>
                 </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- BRAND LOGO / QUICK FILTER STRIP -->
-    <section
-      class="py-6 bg-gray-100/80 dark:bg-slate-950/90 border-b border-gray-200 dark:border-white/10 overflow-x-auto">
-      <div
-        class="max-w-7xl mx-auto px-4 flex items-center gap-2 sm:gap-3 justify-start md:justify-center min-w-max"
-        id="brandPillContainer">
-        <!-- Brand pills injected via JavaScript -->
-      </div>
-    </section>
-
-    <!-- MAIN CAR SHOWROOM & INVENTORY -->
-    <main id="car-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-      <!-- Section Header -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <span
-            class="text-xs font-bold text-indigo-600 dark:text-indigo-500 tracking-widest uppercase flex items-center gap-1.5">
-            <i class="fa-solid fa-car-side"></i>
-            BỘ SƯU TẬP XE 2026
-          </span>
-          <h2 class="text-3xl sm:text-4xl font-black font-heading mt-1 text-slate-900 dark:text-white">
-            DANH SÁCH SIÊU XE & XE SANG SẴN GIAO
-          </h2>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-xl">
-            Lựa chọn các siêu phẩm tốc độ, SUV thương gia và xe điện bán chạy nhất hiện nay. Đầy đủ giấy tờ pháp lý, hỗ
-            trợ sang tên trọn gói.
-          </p>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <span
-            id="carCountBadge"
-            class="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/10 shadow-sm">
-            Đang hiển thị:
-            <strong class="text-indigo-600 dark:text-indigo-400">0</strong>
-            xe
-          </span>
-          <button
-            onclick="resetAllFilters()"
-            class="text-xs text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white underline transition">
-            <i class="fa-solid fa-rotate-left mr-1"></i>
-            Đặt lại bộ lọc
-          </button>
-        </div>
-      </div>
-
-      <!-- ADVANCED FILTER & SEARCH PANEL -->
-      <div class="glass-panel p-5 rounded-3xl space-y-4 shadow-xl border border-gray-200/80 dark:border-white/10">
-        <!-- Top Search & Main Dropdowns -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          <!-- Keyword Search -->
-          <div class="relative lg:col-span-2">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Tìm kiếm theo tên xe, hãng xe (VD: VF3, G63, Porsche)..."
-              class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-900 transition" />
-          </div>
-
-          <!-- Brand Select -->
-          <div>
-            <select
-              id="brandFilter"
-              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition">
-              <option value="">Tất cả thương hiệu</option>
-            </select>
-          </div>
-
-          <!-- Price Segment Select -->
-          <div>
-            <select
-              id="priceFilter"
-              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition">
-              <option value="">Tất cả phân khúc giá</option>
-              <option value="under-1b">Dưới 1 Tỷ VNĐ</option>
-              <option value="1b-3b">1 Tỷ - 3 Tỷ VNĐ</option>
-              <option value="3b-8b">3 Tỷ - 8 Tỷ VNĐ</option>
-              <option value="over-8b">Trên 8 Tỷ VNĐ (Siêu xe)</option>
-            </select>
-          </div>
-
-          <!-- Fuel Type Select -->
-          <div>
-            <select
-              id="fuelFilter"
-              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition">
-              <option value="">Tất cả nhiên liệu</option>
-              <option value="Điện">⚡ Xe thuần điện (EV)</option>
-              <option value="Xăng">⛽ Xe máy xăng</option>
-              <option value="Hybrid">🔋 Xe Hybrid</option>
-              <option value="Dầu">🚜 Xe máy dầu (Diesel)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Quick Category Tabs & Sort -->
-        <div
-          class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-gray-200 dark:border-white/10 text-xs">
-          <!-- Quick filter tags -->
-          <div class="flex flex-wrap items-center gap-2" id="quickFilterTabs">
-            <button
-              onclick="setCategoryFilter('all', this)"
-              class="cat-pill active px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white transition">
-              Tất Cả Mẫu Xe
-            </button>
-            <button
-              onclick="setCategoryFilter('electric', this)"
-              class="cat-pill px-3 py-1.5 rounded-xl font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-300 border border-gray-200 dark:border-white/10 transition">
-              ⚡ Xe Thuần Điện
-            </button>
-            <button
-              onclick="setCategoryFilter('supercar', this)"
-              class="cat-pill px-3 py-1.5 rounded-xl font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-300 border border-gray-200 dark:border-white/10 transition">
-              🔥 Siêu Xe Tốc Độ
-            </button>
-            <button
-              onclick="setCategoryFilter('luxury_suv', this)"
-              class="cat-pill px-3 py-1.5 rounded-xl font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-300 border border-gray-200 dark:border-white/10 transition">
-              💎 Xe Sang & SUV
-            </button>
-          </div>
-
-          <!-- Sort Dropdown -->
-          <div class="flex items-center gap-2">
-            <span class="text-gray-500 dark:text-gray-400">Sắp xếp:</span>
-            <select
-              id="sortFilter"
-              onchange="filterCars()"
-              class="px-3 py-1.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500">
-              <option value="featured">Nổi bật nhất</option>
-              <option value="asc">Giá: Thấp đến Cao</option>
-              <option value="desc">Giá: Cao đến Thấp</option>
-              <option value="name">Tên: A &rarr; Z</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- CAR INVENTORY GRID -->
-      <div id="carGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-        <!-- Dynamically populated via JavaScript -->
-      </div>
-    </main>
 
     <!-- INTERACTIVE INSTALLMENT / LOAN CALCULATOR -->
     <section id="loan-calculator" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -495,15 +388,15 @@ showroom/
                 id="calcDownPercent"
                 min="10"
                 max="80"
-                step="5"
+                step="1"
                 value="20"
                 oninput="calculateLoan()"
                 class="w-full" />
-              <div class="flex justify-between text-[11px] text-gray-400">
-                <span>10% (Tối thiểu)</span>
-                <span>30%</span>
-                <span>50%</span>
-                <span>80%</span>
+              <div class="relative h-4 text-[11px] text-gray-400">
+                <span class="absolute left-0">10% (Tối thiểu)</span>
+                <span class="absolute left-[28.57%] -translate-x-1/2">30%</span>
+                <span class="absolute left-[57.14%] -translate-x-1/2">50%</span>
+                <span class="absolute right-0">80%</span>
               </div>
             </div>
 
@@ -801,7 +694,7 @@ showroom/
                 <i class="fa-solid fa-phone text-indigo-600 dark:text-indigo-500"></i>
                 <span>
                   Hotline Bán Hàng:
-                  <strong class="text-slate-900 dark:text-white">0706.850.014</strong>
+                  <strong class="text-slate-900 dark:text-white">0765.650.114</strong>
                 </span>
               </div>
               <div class="flex items-center gap-3">
@@ -873,24 +766,44 @@ showroom/
               Đại lý độc lập phân phối các dòng siêu xe thể thao, SUV cao cấp và xe điện hàng đầu tại Việt Nam. Cam kết
               chất lượng chuẩn quốc tế, nâng tầm phong cách sống thượng lưu.
             </p>
+            <!-- FOOTER -->
             <div class="flex items-center gap-3 pt-2">
+              <!-- Facebook -->
               <a
-                href="#"
+                href="https://www.facebook.com/reel/1642467180766930"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook Showroom 4TL"
                 class="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center hover:text-indigo-400 hover:border-indigo-500 transition">
                 <i class="fa-brands fa-facebook-f"></i>
               </a>
+
+              <!-- YouTube -->
               <a
-                href="#"
+                href="https://youtube.com/shorts/_6HzLIJPH2A?si=6ImBgPEFHYw8e5pb"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube Showroom 4TL"
                 class="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center hover:text-indigo-400 hover:border-indigo-500 transition">
                 <i class="fa-brands fa-youtube"></i>
               </a>
+
+              <!-- TikTok -->
               <a
-                href="#"
+                href="https://www.tiktok.com/@thanh_ne_troi/video/7687223237138189588?is_from_webapp=1&sender_device=pc&web_id=7709105540550477333"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok Showroom 4TL"
                 class="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center hover:text-indigo-400 hover:border-indigo-500 transition">
                 <i class="fa-brands fa-tiktok"></i>
               </a>
+
+              <!-- Instagram -->
               <a
-                href="#"
+                href="https://www.instagram.com/reel/Db958Q4S4u1/?cplk=djB3N3ByZWFwMjJn"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram Showroom 4TL"
                 class="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center hover:text-indigo-400 hover:border-indigo-500 transition">
                 <i class="fa-brands fa-instagram"></i>
               </a>
@@ -902,32 +815,19 @@ showroom/
             <h4 class="text-white font-bold uppercase text-xs tracking-wider">Dòng Xe Bán Chạy</h4>
             <ul class="space-y-2">
               <li>
-                <a href="#car-section" onclick="filterByBrandQuick('Porsche')" class="hover:text-indigo-400 transition">
-                  Porsche 911 Series
-                </a>
+                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">Porsche 911 Series</a>
               </li>
               <li>
-                <a
-                  href="#car-section"
-                  onclick="filterByBrandQuick('Mercedes-Benz')"
-                  class="hover:text-indigo-400 transition">
-                  Mercedes-AMG G63
-                </a>
+                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">Mercedes-AMG G63</a>
               </li>
               <li>
-                <a href="#car-section" onclick="filterByBrandQuick('VinFast')" class="hover:text-indigo-400 transition">
-                  VinFast VF3 & VF8
-                </a>
+                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">VinFast VF3 & VF8</a>
               </li>
               <li>
-                <a href="#car-section" onclick="filterByBrandQuick('Ferrari')" class="hover:text-indigo-400 transition">
-                  Ferrari F8 Tributo
-                </a>
+                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">Ferrari F8 Tributo</a>
               </li>
               <li>
-                <a href="#car-section" onclick="filterByBrandQuick('BMW')" class="hover:text-indigo-400 transition">
-                  BMW 7-Series
-                </a>
+                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">BMW 7-Series</a>
               </li>
             </ul>
           </div>
@@ -944,7 +844,10 @@ showroom/
               <li>
                 <a
                   href="#"
-                  onclick="alert('Hotline cứu hộ khẩn cấp: 1900.8888 (24/7)')"
+                  onclick="
+                    showToast('Hotline cứu hộ khẩn cấp: 1900.8888 (24/7)', 'success');
+                    return false;
+                  "
                   class="hover:text-indigo-400 transition">
                   Cứu hộ xe 24/7 toàn quốc
                 </a>
@@ -1058,7 +961,7 @@ showroom/
           </div>
           <div class="flex justify-between">
             <span>Số tài khoản:</span>
-            <strong class="text-indigo-600 dark:text-indigo-400 font-mono tracking-wider">0706850014</strong>
+            <strong class="text-indigo-600 dark:text-indigo-400 font-mono tracking-wider">0765650114</strong>
           </div>
           <div class="flex justify-between">
             <span>Chủ TK:</span>
@@ -1285,268 +1188,312 @@ showroom/
 
     <!-- JAVASCRIPT LOGIC & ENGINE -->
     <script>
-      // Fallback Database Cars (20 siêu phẩm đảm bảo website hiển thị đẹp ngay cả khi không có kết nối MySQL)
+      function showToast(message, type = "success") {
+        const container = document.getElementById("toastContainer");
+        if (!container) return;
+
+        const toast = document.createElement("div");
+        toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold transition-all duration-300 transform translate-y-[-20px] opacity-0 border backdrop-blur-xl ${
+          type === "success"
+            ? "bg-emerald-950/90 border-emerald-500/40 text-emerald-300"
+            : "bg-rose-950/90 border-rose-500/40 text-rose-300"
+        }`;
+
+        toast.innerHTML = `
+              <i class="fa-solid ${type === "success" ? "fa-circle-check text-emerald-400" : "fa-triangle-exclamation text-rose-400"} text-base"></i>
+              <span>${escapeHtml(message)}</span>
+          `;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.remove("translate-y-[-20px]", "opacity-0");
+        }, 10);
+
+        setTimeout(() => {
+          toast.classList.add("translate-y-[-20px]", "opacity-0");
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      // Fallback Database Cars
       const fallbackCars = [
         {
           id: 1,
           name: "VinFast VF3",
           brand: "VinFast",
           price: 240000000,
-          image: "https://vinfastquan12.com.vn/wp-content/uploads/2025/02/VinFast_VF3_Mau_trang.webp",
-          engine: "Động cơ điện đơn (43 HP)",
-          transmission: "Tự động",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFJCmiv3bB_2DDesc8SnYvKr_hq-1IiNwk2YCGZKyqZA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDJ8HxL4j3SfFrNMGCvRD9bwAZjykVF3WG-Xxl5v7h9w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbsZHkDzGDsG_EspjalYDoIEN3dnHiV45pQrIns8UK3w&s=10",
+          engine: "Động cơ điện đơn (Công suất 43 HP / Mô-men xoắn 110 Nm)",
+          transmission: "Tự động 1 cấp",
           fuel: "Điện",
           description:
-            "Cơn sốt xe điện mini tại Việt Nam! Kiểu dáng hình hộp cá tính, gầm cao 191mm vượt địa hình ngập nước, Best Seller tại Showroom 4TL.",
+            "Cơn sốt xe điện mini đô thị tại Việt Nam! Mang phong cách thiết kế hình hộp cá tính, khỏe khoắn, khoảng sáng gầm xe cao 191mm giúp dễ dàng vượt qua các địa hình ngập nước đô thị, là mẫu xe điện bán chạy nhất (Best Seller) tại Showroom 4TL.",
         },
         {
           id: 2,
           name: "Mercedes-Benz C-Class C300 AMG",
           brand: "Mercedes-Benz",
           price: 2099000000,
-          image: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800",
-          engine: "2.0L Turbo EQ Boost (258 HP)",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nJj5R87z1dpwUCcHbj1KwNTJtJBM4sYDjrEIgxRtRA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0jXuoX5_WAmEuVpxNpYUIX-UtNpPa78eTAQECU9_aJQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR98khAhzlP1bBIDo7mN_uNiVMy5ExBrqfae38EzD2oBg&s=10",
+          engine: "Xăng 2.0L Turbo kết hợp công nghệ EQ Boost Mild-Hybrid (258 HP / 400 Nm)",
           transmission: "Tự động 9 cấp 9G-TRONIC",
           fuel: "Xăng Mild-Hybrid",
           description:
-            "Tiểu S-Class với thiết kế thể thao AMG Line, màn hình giải trí trung tâm 11.9 inch định dạng dọc, đèn Digital Light tối tân nhất.",
+            'Mẫu sedan thể thao mệnh danh là "tiểu S-Class" với gói trang thiết kế ngoại thất AMG Line cuốn hút, màn hình giải trí trung tâm đặt dọc 11.9 inch tích hợp MBUX thế hệ mới, cụm đèn pha thông minh Digital Light tối tân và hệ thống âm thanh vòm Burmester 3D 15 loa sống động.',
         },
         {
           id: 3,
           name: "Porsche 911 Carrera S",
           brand: "Porsche",
           price: 8500000000,
-          image: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800",
-          engine: "3.0L Boxer Twin-Turbo (450 HP)",
-          transmission: "Tự động 8 cấp PDK",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUGbNCOFMrr8i-ELaF9sQVPpIjPWMSJB44Ql_bo2667w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXIwrpx24-3p2ImkIovLVRN_wTXP-Sr-f5Y_LXkgKJDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpMtyFyXiOJ0kzPQgcy_26PGobb5w_z8zugn9VxdYSjg&s=10",
+          engine: "Xăng Boxer 6 xi-lanh 3.0L Twin-Turbo (450 HP / 530 Nm)",
+          transmission: "Ly hợp kép 8 cấp PDK danh tiếng của Porsche",
           fuel: "Xăng",
           description:
-            "Mẫu xe thể thao huyền thoại mang lại cảm giác lái đỉnh cao, thiết kế timeless vượt thời gian đi cùng gói thể thao Sport Chrono Package.",
+            "Biểu tượng xe thể thao hiệu suất cao huyền thoại mang lại cảm giác lái thuần khiết đỉnh cao. Khả năng tăng tốc 0-100 km/h chỉ mất 3.7 giây khi trang bị gói Sport Chrono, tốc độ tối đa đạt 308 km/h, tích hợp hệ thống treo chủ động PASM và thiết kế buồng lái đậm chất xe đua Đức.",
         },
         {
           id: 4,
           name: "Mercedes-AMG G63",
           brand: "Mercedes-Benz",
           price: 11750000000,
-          image: "https://images.unsplash.com/photo-1520050206274-a1ae44613e6d?w=800",
-          engine: "4.0L V8 Bi-Turbo (585 HP)",
-          transmission: "Tự động 9 cấp AMG Speedshift",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9k-mmUkZkHwMhAB8bjPOA9mFIiMkV_1C-dBgyFThkTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHgJI_oRJzR0lzto9sfPraPiSShwHmuhhfQ45LX6a1lA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKEtZnRwUw07P1WR5UkpeZNNF4_2YJJY3Pyyja2xXKOw&s=10",
+          engine: "Xăng V8 4.0L Biturbo AMG (585 HP / 850 Nm)",
+          transmission: "Tự động thể thao 9 cấp AMG SPEEDSHIFT TCT 9G",
           fuel: "Xăng",
           description:
-            "Mẫu SUV địa hình hạng sang đẳng cấp biểu tượng hoàng gia. Hệ dẫn động 4 bánh toàn thời gian 4MATIC với 3 khóa vi sai độc lập.",
+            "Mẫu SUV địa hình hạng sang biểu tượng uy quyền. Thiết kế khung gầm hình thang siêu cứng vững với 3 khóa vi sai độc lập có thể khóa hoàn toàn bằng điện, hệ thống ống xả thể thao đặt bên hông uy lực, nội thất da Nappa hảo hạng kết hợp hệ thống âm thanh vòm Burmester 15 loa.",
         },
         {
           id: 5,
           name: "BMW 740i Pure Excellence",
           brand: "BMW",
           price: 4699000000,
-          image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
-          engine: "3.0L I6 TwinPower (381 HP)",
-          transmission: "Tự động 8 cấp Steptronic",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMNStnEqOgN-AtfJc4ZxIl-FSqSxWD-_KPP9Zjk-BkA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10",
+          engine: "Xăng 3.0L I6 TwinPower Turbo Mild-Hybrid (381 HP / 540 Nm)",
+          transmission: "Tự động 8 cấp Steptronic Sport",
           fuel: "Xăng Mild-Hybrid",
           description:
-            "Sedan hạng sang cao cấp đầy công nghệ của BMW với màn hình Theatre Screen 31.3 inch chuẩn 8K cùng hệ thống âm thanh vòm Bowers & Wilkins Diamond.",
+            "Sedan hạng sang cỡ lớn đỉnh cao công nghệ của BMW. Không gian nội thất xa hoa với thanh pha lê tương tác BMW Interaction Bar, ghế ngồi thương gia bọc da Merino cao cấp tích hợp massage, màn hình rạp chiếu phim rạp phía sau 31.3 inch và dàn âm thanh vòm Bowers & Wilkins Diamond.",
         },
         {
           id: 6,
           name: "VinFast VF8 Plus",
           brand: "VinFast",
           price: 1270000000,
-          image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800",
-          engine: "2 Động cơ điện (402 HP - AWD)",
-          transmission: "Tự động đơn cấp",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMgh5eFb69xZCQCeJXpE2n1sx0fIj0gMZRsLUCkF7F2Q&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2fiRyUQE2tzYAfH61XkhF-ZaRi4kbEv1pGYAd6gaKZw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNnZ23dQtN4guhpS1WTpIHS2Azx4Cb_TRBVR3v3oMa8A&s=10",
+          engine: "2 mô-tơ điện AWD toàn thời gian (402 HP / 620 Nm)",
+          transmission: "Tự động 1 cấp",
           fuel: "Điện",
           description:
-            "SUV điện thông minh phân khúc D, thiết kế Pininfarina đỉnh cao, tăng tốc 0-100 km/h trong 5.5 giây và trợ lái thông minh ADAS cấp độ 2.",
+            "SUV điện thông minh phân khúc D mạnh mẽ, trang bị nhiều tính năng trợ lái nâng cao ADAS. Khả năng tăng tốc ấn tượng từ 0-100 km/h dưới 5.5 giây, màn hình trung tâm tràn viền 15.6 inch tối giản, không gian rộng rãi và cửa sổ trời toàn cảnh kính lớn.",
         },
         {
           id: 7,
           name: "VinFast VF5 Plus",
           brand: "VinFast",
           price: 468000000,
-          image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800",
-          engine: "Động cơ điện (134 HP - 135 Nm)",
-          transmission: "Tự động đơn cấp",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd-uWGNUo1taSToXpQaIDCJxCi0OOXvd5SN34Va8zCgQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFGMSwMiRgj3WEsCu14j3Th0mDeFZDiTmfuN5AIyfgiA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEnAbDWJMk7kjzcYqCfHxsNLGsZ4hGodDqmC_vbKh6lw&s=10",
+          engine: "Động cơ điện đơn (Công suất 134 HP / Mô-men xoắn 135 Nm)",
+          transmission: "Tự động 1 cấp",
           fuel: "Điện",
           description:
-            "A-SUV thuần điện quốc dân nhỏ gọn, chi phí vận hành siêu rẻ chỉ bằng 1/3 xe xăng, thời trang và linh hoạt trong đô thị.",
+            "Mẫu A-SUV chạy điện nhỏ gọn, thiết kế năng động tối ưu cho nhu cầu di chuyển đô thị hàng ngày. Tầm hoạt động hơn 300 km cho mỗi lần sạc đầy, tích hợp trợ lý ảo tiếng Việt thông minh, cảnh báo điểm mù và trang bị 6 túi khí an toàn.",
         },
         {
           id: 8,
           name: "Toyota Camry 2.5Q",
           brand: "Toyota",
           price: 1405000000,
-          image: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800",
-          engine: "2.5L Dynamic Force (207 HP)",
-          transmission: "Tự động 8 cấp Direct Shift",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYl1j8avzp_a52uX2szBu_X2g82yHbEtkqDDN0XtKJ6A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ16pL8BQW83ACdsEAsk95IbLeS0i347RmCkAbc4zGLLA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkDKY-KgdZor0p_2ggyNXFiRd7VE6K5ydz31QxuOYG8w&s=10",
+          engine: "Xăng Dynamic Force 2.5L (207 HP / 250 Nm)",
+          transmission: "Tự động 8 cấp",
           fuel: "Xăng",
           description:
-            "Mẫu sedan hạng D chuẩn mực của sự thành đạt, bền bỉ, êm ái bậc nhất phân khúc với gói an toàn Toyota Safety Sense 2.0.",
+            "Mẫu sedan hạng D biểu tượng cho sự bền bỉ, sang trọng và êm ái. Khoang hành khách phía sau thiết kế chuẩn doanh nhân với bệ tỳ tay tích hợp bảng điều khiển cảm ứng ngả ghế, rèm che nắng chỉnh điện, điều hòa 3 vùng độc lập và 9 loa JBL cao cấp.",
         },
         {
           id: 9,
           name: "Toyota Corolla Cross 1.8HEV",
           brand: "Toyota",
           price: 905000000,
-          image: "https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800",
-          engine: "1.8L Hybrid Xăng + Điện (122 HP)",
-          transmission: "Vô cấp e-CVT",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpA_ZtVNe8sOc_-tGXiFue--SWAvHYn4hqdXnj1v5NYg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNuPdKKZWfVIlpfJtWjiH1WDTCkzs65ZGLNbW8xdkYXA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaemDP4gzPH3lDaNIymrWag_h6ogYiqv8TLc60aEacSA&s=10",
+          engine: "Xăng 1.8L kết hợp mô-tơ điện Hybrid (Tổng công suất 122 HP)",
+          transmission: "Tự động vô cấp E-CVT",
           fuel: "Xăng Hybrid",
           description:
-            "Mẫu Urban SUV tiết kiệm nhiên liệu tối ưu với động cơ Hybrid tiên tiến, khung gầm TNGA vững chắc và vận hành êm ái nhẹ nhàng.",
+            "SUV đô thị xanh tiết kiệm nhiên liệu tối ưu nhờ công suất tự sạc Hybrid tiên tiến. Trang bị gói công nghệ an toàn Toyota Safety Sense, camera toàn cảnh 360 độ, cửa sổ trời toàn cảnh và vận hành êm ái, bền bỉ chuẩn mực.",
         },
         {
           id: 10,
           name: "Ford Ranger Raptor 3.0 V6",
           brand: "Ford",
           price: 1299000000,
-          image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800",
-          engine: "3.0L V6 EcoBoost Twin-Turbo (392 HP)",
-          transmission: "Tự động 10 cấp",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkAP8_0fM7-es-s0TkuWfES4ERnhn3kRzgpiERtCEFyw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX-ZqLNONfwQeU5XwtL9ZqejukswL1TpUpsr1-76jc3w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQH0fOuAoH-XV1q7BGhIXSq8KXrWfeO2ChqH9Z6Zjgvg&s=10",
+          engine: "Xăng EcoBoost 3.0L V6 Twin-Turbo (397 HP / 583 Nm)",
+          transmission: "Tự động 10 cấp điện tử",
           fuel: "Xăng",
           description:
-            "Vua bán tải hiệu năng cao, trang bị bộ giảm xóc FOX 2.5 inch Live Valve thích ứng theo thời gian thực và chế độ lái sa mạc Baja Mode.",
+            "Vua bán tải hiệu năng cao chuyên nghiệp, trang bị hệ thống giảm xóc FOX Live Valve 2.5 inch trượt địa hình. Sở hữu 7 chế độ lái linh hoạt (bao gồm chế độ Baja chuyên đua sa mạc), hệ thống khóa vi sai trước/sau và ống xả thể thao điều chỉnh độ vang.",
         },
         {
           id: 11,
           name: "Ford Everest Titanium+ 4x4",
           brand: "Ford",
           price: 1468000000,
-          image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800",
-          engine: "2.0L Bi-Turbo Diesel (210 HP)",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiZtZyv9cLXgHdi-7v-PjeTIL5tGeeU3tpnMYplS6XDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTYj1liAKQcUeUhRU01jidOFrEQonbqh2FvYukozZM4w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfRprvZIOazCuK7ZgS3R8vKBIHAlTpdmYSX9Y03eOZBw&s=10",
+          engine: "Bi-Turbo Diesel 2.0L i4 (210 HP / 500 Nm)",
           transmission: "Tự động 10 cấp điện tử",
           fuel: "Dầu (Diesel)",
           description:
-            "SUV 7 chỗ thực thụ đậm chất cơ bắp Mỹ, khả năng lội nước 800mm, camera 360 độ và công nghệ đỗ xe tự động 2.0.",
+            "SUV 7 chỗ gầm cao hầm hố, khả năng cách âm đỉnh cao và giàu công nghệ an toàn hàng đầu phân khúc. Hệ thống dẫn động 2 cầu 4x4 thông minh, màn hình trung tâm dọc 12 inch chạy SYNC 4A, camera 360 độ sắc nét và hỗ trợ đỗ xe tự động.",
         },
         {
           id: 12,
           name: "Hyundai Tucson 2.0 Diesel",
           brand: "Hyundai",
           price: 959000000,
-          image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800",
-          engine: "2.0L Smartstream D2.0 (186 HP)",
-          transmission: "Tự động 8 cấp số nút bấm",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStMbKbjpRugZbAa8Jxhz2GPdFPKMMrw8fJwjRdQ-TBZQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ8ey04y0-7pSS5gagfiCQrjMaVJBoxy_NPolImcNVTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-AHImYzA1sSv1yPO9EeJObAW1AWSceaxllVKBvl_VJg&s=10",
+          engine: "Diesel Smartstream D2.0 (186 HP / 416 Nm)",
+          transmission: "Tự động 8 cấp",
           fuel: "Dầu (Diesel)",
           description:
-            "Crossover thiết kế tương lai Parametric Jewel, nội thất mở dạng phi thuyền, máy dầu bốc và tiết kiệm bậc nhất.",
+            "Crossover sở hữu thiết kế ngoại thất táo bạo, khả năng vận hành mạnh mẽ, bốc và tiết kiệm nhiên liệu tối ưu. Nổi bật với lưới tản nhiệt hình khối thông minh, cần số điện tử dạng nút bấm, cửa sổ trời toàn cảnh và gói an toàn Hyundai SmartSense.",
         },
         {
           id: 13,
           name: "Hyundai Accent 1.5 AT",
           brand: "Hyundai",
           price: 489000000,
-          image: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800",
-          engine: "1.5L Smartstream G (115 HP)",
-          transmission: "Vô cấp thông minh iVT",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqxAlh0ojNuYt82BpLC-BRYGclFmTXJd-gJrp2lEF6WQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSahuOZxstBhmyAYM9STEFGftWiVL3FaEJV6jgiXXgjVQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1NEb-vWA47bMBzZmMi3bTdDEKeRmafgiCvZAUuKuHlA&s=10",
+          engine: "Xăng Smartstream G1.5 (115 HP / 144 Nm)",
+          transmission: "Tự động vô cấp thông minh iVT",
           fuel: "Xăng",
           description:
-            "Sedan hạng B thế hệ hoàn toàn mới, kích thước lớn nhất phân khúc, trang bị gói SmartSense vượt tầm giá.",
+            "Sedan hạng B phổ thông, tiện nghi phong phú vượt tầm giá. Thiết kế phong cách Fastback thể thao trẻ trung, màn hình giải trí 8 inch tích hợp Apple CarPlay/Android Auto không dây, sạc điện thoại không dây và tính năng mở cốp thông minh.",
         },
         {
           id: 14,
           name: "Honda CR-V e:HEV RS",
           brand: "Honda",
           price: 1259000000,
-          image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800",
-          engine: "2.0L Hybrid Xăng + Điện (204 HP)",
-          transmission: "E-CVT thể thao",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgYwkQ2_Bnn715DhM8OfuYNpzg5ozBqKoyC2evRYhhUw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYKCZvpPeMChk_J4Lbs9BbrSrpBDSw5G69aSbUDdtrsw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Vqeig2JBKNtNlJ5UGdtK69cmsDwRARmVSINyLF-S_Q&s=10",
+          engine: "Xăng 2.0L kết hợp 2 mô-tơ điện (Tổng công suất 204 HP / 335 Nm)",
+          transmission: "Tự động vô cấp E-CVT",
           fuel: "Xăng Hybrid",
           description:
-            "SUV thể thao thế hệ mới nhập khẩu nguyên chiếc, tiết kiệm nhiên liệu chỉ 3.4L/100km đô thị, gói an toàn Honda SENSING đầy đủ.",
+            "SUV 5 chỗ thể thao mang lại trải nghiệm lái phấn khích chuẩn Honda Sensing. Khả năng tiết kiệm nhiên liệu tối ưu chỉ khoảng 5.2L/100km trong đô thị, trang bị cửa sổ trời toàn cảnh Panorama, hệ thống âm thanh 12 loa Bose và màn hình HUD.",
         },
         {
           id: 15,
           name: "Mazda CX-5 2.0 Premium",
           brand: "Mazda",
           price: 829000000,
-          image: "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800",
-          engine: "2.0L SkyActiv-G (154 HP)",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW39XsAvfNmzgS3h7r2TjxeeJTUhyLpVsnzGlKpS-mQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTInC9__STOHLHNime6eFjQhx4SSUEX5S8lyJn71cJTqQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIF5WKKGY123T08e8kSO_mXGGGMgDtg41luLhyq88TKw&s=10",
+          engine: "Xăng SkyActiv-G 2.0L (154 HP / 200 Nm)",
           transmission: "Tự động 6 cấp",
           fuel: "Xăng",
           description:
-            "Mẫu Crossover bán chạy nhất phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế, 10 loa Bose cao cấp và hệ thống an toàn i-Activsense.",
+            "Mẫu Crossover bán chạy hàng đầu phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế. Trang bị màn hình hiển thị kính lái HUD, gương chiếu hậu chống chói tự động, cốp điện rảnh tay, 10 loa Bose cao cấp và gói an toàn chủ động i-Activsense.",
         },
         {
           id: 16,
           name: "Kia Carnival 2.2D Signature",
           brand: "Kia",
           price: 1759000000,
-          image: "https://images.unsplash.com/photo-1563720223185-11003d516935?w=800",
-          engine: "2.2L Smartstream D2.2 (199 HP)",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDrQOfx7kICr3cyGjHqTHm_SMnzFbZOde_TVN6qS1FXw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5v0u6MMN_-u8H5QgBA6eq9gRrBtD3urv_V9zGDT_5ig&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKUw3TRHK3bFJ7Hv5brQb8FBAB1NJEcZdPSkYD5-8ysg&s=10",
+          engine: "Diesel Smartstream 2.2L (199 HP / 440 Nm)",
           transmission: "Tự động 8 cấp",
           fuel: "Dầu (Diesel)",
           description:
-            "Chuyên cơ mặt đất MPV 7 chỗ thương gia siêu tiện nghi, hàng ghế thứ 2 sưởi/làm mát và chế độ thư giãn không trọng lực VIP.",
+            "Xe gia đình hạng sang (MPV) cỡ lớn rộng rãi, trang bị đầy đủ như khoang hạng thương gia. Hàng ghế thứ hai chỉnh điện thư giãn tích hợp sưởi/làm mát, cửa sổ trời đôi độc lập, rèm che nắng và hệ thống âm thanh 12 loa Bose.",
         },
         {
           id: 17,
           name: "Audi Q7 45 TFSI quattro",
           brand: "Audi",
           price: 3700000000,
-          image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800",
-          engine: "2.0L Turbo Mild-Hybrid (252 HP)",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsMi5fmiZg1cQubrLMpSpHHiwFbiC2puLtGW-dhi1Evw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg2Z49zJQSa-QgYOK6PnDsCeXGbIjDlMy_UJgY5AVG0w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXio_hwx7mM0zgI01Sdx4o-ZLySmfpn8qKouBDzFESQA&s=10",
+          engine: "Xăng 2.0L TFSI Mild-Hybrid MHEV (252 HP / 370 Nm)",
           transmission: "Tự động 8 cấp Tiptronic",
-          fuel: "Xăng Mild-Hybrid",
+          fuel: "Xăng",
           description:
-            "SUV hạng sang 7 chỗ cỡ lớn dẫn động 4 bánh toàn thời gian quattro danh tiếng, đèn Matrix LED thông minh và buồng lái ảo Audi Virtual Cockpit.",
+            "SUV hạng sang 7 chỗ dẫn động 4 bánh toàn thời gian quattro danh tiếng. Thiết kế lưới tản nhiệt Singleframe bát giác bề thế, cụm đèn pha LED Matrix sắc sảo, buồng lái ảo Audi Virtual Cockpit và dàn âm thanh 3D Bang & Olufsen 19 loa.",
         },
         {
           id: 18,
           name: "Lexus RX350 Luxury",
           brand: "Lexus",
           price: 4330000000,
-          image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800",
-          engine: "2.4L Turbo T24A-FTS (275 HP)",
-          transmission: "Tự động 8 cấp Direct Shift",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOKn1MNoCINsLRyMryNK-gqu0xXC7E4vegTJpqDpxwKg&s, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlhxOxreBx7dZ0WVilniwHUvofB_NaKB71xDtEZh1WYA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOMkj7dV-dZSUjqzqpyhMVxWrlA_BEZeQ-CC4u_rdp7Q&s=10",
+          engine: "Xăng 2.4L Turbo I4 (275 HP / 430 Nm)",
+          transmission: "Tự động 8 cấp",
           fuel: "Xăng",
           description:
-            "Mẫu SUV xe sang Nhật Bản êm ái, cách âm tĩnh lặng đỉnh cao, nội thất da Semi-Aniline cao cấp và hệ thống an toàn Lexus Safety System+ 3.0.",
+            "Mẫu SUV xe sang Nhật Bản êm ái, cách âm vượt trội và giữ giá tốt. Nội thất bọc da Semi-Aniline cao cấp, màn hình trung tâm cảm ứng 14 inch, hệ thống âm thanh vòm 21 loa Mark Levinson và gói công nghệ an toàn Lexus Safety System+.",
         },
         {
           id: 19,
           name: "Lamborghini Urus S",
           brand: "Lamborghini",
           price: 16500000000,
-          image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800",
-          engine: "4.0L V8 Twin-Turbo (666 HP)",
-          transmission: "Tự động 8 cấp thể thao",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHS2yGPTepN8pLd6xYDDwMDfzd7nNgw0Wb_yTGlGCm0A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKtHAnyoB_1kLYyhE81rizhXi7nkTxwh82w-nitYue7g&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ098BS6eDBP3owhuf17ApxAaDbgMExcwrI0huLgTUudQ&s=10",
+          engine: "Xăng V8 4.0L Twin-Turbo (666 HP / 850 Nm)",
+          transmission: "Tự động 8 cấp",
           fuel: "Xăng",
           description:
-            "Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Thiết kế góc cạnh đậm chất chiến đấu của hãng xe bò tót Sant'Agata Bolognese.",
+            "Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Hệ thống dẫn động 4 bánh toàn thời gian, treo khí nén thích ứng thông minh và núm xoay chế độ lái ANIMA gồm Strada, Sport, Corsa, Terra, Sabbia và Neve.",
         },
         {
           id: 20,
           name: "Ferrari F8 Tributo",
           brand: "Ferrari",
           price: 19000000000,
-          image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800",
-          engine: "3.9L V8 Twin-Turbo (710 HP)",
-          transmission: "Tự động 7 cấp ly hợp kép",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE3sDpn33xn9qTk5wTWc6EFHdkMEssFXSa6l-0td5o2w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgqtnNRCxzmqTFoL6wSi62G-QtJKf_vgT58IWQOpjJvg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0GaWZqHRGG_hseloDpgEOje7D5M_ahm2lMqzkTrlTg&s=10",
+          engine: "Xăng V8 3.9L Twin-Turbo (720 HP / 770 Nm)",
+          transmission: "Ly hợp kép 7 cấp F1",
           fuel: "Xăng",
           description:
-            "Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm Ý. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h.",
+            "Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h, trang bị hốc gió khí động học S-Duct lấy cảm hứng từ xe đua Công thức 1 giúp tăng lực ép xuống đường.",
         },
       ];
 
       let allCars = [];
       let comparedCars = [];
-      let currentCategory = "all";
 
-      // 2. Hàm mở Modal Lái thử bằng ID xe (tránh truyền chuỗi car.name vào onclick)
       function openBookingModalById(id) {
         const car = allCars.find((c) => Number(c.id) === Number(id));
         openBookingModal(car ? car.name : "Tất cả mẫu xe");
       }
 
-      // 3. Hàm mở Modal Đặt cọc QR bằng ID xe
       function openQRModalById(id) {
         const car = allCars.find((c) => Number(c.id) === Number(id));
         if (!car) return;
         openQRModal(car.name, car.price);
       }
 
-      // MODAL MANAGEMENT HELPER (100% immune to CSS class cascade quirks)
       function openModal(modalId) {
         const el = document.getElementById(modalId);
         if (!el) return;
@@ -1563,7 +1510,6 @@ showroom/
         document.body.style.overflow = "";
       }
 
-      // Close on backdrop click & ESC key
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
           ["detailModal", "compareModal", "qrModal", "bookingModal"].forEach(closeModal);
@@ -1583,10 +1529,9 @@ showroom/
         }
       });
 
-      // FETCH CARS DỮ LIỆU TỪ SERVER VỚI FALLBACK AN TOÀN
       async function fetchCars() {
         try {
-          const res = await fetch("php/get_cars.php");
+          const res = await fetch("php/get_cars.php?t=" + Date.now(), { cache: "no-store" });
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
             allCars = data.map((c) => ({
@@ -1602,7 +1547,6 @@ showroom/
             }));
           }
         } catch (e) {
-          console.warn("Sử dụng fallback dữ liệu xe nội bộ:", e);
           allCars = fallbackCars.map((c) => ({
             ...c,
             id: Number(c.id),
@@ -1611,43 +1555,14 @@ showroom/
         }
         allCars.sort((a, b) => b.id - a.id);
 
-        renderBrandPills();
-        populateBrandDropdown();
         populateCalculatorCarSelect();
         populateDriveSelect();
-        renderCars(allCars);
         calculateLoan();
-      }
-
-      // BRAND PILLS RENDER
-      function renderBrandPills() {
-        const brands = ["Tất cả", ...[...new Set(allCars.map((c) => c.brand))].sort()];
-        const container = document.getElementById("brandPillContainer");
-        container.innerHTML = brands
-          .map(
-            (b, idx) => `
-        <button data-brand="${escapeHtml(b)}" onclick="filterByBrandQuick(this.dataset.brand)" class="brand-pill px-4 py-1.5 rounded-full text-xs font-bold border border-gray-200 dark:border-white/10 ${idx === 0 ? "active" : "bg-white text-slate-700 dark:bg-slate-900 dark:text-gray-300 hover:border-indigo-500"}">
-            ${escapeHtml(b)}
-        </button>
-      `,
-          )
-          .join("");
-      }
-
-      function populateBrandDropdown() {
-        const brands = [...new Set(allCars.map((c) => c.brand))].sort();
-        const select = document.getElementById("brandFilter");
-        select.innerHTML = '<option value="">Tất cả thương hiệu</option>';
-        brands.forEach((b) => {
-          const opt = document.createElement("option");
-          opt.value = b;
-          opt.textContent = b;
-          select.appendChild(opt);
-        });
       }
 
       function populateCalculatorCarSelect() {
         const select = document.getElementById("calcCarSelect");
+        if (!select) return;
         select.innerHTML = '<option value="">-- Chọn xe có sẵn --</option>';
         allCars.forEach((car) => {
           const opt = document.createElement("option");
@@ -1659,6 +1574,7 @@ showroom/
 
       function populateDriveSelect() {
         const select = document.getElementById("driveCar");
+        if (!select) return;
         select.innerHTML = '<option value="Chưa chọn xe">Chọn mẫu xe quan tâm</option>';
         allCars.forEach((car) => {
           const opt = document.createElement("option");
@@ -1669,7 +1585,6 @@ showroom/
       }
 
       function formatCurrency(num) {
-        // return Number(num).toLocaleString("vi-VN") + " VNĐ";
         return Math.round(Number(num) || 0).toLocaleString("vi-VN") + " VNĐ";
       }
 
@@ -1681,245 +1596,6 @@ showroom/
         return (num / 1000000).toFixed(0) + " Triệu VNĐ";
       }
 
-      // RENDER DANH SÁCH XE CARD
-      function renderCars(cars) {
-        const grid = document.getElementById("carGrid");
-        const countBadge = document.getElementById("carCountBadge");
-        countBadge.innerHTML = `Đang hiển thị: <strong class="text-indigo-600 dark:text-indigo-400">${cars.length}</strong> xe`;
-
-        if (cars.length === 0) {
-          grid.innerHTML = `
-                    <div class="col-span-full text-center py-16 bg-white dark:bg-slate-900/50 rounded-3xl border border-gray-200 dark:border-white/10 space-y-3 shadow-sm">
-                        <i class="fa-solid fa-car-tunnel text-4xl text-gray-400 dark:text-gray-500"></i>
-                        <h4 class="text-lg font-bold text-slate-800 dark:text-gray-300">Không tìm thấy mẫu xe phù hợp</h4>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Vui lòng thử điều chỉnh lại bộ lọc giá, thương hiệu hoặc từ khóa tìm kiếm.</p>
-                        <button onclick="resetAllFilters()" class="mt-2 px-5 py-2 rounded-xl bg-indigo-600 hover:bg-violet-700 text-white font-bold text-xs transition">
-                            Xem tất cả các xe
-                        </button>
-                    </div>
-                `;
-          return;
-        }
-
-        grid.innerHTML = cars
-          .map((car) => {
-            const carId = Number(car.id);
-            const isCompared = comparedCars.some((c) => Number(c.id) === carId);
-            const fuelIcon =
-              car.fuel && car.fuel.includes("Điện")
-                ? "fa-bolt text-yellow-500"
-                : car.fuel && car.fuel.includes("Dầu")
-                  ? "fa-oil-can text-amber-500"
-                  : "fa-gas-pump text-indigo-500";
-
-            return `
-                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group bg-white dark:bg-slate-900/60 border border-gray-200 dark:border-white/10 shadow-md hover:shadow-2xl transition">
-                        
-                        <!-- Card Media -->
-                        <div class="relative overflow-hidden aspect-[16/10] bg-slate-900">
-                            <img src="${getCarImage(car.image)}" alt="${escapeHtml(car.name)}" 
-                              loading="lazy"
-                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer"
-                              onclick="openDetailModal(${carId})"
-                              onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
-                            
-                            <!-- Badges -->
-                            <div class="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
-                                <span class="bg-indigo-600/90 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">
-                                    ${escapeHtml(car.brand)}
-                                </span>
-                                ${
-                                  car.fuel && car.fuel.includes("Điện")
-                                    ? `
-                                    <span class="bg-emerald-600/90 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">
-                                        ⚡ EV Thuần Điện
-                                    </span>
-                                `
-                                    : ""
-                                }
-                            </div>
-
-                            <!-- Compare Badge Button on image -->
-                            <button onclick="toggleCompareCar(${carId})" title="${isCompared ? "Bỏ so sánh" : "Thêm vào so sánh"}" 
-                                    class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-full ${isCompared ? "bg-emerald-600 text-white font-bold" : "bg-white/80 dark:bg-black/50 text-slate-700 dark:text-gray-300 hover:bg-indigo-600 hover:text-white"} backdrop-blur-md border border-gray-200 dark:border-white/20 flex items-center gap-1 text-[11px] transition shadow">
-                                <i class="fa-solid ${isCompared ? "fa-check" : "fa-code-compare"}"></i>
-                                <span>${isCompared ? "Đang so sánh" : "So sánh"}</span>
-                            </button>
-                        </div>
-
-                        <!-- Card Content -->
-                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-                            <div>
-                                <h3 onclick="openDetailModal(${carId})" class="text-xl font-black text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition leading-snug cursor-pointer">
-                                    ${escapeHtml(car.name)}
-                                </h3>
-                                
-                                <div class="text-indigo-600 font-heading text-2xl font-black my-1">
-                                    ${formatCurrency(car.price)}
-                                </div>
-
-                                <!-- Key Specs Chips -->
-                                <div class="grid grid-cols-3 gap-1.5 text-[11px] bg-gray-50 dark:bg-slate-950/70 p-2.5 rounded-2xl border border-gray-100 dark:border-white/5 text-slate-600 dark:text-gray-300 mt-3">
-                                    <div class="text-center truncate" title="${escapeHtml(car.engine || "N/A")}">
-                                        <i class="fa-solid fa-gauge-high text-indigo-600 dark:text-indigo-500 block mb-1"></i>
-                                        <span class="text-[10px]">${escapeHtml(car.engine ? car.engine.split(" ")[0] : "Động cơ")}</span>
-                                    </div>
-                                    <div class="text-center truncate" title="${escapeHtml(car.transmission || "Tự động")}">
-                                        <i class="fa-solid fa-sliders text-indigo-600 dark:text-indigo-500 block mb-1"></i>
-                                        <span class="text-[10px]">${escapeHtml(car.transmission ? (car.transmission.includes("8") ? "8 cấp" : car.transmission.includes("9") ? "9 cấp" : "Tự động") : "Tự động")}</span>
-                                    </div>
-                                    <div class="text-center truncate" title="${escapeHtml(car.fuel || "Xăng")}">
-                                        <i class="fa-solid ${fuelIcon} block mb-1"></i>
-                                        <span class="text-[10px]">${escapeHtml(car.fuel || "Xăng")}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Actions -->
-                            <div class="space-y-2 pt-1">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <button onclick="openDetailModal(${carId})" class="bg-indigo-600 hover:bg-violet-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-1.5">
-                                        <i class="fa-solid fa-circle-info"></i> Xem Chi Tiết
-                                    </button>
-                                    <button onclick="toggleCompareCar(${carId})" class="${isCompared ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-gray-200"} font-bold py-2.5 rounded-xl text-xs border border-gray-200 dark:border-white/10 transition flex items-center justify-center gap-1.5 shadow-sm">
-                                        <i class="fa-solid ${isCompared ? "fa-check" : "fa-code-compare"}"></i> ${isCompared ? "Đã Chọn" : "+ So Sánh"}
-                                    </button>
-                                </div>
-                                
-                                <div class="grid grid-cols-2 gap-2">
-                                    <button onclick="openBookingModalById(${carId})" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs border border-gray-200 dark:border-white/10 hover:border-indigo-500/40 transition flex items-center justify-center gap-1">
-                                        <i class="fa-solid fa-steering-wheel text-indigo-600 dark:text-indigo-400"></i> Lái Thử
-                                    </button>
-                                    <button onclick="openQRModalById(${carId})" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs border border-gray-200 dark:border-white/10 hover:border-indigo-500/40 transition flex items-center justify-center gap-1">
-                                        <i class="fa-solid fa-qrcode text-indigo-600 dark:text-indigo-400"></i> Đặt Cọc
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                `;
-          })
-          .join("");
-      }
-
-      // BỘ LỌC ĐA CHIỀU (SEARCH + BRAND + PRICE + FUEL + CATEGORY + SORT)
-      function filterCars() {
-        const search = document.getElementById("searchInput").value.toLowerCase().trim();
-        const brand = document.getElementById("brandFilter").value;
-        const price = document.getElementById("priceFilter").value;
-        const fuel = document.getElementById("fuelFilter").value;
-        const sort = document.getElementById("sortFilter").value;
-
-        let filtered = allCars.filter((c) => {
-          const matchSearch =
-            !search || c.name.toLowerCase().includes(search) || c.brand.toLowerCase().includes(search);
-          const matchBrand = !brand || c.brand === brand;
-
-          let matchPrice = true;
-          if (price === "under-1b") matchPrice = c.price < 1000000000;
-          else if (price === "1b-3b") matchPrice = c.price >= 1000000000 && c.price <= 3000000000;
-          else if (price === "3b-8b") matchPrice = c.price > 3000000000 && c.price <= 8000000000;
-          else if (price === "over-8b") matchPrice = c.price > 8000000000;
-
-          let matchFuel = true;
-          if (fuel) {
-            matchFuel = c.fuel && c.fuel.toLowerCase().includes(fuel.toLowerCase());
-          }
-
-          let matchCategory = true;
-          if (currentCategory === "electric") {
-            matchCategory = c.fuel && c.fuel.includes("Điện");
-          } else if (currentCategory === "supercar") {
-            matchCategory = c.price >= 8000000000 || ["Ferrari", "Lamborghini", "Porsche"].includes(c.brand);
-          } else if (currentCategory === "luxury_suv") {
-            matchCategory =
-              c.name.includes("G63") ||
-              c.name.includes("Urus") ||
-              c.name.includes("RX350") ||
-              c.name.includes("Q7") ||
-              c.name.includes("Everest") ||
-              c.name.includes("Tucson") ||
-              c.name.includes("CR-V") ||
-              c.name.includes("VF8");
-          }
-
-          return matchSearch && matchBrand && matchPrice && matchFuel && matchCategory;
-        });
-
-        if (sort === "asc") filtered.sort((a, b) => a.price - b.price);
-        else if (sort === "desc") filtered.sort((a, b) => b.price - a.price);
-        else if (sort === "name") filtered.sort((a, b) => a.name.localeCompare(b.name));
-        else if (sort === "featured") filtered.sort((a, b) => b.id - a.id);
-
-        renderCars(filtered);
-      }
-
-      // Quick Brand Pill Filter Click
-      function filterByBrandQuick(brandName) {
-        const pills = document.querySelectorAll(".brand-pill");
-        pills.forEach((p) => {
-          if ((brandName === "Tất cả" && p.textContent.trim() === "Tất cả") || p.textContent.trim() === brandName) {
-            p.classList.add("active");
-          } else {
-            p.classList.remove("active");
-          }
-        });
-
-        const brandSelect = document.getElementById("brandFilter");
-        brandSelect.value = brandName === "Tất cả" ? "" : brandName;
-        filterCars();
-
-        // Smooth scroll to car section if on desktop
-        const carSec = document.getElementById("car-section");
-        carSec.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-
-      // Category Tab Filter
-      function setCategoryFilter(cat, el) {
-        currentCategory = cat;
-        const tabs = document.querySelectorAll(".cat-pill");
-        tabs.forEach((t) => t.classList.remove("active", "bg-indigo-600", "text-white"));
-
-        // Gán class active cho đúng nút vừa bấm (el)
-        if (el) {
-          el.classList.add("active", "bg-indigo-600", "text-white");
-        }
-        filterCars();
-      }
-
-      function resetAllFilters() {
-        document.getElementById("searchInput").value = "";
-        document.getElementById("brandFilter").value = "";
-        document.getElementById("priceFilter").value = "";
-        document.getElementById("fuelFilter").value = "";
-        document.getElementById("sortFilter").value = "featured";
-        currentCategory = "all";
-
-        // Reset trạng thái nút Thương hiệu (.brand-pill)
-        document.querySelectorAll(".brand-pill").forEach((p, idx) => {
-          if (idx === 0) p.classList.add("active");
-          else p.classList.remove("active");
-        });
-
-        // Reset trạng thái nút Danh mục nhanh (.cat-pill) về "Tất Cả Mẫu Xe"
-        document.querySelectorAll(".cat-pill").forEach((t, idx) => {
-          if (idx === 0) {
-            t.classList.add("active", "bg-indigo-600", "text-white");
-          } else {
-            t.classList.remove("active", "bg-indigo-600", "text-white");
-          }
-        });
-
-        filterCars();
-      }
-
-      document.getElementById("searchInput").addEventListener("input", filterCars);
-      document.getElementById("brandFilter").addEventListener("change", filterCars);
-      document.getElementById("priceFilter").addEventListener("change", filterCars);
-      document.getElementById("fuelFilter").addEventListener("change", filterCars);
-
-      // INSTALLMENT CALCULATOR LOGIC
       function applyCarToCalculator() {
         const val = document.getElementById("calcCarSelect").value;
         if (val) {
@@ -1929,7 +1605,6 @@ showroom/
       }
 
       function calculateLoan() {
-        // 1. Cập nhật dải màu đỏ chạy theo cục tròn cho cả 3 thanh trượt
         ["calcDownPercent", "calcMonths", "calcInterest"].forEach((id) => {
           const slider = document.getElementById(id);
           if (!slider) return;
@@ -1938,20 +1613,17 @@ showroom/
           const val = parseFloat(slider.value) || 0;
           const percent = ((val - min) / (max - min)) * 100;
 
-          // Lấy màu nền phần chưa kéo dựa theo chế độ Sáng/Tối trong style.css
           const isLight = document.documentElement.classList.contains("light");
           const trackBg = isLight ? "#cbd5e1" : "#334155";
 
           slider.style.background = `linear-gradient(to right, #6366f1 0%, #6366f1 ${percent}%, ${trackBg} ${percent}%, ${trackBg} 100%)`;
         });
 
-        // 2. code tính toán giá
         const price = parseFloat(document.getElementById("calcPriceInput").value) || 0;
         const downPercent = parseInt(document.getElementById("calcDownPercent").value) || 20;
         const months = parseInt(document.getElementById("calcMonths").value) || 60;
         const rateYear = parseFloat(document.getElementById("calcInterest").value) || 8.5;
 
-        // Labels update
         const downAmount = price * (downPercent / 100);
         const loanAmount = price - downAmount;
         const years = Number((months / 12).toFixed(1));
@@ -1960,7 +1632,6 @@ showroom/
         document.getElementById("calcMonthsLabel").innerText = `${months} tháng (${years} năm)`;
         document.getElementById("calcInterestLabel").innerText = `${rateYear.toFixed(1)}% / năm`;
 
-        // Loan math: monthly principal + monthly interest (first month)
         const monthlyPrincipal = loanAmount / months;
         const monthlyRate = rateYear / 100 / 12;
         const monthlyInterestFirst = loanAmount * monthlyRate;
@@ -1974,38 +1645,31 @@ showroom/
       }
 
       window.addEventListener("DOMContentLoaded", calculateLoan);
-      // Tự động phát hiện ngay khi thẻ <html> đổi chế độ Dark / Light Mode
       const themeObserver = new MutationObserver(() => {
         calculateLoan();
       });
-      // Lắng nghe mọi thay đổi thuộc tính class trên thẻ <html>
       themeObserver.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ["class"],
       });
 
-      // CAR COMPARISON LOGIC
       function toggleCompareCar(id) {
         const targetId = Number(id);
         const car = allCars.find((c) => Number(c.id) === targetId);
-        if (!car) {
-          console.warn("Không tìm thấy xe id:", id);
-          return;
-        }
+        if (!car) return;
 
         const idx = comparedCars.findIndex((c) => Number(c.id) === targetId);
         if (idx > -1) {
           comparedCars.splice(idx, 1);
         } else {
           if (comparedCars.length >= 3) {
-            alert("Quý khách chỉ có thể so sánh tối đa 3 mẫu xe cùng lúc. Vui lòng bấm bỏ bớt xe để thêm xe khác!");
+            showToast("Chỉ có thể so sánh tối đa 3 mẫu xe cùng lúc!", "error");
             return;
           }
           comparedCars.push(car);
         }
 
         updateCompareDock();
-        filterCars();
       }
 
       function updateCompareDock() {
@@ -2051,7 +1715,6 @@ showroom/
       function clearComparison() {
         comparedCars = [];
         updateCompareDock();
-        filterCars();
       }
 
       function toggleCompareModal() {
@@ -2059,23 +1722,18 @@ showroom/
           if (allCars.length >= 2) {
             comparedCars = [allCars[0], allCars[1]];
             updateCompareDock();
-            filterCars();
           } else if (allCars.length === 1) {
             comparedCars = [allCars[0]];
             updateCompareDock();
-            filterCars();
           }
         }
         openCompareModal();
       }
 
       function openCompareModal() {
-        if (comparedCars.length === 0) {
-          if (allCars.length >= 2) {
-            comparedCars = [allCars[0], allCars[1]];
-            updateCompareDock();
-            filterCars();
-          }
+        if (comparedCars.length === 0 && allCars.length >= 2) {
+          comparedCars = [allCars[0], allCars[1]];
+          updateCompareDock();
         }
 
         const container = document.getElementById("compareTableContainer");
@@ -2102,7 +1760,7 @@ showroom/
                     </button>
                 </div>
 
-                <table class="w-full text-left border-collapse text-xs">
+                <table class="w-full table-fixed text-left border-collapse text-xs">
                     <thead>
                         <tr class="border-b border-gray-200 dark:border-white/10">
                             <th class="p-3 text-gray-500 dark:text-gray-400 w-36">Thông Số</th>
@@ -2141,7 +1799,7 @@ showroom/
                         </tr>
                         <tr>
                             <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Mô Tả & Điểm Nhấn</td>
-                            ${comparedCars.map((c) => `<td class="p-3 leading-relaxed text-[11px] text-gray-600 dark:text-gray-400">${escapeHtml(c.description || "Chưa có thông tin")}</td>`).join("")}
+                            ${comparedCars.map((c) => `<td class="p-3 leading-relaxed text-[11px] text-gray-600 dark:text-gray-400 break-words break-all whitespace-pre-line align-top">${escapeHtml(c.description || "Chưa có thông tin")}</td>`).join("")}
                         </tr>
                         <tr>
                             <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Thao Tác</td>
@@ -2173,14 +1831,10 @@ showroom/
         openCompareModal();
       }
 
-      // MODAL HANDLERS
       function openDetailModal(id) {
         const targetId = Number(id);
         const car = allCars.find((c) => Number(c.id) === targetId);
-        if (!car) {
-          console.warn("Không tìm thấy xe id:", id);
-          return;
-        }
+        if (!car) return;
 
         const isCompared = comparedCars.some((c) => Number(c.id) === targetId);
 
@@ -2219,7 +1873,7 @@ showroom/
 
                 <div class="space-y-2">
                     <h4 class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Giới thiệu tổng quan & Trang bị nổi bật</h4>
-                    <p class="text-gray-600 dark:text-gray-300 text-xs sm:text-sm leading-relaxed bg-gray-50 dark:bg-slate-950/50 p-4 rounded-2xl border border-gray-200 dark:border-white/5">
+                    <p class="text-gray-600 dark:text-gray-300 text-xs sm:text-sm leading-relaxed bg-gray-50 dark:bg-slate-950/50 p-4 rounded-2xl border border-gray-200 dark:border-white/5 break-words whitespace-pre-line">
                         ${escapeHtml(car.description || "Mẫu xe sở hữu thiết kế thể thao đột phá, vật liệu nội thất cao cấp cùng hệ thống trợ lái và an toàn tối tân hàng đầu phân khúc.")}
                     </p>
                 </div>
@@ -2257,13 +1911,8 @@ showroom/
 
         qrImg.onerror = function () {
           this.onerror = null;
-          // Thay MÃ_NGÂN_HÀNG (vd: VCB, TCB, MB, ACB, BIDV...) và SỐ_TÀI_KHOẢN_THẬT của bạn vào dưới đây
-          this.src = `https://img.vietqr.io/image/MB-0706850014-compact2.png?amount=500000000&addInfo=${encodeURIComponent(memo)}&accountName=SHOWROOM%204TL%20AUTO`;
+          this.src = `https://img.vietqr.io/image/MB-0765650114-compact2.png?amount=500000000&addInfo=${encodeURIComponent(memo)}&accountName=SHOWROOM%204TL%20AUTO`;
         };
-
-        // // VietQR Dynamic URL format
-        // const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=SHOWROOM4TL_MB_0706850014_${encodeURIComponent(memo)}`;
-        // document.getElementById("qrImage").src = qrUrl;
 
         openModal("qrModal");
       }
@@ -2282,7 +1931,7 @@ showroom/
         const memo = document.getElementById("qrMemo").innerText;
 
         if (!cusPhone) {
-          alert("Vui lòng nhập Số điện thoại để kế toán đối soát giao dịch đặt cọc!");
+          showToast("Vui lòng nhập Số điện thoại để kế toán đối soát!", "error");
           return;
         }
 
@@ -2302,20 +1951,19 @@ showroom/
 
           const result = await res.json();
           if (result.status !== "success") {
-            alert("❌ " + (result.message || "Lỗi lưu giao dịch đặt cọc!"));
+            showToast(result.message || "Lỗi lưu giao dịch đặt cọc!", "error");
             return;
           }
 
-          alert(
-            "🎉 Showroom 4TL đã lưu thông tin giao dịch cọc! Kế toán sẽ gọi xác nhận qua SĐT " +
-              cusPhone +
-              " trong 15 phút.",
+          showToast(
+            "Đã lưu thông tin giao dịch cọc! Kế toán sẽ gọi xác nhận qua SĐT " + cusPhone + " trong 15 phút.",
+            "success",
           );
           document.getElementById("qrCustomerName").value = "";
           document.getElementById("qrCustomerPhone").value = "";
           closeModal("qrModal");
         } catch (err) {
-          alert("❌ Lỗi kết nối máy chủ: Không thể lưu giao dịch lúc này.");
+          showToast("Lỗi kết nối máy chủ: Không thể lưu giao dịch lúc này.", "error");
         }
       }
 
@@ -2334,16 +1982,18 @@ showroom/
           });
 
           const result = await res.json();
-          if (result.status !== "success") {
-            alert("❌ " + (result.message || "Không thể lưu lịch lái thử!"));
+
+          if (result.status === "success") {
+            showToast("Đã lưu lịch lái thử thành công cho khách hàng: " + name, "success");
+          } else {
+            showToast(result.message || "Có lỗi xảy ra!", "error");
             return;
           }
 
-          alert(`✅ Đã lưu lịch lái thử vào hệ thống!\nKhách hàng: ${name} (${phone})\nMẫu xe: ${car} - Ngày: ${date}`);
           e.target.reset();
           closeModal("bookingModal");
         } catch (err) {
-          alert("❌ Lỗi kết nối máy chủ: Không thể gửi đăng ký lái thử.");
+          showToast("Lỗi kết nối máy chủ!", "error");
         }
       }
 
@@ -2368,15 +2018,17 @@ showroom/
           });
 
           const result = await res.json();
-          if (result.status !== "success") {
-            alert("❌ " + (result.message || "Không thể lưu lịch hẹn!"));
+
+          if (result.status === "success") {
+            showToast("Đã tiếp nhận lịch hẹn lái thử của quý khách " + name + "!", "success");
+          } else {
+            showToast(result.message || "Có lỗi xảy ra!", "error");
             return;
           }
 
-          alert(`✅ Đã tiếp nhận & lưu lịch hẹn của quý khách ${name} (${phone}) đối với mẫu xe "${car}"!`);
           e.target.reset();
         } catch (err) {
-          alert("❌ Lỗi kết nối máy chủ: Không thể gửi lịch hẹn.");
+          showToast("Lỗi kết nối máy chủ: Không thể gửi lịch hẹn.", "error");
         }
       }
 
@@ -2404,17 +2056,13 @@ showroom/
 
           const result = await res.json();
           if (result.status !== "success") {
-            alert("❌ " + (result.message || "Không thể gửi yêu cầu tư vấn!"));
+            showToast(result.message || "Không thể gửi yêu cầu tư vấn!", "error");
             return;
           }
 
-          alert(
-            "✅ Đã gửi yêu cầu thành công! Chuyên viên tín dụng 4TL sẽ gửi bảng tính qua Zalo " +
-              phone.trim() +
-              " ngay.",
-          );
+          showToast("Đã gửi yêu cầu thành công! Chuyên viên sẽ gửi bảng tính qua Zalo " + phone.trim(), "success");
         } catch (err) {
-          alert("❌ Lỗi kết nối máy chủ: Không thể gửi yêu cầu tư vấn.");
+          showToast("Lỗi kết nối máy chủ: Không thể gửi yêu cầu tư vấn.", "error");
         }
       }
 
@@ -2459,7 +2107,6 @@ showroom/
 
         const chatBox = document.getElementById("chatBox");
 
-        // Add user message
         chatBox.innerHTML += `
               <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-xs shadow-md leading-relaxed">
                   ${escapeHtml(text)}
@@ -2468,7 +2115,6 @@ showroom/
         input.value = "";
         chatBox.scrollTop = chatBox.scrollHeight;
 
-        // Typing indicator
         const typingId = "typing-" + Date.now();
         chatBox.innerHTML += `
                 <div id="${typingId}" class="bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-gray-400 p-2.5 rounded-2xl rounded-tl-none max-w-[50%] self-start text-xs border border-gray-200 dark:border-white/5 flex items-center gap-1">
@@ -2500,7 +2146,7 @@ showroom/
 
           chatBox.innerHTML += `
                     <div class="bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] self-start border border-gray-200 dark:border-white/10 shadow-sm leading-relaxed">
-                        Dạ quý khách cần tư vấn chi tiết về mẫu xe nào, xin vui lòng gọi trực tiếp Hotline VIP <strong>0706.850.014</strong> để được phục vụ 24/7 ạ!
+                        Dạ quý khách cần tư vấn chi tiết về mẫu xe nào, xin vui lòng gọi trực tiếp Hotline VIP <strong>0765.650.114</strong> để được phục vụ 24/7 ạ!
                     </div>
                 `;
           chatBox.scrollTop = chatBox.scrollHeight;
@@ -2534,6 +2180,11 @@ showroom/
 
   <body
     class="hidden bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 min-h-screen p-4 sm:p-8 font-sans transition-colors duration-300">
+    
+    <!-- KHUNG CHỨA THÔNG BÁO TOAST (NẰM GIỮA PHÍA TRÊN) -->
+    <div id="toastContainer" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto space-y-6">
     <div class="max-w-6xl mx-auto space-y-6">
       <!-- Top Admin Header -->
       <header
@@ -2746,23 +2397,29 @@ showroom/
 
           <div class="md:col-span-3">
             <label class="block text-gray-700 dark:text-gray-400 mb-1 font-semibold">
-              URL Hình ảnh xe (link ảnh online)
+              Danh sách URL Hình ảnh xe (ngăn cách bằng dấu phẩy hoặc xuống dòng)
             </label>
-            <input
-              type="text"
+            <textarea
               id="image"
-              placeholder="https://..."
+              rows="2"
+              placeholder="https://link-anh-1.jpg, https://link-anh-2.jpg, https://link-anh-3.jpg"
               required
-              class="w-full bg-gray-50 dark:bg-slate-800 p-3 rounded-xl border border-gray-300 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+              class="w-full bg-gray-50 dark:bg-slate-800 p-3 rounded-xl border border-gray-300 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"></textarea>
           </div>
 
           <div class="md:col-span-3">
-            <label class="block text-gray-700 dark:text-gray-400 mb-1 font-semibold">
-              Mô tả chi tiết & Điểm nhấn công nghệ
-            </label>
+            <div class="flex justify-between items-center mb-1">
+              <label class="block text-gray-700 dark:text-gray-400 font-semibold">
+                Mô tả chi tiết & Điểm nhấn công nghệ
+              </label>
+              <!-- Hiển thị đếm số ký tự -->
+              <span id="charCount" class="text-[10px] text-gray-400">0 / 500 ký tự</span>
+            </div>
             <textarea
               id="description"
-              placeholder="Mô tả các trang bị an toàn, cảm giác lái, bảo hành..."
+              maxlength="500"
+              oninput="document.getElementById('charCount').innerText = this.value.length + ' / 500 ký tự';"
+              placeholder="Mô tả các trang bị an toàn, cảm giác lái, bảo hành (Tối đa 500 ký tự)..."
               rows="3"
               class="w-full bg-gray-50 dark:bg-slate-800 p-3 rounded-xl border border-gray-300 dark:border-white/10 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"></textarea>
           </div>
@@ -2815,6 +2472,34 @@ showroom/
     </div>
 
     <script>
+      function showToast(message, type = 'success') {
+          const container = document.getElementById('toastContainer');
+          if (!container) return;
+
+          const toast = document.createElement('div');
+          toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold transition-all duration-300 transform translate-y-[-20px] opacity-0 border backdrop-blur-xl ${
+              type === 'success' 
+                  ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' 
+                  : 'bg-rose-950/90 border-rose-500/40 text-rose-300'
+          }`;
+
+          toast.innerHTML = `
+              <i class="fa-solid ${type === 'success' ? 'fa-circle-check text-emerald-400' : 'fa-triangle-exclamation text-rose-400'} text-base"></i>
+              <span>${escapeHtml(message)}</span>
+          `;
+
+          container.appendChild(toast);
+
+          setTimeout(() => {
+              toast.classList.remove('translate-y-[-20px]', 'opacity-0');
+          }, 10);
+
+          setTimeout(() => {
+              toast.classList.add('translate-y-[-20px]', 'opacity-0');
+              setTimeout(() => toast.remove(), 300);
+          }, 3000);
+      }
+
       (async function checkAdminSession() {
         try {
           const res = await fetch("../php/auth_check.php");
@@ -2833,7 +2518,7 @@ showroom/
 
       async function loadAdminCars() {
         try {
-          const res = await fetch("../php/get_cars.php");
+          const res = await fetch("../php/get_cars.php?t=" + Date.now(), { cache: "no-store" });
           adminCars = await res.json();
           updateStats();
           renderAdminTable(adminCars);
@@ -2915,9 +2600,20 @@ showroom/
       }
 
       async function deleteOrder(table, id) {
-        if (confirm("Xóa bản ghi này?")) {
-          await fetch(`../php/manage_orders.php?action=delete&table=${table}&id=${id}`);
-          loadCRMOrders();
+        // Thay vì dùng hộp thoại confirm() mặc định của trình duyệt, 
+        // ta gọi trực tiếp API xóa và hiển thị Toast thông báo kết quả
+        try {
+          const res = await fetch(`../php/manage_orders.php?action=delete&table=${table}&id=${id}`);
+          const data = await res.json();
+
+          if (data.status === "success") {
+            showToast("Đã xóa bản ghi thành công!", "success");
+            loadCRMOrders();
+          } else {
+            showToast(data.message || "Không thể xóa bản ghi này!", "error");
+          }
+        } catch (err) {
+          showToast("Lỗi kết nối máy chủ khi xóa!", "error");
         }
       }
 
@@ -2951,7 +2647,12 @@ showroom/
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition">
                     <td class="p-3 text-gray-400 font-mono">#${Number(car.id)}</td>
                     <td class="p-3">
-                        <img src="${getCarImage(car.image)}" class="w-14 h-9 object-cover rounded-lg border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
+                        <div class="relative inline-block">
+                            <img src="${getCarImage(car.image)}" class="w-14 h-9 object-cover rounded-lg border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
+                            <span class="absolute -top-1.5 -right-1.5 bg-indigo-600 text-white text-[9px] font-bold px-1.5 rounded-full shadow">
+                                ${getCarImages(car.image).length} ảnh
+                            </span>
+                        </div>
                     </td>
                     <td class="p-3 font-bold text-slate-900 dark:text-white">${escapeHtml(car.name)}</td>
                     <td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 font-bold">${escapeHtml(car.brand)}</span></td>
@@ -2996,29 +2697,39 @@ showroom/
           });
           const data = await res.json();
           if (data.status === "success") {
-            alert("✅ Đã lưu thông tin xe thành công!");
+            // THAY THẾ ALERT BẰNG TOAST THÀNH CÔNG
+            showToast("Đã lưu thông tin xe thành công!", "success");
             this.reset();
             loadAdminCars();
           } else {
-            alert("❌ " + (data.message || "Thêm xe thất bại!"));
+            // THAY THẾ ALERT BẰNG TOAST LỖI
+            showToast(data.message || "Thêm xe thất bại!", "error");
           }
         } catch (err) {
-          alert("Lỗi kết nối máy chủ khi thêm xe: " + err);
+          showToast("Lỗi kết nối máy chủ khi thêm xe: " + err, "error");
         }
       };
 
+      // Hàm xóa xe
       async function deleteCar(id) {
-        if (!confirm("Bạn có chắc muốn xóa mẫu xe này khỏi cơ sở dữ liệu?")) return;
         try {
-          const res = await fetch(`../php/delete_car.php?id=${id}`);
+          const res = await fetch("../php/delete_car.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: Number(id) })
+          });
+          
           const data = await res.json();
+
           if (data.status === "success") {
-            loadAdminCars();
+            showToast("Đã xóa mẫu xe thành công!", "success");
+            await loadAdminCars();
           } else {
-            alert("❌ " + (data.message || "Không thể xóa xe!"));
+            showToast(data.message || "Không thể xóa mẫu xe này!", "error");
           }
         } catch (err) {
-          alert("Lỗi kết nối khi xóa xe: " + err);
+          console.error(err);
+          showToast("Lỗi kết nối máy chủ khi xóa xe!", "error");
         }
       }
 
@@ -3026,7 +2737,10 @@ showroom/
 
       function openEditModal(id) {
         const car = adminCars.find((c) => Number(c.id) === Number(id));
-        if (!car) return;
+        if (!car) {
+          showToast("Không tìm thấy dữ liệu xe!", "error");
+          return;
+        }
 
         document.getElementById("editCarIdLabel").innerText = car.id;
         document.getElementById("edit_id").value = car.id;
@@ -3038,6 +2752,7 @@ showroom/
         document.getElementById("edit_transmission").value = car.transmission || "";
         document.getElementById("edit_image").value = car.image || "";
         document.getElementById("edit_description").value = car.description || "";
+        document.getElementById("editCharCount").innerText = (car.description ? car.description.length : 0) + " / 500 ký tự";
 
         const modal = document.getElementById("editCarModal");
         modal.classList.remove("hidden");
@@ -3050,36 +2765,47 @@ showroom/
         modal.style.display = "none";
       }
 
-      document.getElementById("editCarForm").onsubmit = async function (e) {
-        e.preventDefault();
-        try {
-          const res = await fetch("../php/edit_car.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: document.getElementById("edit_id").value,
-              name: document.getElementById("edit_name").value,
-              brand: document.getElementById("edit_brand").value,
-              price: document.getElementById("edit_price").value,
-              fuel: document.getElementById("edit_fuel").value,
-              engine: document.getElementById("edit_engine").value,
-              transmission: document.getElementById("edit_transmission").value,
-              image: document.getElementById("edit_image").value,
-              description: document.getElementById("edit_description").value,
-            }),
-          });
-          const data = await res.json();
-          if (data.status === "success") {
-            alert("✅ Đã cập nhật thông tin xe thành công!");
-            closeEditModal();
-            loadAdminCars();
-          } else {
-            alert("❌ " + (data.message || "Cập nhật thất bại!"));
+      // Đảm bảo trang tải xong mới gắn sự kiện cho #editCarForm
+      document.addEventListener("DOMContentLoaded", function () {
+        const editForm = document.getElementById("editCarForm");
+        if (!editForm) return;
+
+        editForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const payload = {
+            id: Number(document.getElementById("edit_id").value),
+            name: document.getElementById("edit_name").value.trim(),
+            brand: document.getElementById("edit_brand").value.trim(),
+            price: Number(document.getElementById("edit_price").value),
+            fuel: document.getElementById("edit_fuel").value.trim(),
+            engine: document.getElementById("edit_engine").value.trim(),
+            transmission: document.getElementById("edit_transmission").value.trim(),
+            image: document.getElementById("edit_image").value.trim(),
+            description: document.getElementById("edit_description").value.trim(),
+          };
+
+          try {
+            const res = await fetch("../php/edit_car.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+
+            if (data.status === "success") {
+              showToast("Đã cập nhật thông tin xe thành công!", "success");
+              closeEditModal();
+              await loadAdminCars();
+            } else {
+              showToast(data.message || "Cập nhật thất bại!", "error");
+            }
+          } catch (err) {
+            showToast("Lỗi kết nối máy chủ: " + err.message, "error");
           }
-        } catch (err) {
-          alert("Lỗi kết nối máy chủ: " + err);
-        }
-      };
+        });
+      });
+      
     </script>
 
     <!-- MODAL CHỈNH SỬA THÔNG TIN XE TRỰC TIẾP -->
@@ -3158,17 +2884,24 @@ showroom/
               class="w-full bg-gray-50 dark:bg-slate-800 p-3 rounded-xl border border-gray-300 dark:border-white/10 focus:outline-none focus:border-indigo-500" />
           </div>
           <div class="md:col-span-2">
-            <label class="block text-gray-700 dark:text-gray-400 mb-1 font-bold">URL Hình ảnh</label>
-            <input
-              type="text"
+            <label class="block text-gray-700 dark:text-gray-400 mb-1 font-bold">
+              Danh sách URL Hình ảnh (ngăn cách bằng dấu phẩy hoặc xuống dòng)
+            </label>
+            <textarea
               id="edit_image"
+              rows="3"
               required
-              class="w-full bg-gray-50 dark:bg-slate-800 p-3 rounded-xl border border-gray-300 dark:border-white/10 focus:outline-none focus:border-indigo-500" />
+              class="w-full bg-gray-50 dark:bg-slate-800 p-3 rounded-xl border border-gray-300 dark:border-white/10 focus:outline-none focus:border-indigo-500"></textarea>
           </div>
           <div class="md:col-span-2">
-            <label class="block text-gray-700 dark:text-gray-400 mb-1 font-bold">Mô tả chi tiết</label>
+            <div class="flex justify-between items-center mb-1">
+              <label class="block text-gray-700 dark:text-gray-400 font-bold">Mô tả chi tiết</label>
+              <span id="editCharCount" class="text-[10px] text-gray-400">0 / 500 ký tự</span>
+            </div>
             <textarea
               id="edit_description"
+              maxlength="500"
+              oninput="document.getElementById('editCharCount').innerText = this.value.length + ' / 500 ký tự';"
               rows="3"
               class="w-full bg-gray-50 dark:bg-slate-800 p-3 rounded-xl border border-gray-300 dark:border-white/10 focus:outline-none focus:border-indigo-500"></textarea>
           </div>
@@ -3192,7 +2925,6 @@ showroom/
     </div>
   </body>
 </html>
-
 ```
 
 ### file bot_train.html:
@@ -3352,7 +3084,7 @@ showroom/
 
           chatBox.innerHTML += `
                     <div class="bg-white dark:bg-slate-800 text-slate-800 dark:text-gray-200 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] self-start border border-gray-200 dark:border-white/10 leading-relaxed shadow-sm">
-                        Dạ em đã ghi nhận câu hỏi. Quý khách có thể liên hệ trực tiếp Hotline VIP <strong>0706.850.014</strong> để chuyên viên tư vấn phục vụ quý khách ngay ạ!
+                        Dạ em đã ghi nhận câu hỏi. Quý khách có thể liên hệ trực tiếp Hotline VIP <strong>0765.650.114</strong> để chuyên viên tư vấn phục vụ quý khách ngay ạ!
                     </div>
                 `;
           chatBox.scrollTop = chatBox.scrollHeight;
@@ -3412,7 +3144,7 @@ showroom/
             <i id="themeIcon" class="fa-solid fa-sun text-sm"></i>
           </button>
           <a
-            href="tel:0706850014"
+            href="tel:0765650114"
             class="bg-indigo-600 hover:bg-violet-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-md">
             <i class="fa-solid fa-phone"></i>
             Hotline VIP
@@ -3438,62 +3170,303 @@ showroom/
           name: "VinFast VF3",
           brand: "VinFast",
           price: 240000000,
-          image: "https://vinfastquan12.com.vn/wp-content/uploads/2025/02/VinFast_VF3_Mau_trang.webp",
-          engine: "Động cơ điện đơn (43 HP)",
-          transmission: "Tự động",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFJCmiv3bB_2DDesc8SnYvKr_hq-1IiNwk2YCGZKyqZA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDJ8HxL4j3SfFrNMGCvRD9bwAZjykVF3WG-Xxl5v7h9w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbsZHkDzGDsG_EspjalYDoIEN3dnHiV45pQrIns8UK3w&s=10",
+          engine: "Động cơ điện đơn (Công suất 43 HP / Mô-men xoắn 110 Nm)",
+          transmission: "Tự động 1 cấp",
           fuel: "Điện",
           description:
-            "Cơn sốt xe điện mini tại Việt Nam! Kiểu dáng hình hộp cá tính, gầm cao 191mm vượt địa hình ngập nước, Best Seller tại Showroom 4TL.",
+            "Cơn sốt xe điện mini đô thị tại Việt Nam! Mang phong cách thiết kế hình hộp cá tính, khỏe khoắn, khoảng sáng gầm xe cao 191mm giúp dễ dàng vượt qua các địa hình ngập nước đô thị, là mẫu xe điện bán chạy nhất (Best Seller) tại Showroom 4TL.",
         },
         {
           id: 2,
           name: "Mercedes-Benz C-Class C300 AMG",
           brand: "Mercedes-Benz",
           price: 2099000000,
-          image: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800",
-          engine: "2.0L Turbo EQ Boost (258 HP)",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nJj5R87z1dpwUCcHbj1KwNTJtJBM4sYDjrEIgxRtRA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0jXuoX5_WAmEuVpxNpYUIX-UtNpPa78eTAQECU9_aJQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR98khAhzlP1bBIDo7mN_uNiVMy5ExBrqfae38EzD2oBg&s=10",
+          engine: "Xăng 2.0L Turbo kết hợp công nghệ EQ Boost Mild-Hybrid (258 HP / 400 Nm)",
           transmission: "Tự động 9 cấp 9G-TRONIC",
           fuel: "Xăng Mild-Hybrid",
           description:
-            "Tiểu S-Class với thiết kế thể thao AMG Line, màn hình giải trí trung tâm 11.9 inch định dạng dọc, đèn Digital Light tối tân nhất.",
+            'Mẫu sedan thể thao mệnh danh là "tiểu S-Class" với gói trang thiết kế ngoại thất AMG Line cuốn hút, màn hình giải trí trung tâm đặt dọc 11.9 inch tích hợp MBUX thế hệ mới, cụm đèn pha thông minh Digital Light tối tân và hệ thống âm thanh vòm Burmester 3D 15 loa sống động.',
         },
         {
           id: 3,
           name: "Porsche 911 Carrera S",
           brand: "Porsche",
           price: 8500000000,
-          image: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800",
-          engine: "3.0L Boxer Twin-Turbo (450 HP)",
-          transmission: "Tự động 8 cấp PDK",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUGbNCOFMrr8i-ELaF9sQVPpIjPWMSJB44Ql_bo2667w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXIwrpx24-3p2ImkIovLVRN_wTXP-Sr-f5Y_LXkgKJDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpMtyFyXiOJ0kzPQgcy_26PGobb5w_z8zugn9VxdYSjg&s=10",
+          engine: "Xăng Boxer 6 xi-lanh 3.0L Twin-Turbo (450 HP / 530 Nm)",
+          transmission: "Ly hợp kép 8 cấp PDK danh tiếng của Porsche",
           fuel: "Xăng",
           description:
-            "Mẫu xe thể thao huyền thoại mang lại cảm giác lái đỉnh cao, thiết kế timeless vượt thời gian đi cùng gói thể thao Sport Chrono Package.",
+            "Biểu tượng xe thể thao hiệu suất cao huyền thoại mang lại cảm giác lái thuần khiết đỉnh cao. Khả năng tăng tốc 0-100 km/h chỉ mất 3.7 giây khi trang bị gói Sport Chrono, tốc độ tối đa đạt 308 km/h, tích hợp hệ thống treo chủ động PASM và thiết kế buồng lái đậm chất xe đua Đức.",
         },
         {
           id: 4,
           name: "Mercedes-AMG G63",
           brand: "Mercedes-Benz",
           price: 11750000000,
-          image: "https://images.unsplash.com/photo-1520050206274-a1ae44613e6d?w=800",
-          engine: "4.0L V8 Bi-Turbo (585 HP)",
-          transmission: "Tự động 9 cấp AMG Speedshift",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9k-mmUkZkHwMhAB8bjPOA9mFIiMkV_1C-dBgyFThkTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHgJI_oRJzR0lzto9sfPraPiSShwHmuhhfQ45LX6a1lA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKEtZnRwUw07P1WR5UkpeZNNF4_2YJJY3Pyyja2xXKOw&s=10",
+          engine: "Xăng V8 4.0L Biturbo AMG (585 HP / 850 Nm)",
+          transmission: "Tự động thể thao 9 cấp AMG SPEEDSHIFT TCT 9G",
           fuel: "Xăng",
           description:
-            "Mẫu SUV địa hình hạng sang đẳng cấp biểu tượng hoàng gia. Hệ dẫn động 4 bánh toàn thời gian 4MATIC với 3 khóa vi sai độc lập.",
+            "Mẫu SUV địa hình hạng sang biểu tượng uy quyền. Thiết kế khung gầm hình thang siêu cứng vững với 3 khóa vi sai độc lập có thể khóa hoàn toàn bằng điện, hệ thống ống xả thể thao đặt bên hông uy lực, nội thất da Nappa hảo hạng kết hợp hệ thống âm thanh vòm Burmester 15 loa.",
+        },
+        {
+          id: 5,
+          name: "BMW 740i Pure Excellence",
+          brand: "BMW",
+          price: 4699000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMNStnEqOgN-AtfJc4ZxIl-FSqSxWD-_KPP9Zjk-BkA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10",
+          engine: "Xăng 3.0L I6 TwinPower Turbo Mild-Hybrid (381 HP / 540 Nm)",
+          transmission: "Tự động 8 cấp Steptronic Sport",
+          fuel: "Xăng Mild-Hybrid",
+          description:
+            "Sedan hạng sang cỡ lớn đỉnh cao công nghệ của BMW. Không gian nội thất xa hoa với thanh pha lê tương tác BMW Interaction Bar, ghế ngồi thương gia bọc da Merino cao cấp tích hợp massage, màn hình rạp chiếu phim rạp phía sau 31.3 inch và dàn âm thanh vòm Bowers & Wilkins Diamond.",
+        },
+        {
+          id: 6,
+          name: "VinFast VF8 Plus",
+          brand: "VinFast",
+          price: 1270000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMgh5eFb69xZCQCeJXpE2n1sx0fIj0gMZRsLUCkF7F2Q&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2fiRyUQE2tzYAfH61XkhF-ZaRi4kbEv1pGYAd6gaKZw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNnZ23dQtN4guhpS1WTpIHS2Azx4Cb_TRBVR3v3oMa8A&s=10",
+          engine: "2 mô-tơ điện AWD toàn thời gian (402 HP / 620 Nm)",
+          transmission: "Tự động 1 cấp",
+          fuel: "Điện",
+          description:
+            "SUV điện thông minh phân khúc D mạnh mẽ, trang bị nhiều tính năng trợ lái nâng cao ADAS. Khả năng tăng tốc ấn tượng từ 0-100 km/h dưới 5.5 giây, màn hình trung tâm tràn viền 15.6 inch tối giản, không gian rộng rãi và cửa sổ trời toàn cảnh kính lớn.",
+        },
+        {
+          id: 7,
+          name: "VinFast VF5 Plus",
+          brand: "VinFast",
+          price: 468000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd-uWGNUo1taSToXpQaIDCJxCi0OOXvd5SN34Va8zCgQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFGMSwMiRgj3WEsCu14j3Th0mDeFZDiTmfuN5AIyfgiA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEnAbDWJMk7kjzcYqCfHxsNLGsZ4hGodDqmC_vbKh6lw&s=10",
+          engine: "Động cơ điện đơn (Công suất 134 HP / Mô-men xoắn 135 Nm)",
+          transmission: "Tự động 1 cấp",
+          fuel: "Điện",
+          description:
+            "Mẫu A-SUV chạy điện nhỏ gọn, thiết kế năng động tối ưu cho nhu cầu di chuyển đô thị hàng ngày. Tầm hoạt động hơn 300 km cho mỗi lần sạc đầy, tích hợp trợ lý ảo tiếng Việt thông minh, cảnh báo điểm mù và trang bị 6 túi khí an toàn.",
+        },
+        {
+          id: 8,
+          name: "Toyota Camry 2.5Q",
+          brand: "Toyota",
+          price: 1405000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYl1j8avzp_a52uX2szBu_X2g82yHbEtkqDDN0XtKJ6A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ16pL8BQW83ACdsEAsk95IbLeS0i347RmCkAbc4zGLLA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkDKY-KgdZor0p_2ggyNXFiRd7VE6K5ydz31QxuOYG8w&s=10",
+          engine: "Xăng Dynamic Force 2.5L (207 HP / 250 Nm)",
+          transmission: "Tự động 8 cấp",
+          fuel: "Xăng",
+          description:
+            "Mẫu sedan hạng D biểu tượng cho sự bền bỉ, sang trọng và êm ái. Khoang hành khách phía sau thiết kế chuẩn doanh nhân với bệ tỳ tay tích hợp bảng điều khiển cảm ứng ngả ghế, rèm che nắng chỉnh điện, điều hòa 3 vùng độc lập và 9 loa JBL cao cấp.",
+        },
+        {
+          id: 9,
+          name: "Toyota Corolla Cross 1.8HEV",
+          brand: "Toyota",
+          price: 905000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpA_ZtVNe8sOc_-tGXiFue--SWAvHYn4hqdXnj1v5NYg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNuPdKKZWfVIlpfJtWjiH1WDTCkzs65ZGLNbW8xdkYXA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaemDP4gzPH3lDaNIymrWag_h6ogYiqv8TLc60aEacSA&s=10",
+          engine: "Xăng 1.8L kết hợp mô-tơ điện Hybrid (Tổng công suất 122 HP)",
+          transmission: "Tự động vô cấp E-CVT",
+          fuel: "Xăng Hybrid",
+          description:
+            "SUV đô thị xanh tiết kiệm nhiên liệu tối ưu nhờ công suất tự sạc Hybrid tiên tiến. Trang bị gói công nghệ an toàn Toyota Safety Sense, camera toàn cảnh 360 độ, cửa sổ trời toàn cảnh và vận hành êm ái, bền bỉ chuẩn mực.",
+        },
+        {
+          id: 10,
+          name: "Ford Ranger Raptor 3.0 V6",
+          brand: "Ford",
+          price: 1299000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkAP8_0fM7-es-s0TkuWfES4ERnhn3kRzgpiERtCEFyw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX-ZqLNONfwQeU5XwtL9ZqejukswL1TpUpsr1-76jc3w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQH0fOuAoH-XV1q7BGhIXSq8KXrWfeO2ChqH9Z6Zjgvg&s=10",
+          engine: "Xăng EcoBoost 3.0L V6 Twin-Turbo (397 HP / 583 Nm)",
+          transmission: "Tự động 10 cấp điện tử",
+          fuel: "Xăng",
+          description:
+            "Vua bán tải hiệu năng cao chuyên nghiệp, trang bị hệ thống giảm xóc FOX Live Valve 2.5 inch trượt địa hình. Sở hữu 7 chế độ lái linh hoạt (bao gồm chế độ Baja chuyên đua sa mạc), hệ thống khóa vi sai trước/sau và ống xả thể thao điều chỉnh độ vang.",
+        },
+        {
+          id: 11,
+          name: "Ford Everest Titanium+ 4x4",
+          brand: "Ford",
+          price: 1468000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiZtZyv9cLXgHdi-7v-PjeTIL5tGeeU3tpnMYplS6XDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTYj1liAKQcUeUhRU01jidOFrEQonbqh2FvYukozZM4w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfRprvZIOazCuK7ZgS3R8vKBIHAlTpdmYSX9Y03eOZBw&s=10",
+          engine: "Bi-Turbo Diesel 2.0L i4 (210 HP / 500 Nm)",
+          transmission: "Tự động 10 cấp điện tử",
+          fuel: "Dầu (Diesel)",
+          description:
+            "SUV 7 chỗ gầm cao hầm hố, khả năng cách âm đỉnh cao và giàu công nghệ an toàn hàng đầu phân khúc. Hệ thống dẫn động 2 cầu 4x4 thông minh, màn hình trung tâm dọc 12 inch chạy SYNC 4A, camera 360 độ sắc nét và hỗ trợ đỗ xe tự động.",
+        },
+        {
+          id: 12,
+          name: "Hyundai Tucson 2.0 Diesel",
+          brand: "Hyundai",
+          price: 959000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStMbKbjpRugZbAa8Jxhz2GPdFPKMMrw8fJwjRdQ-TBZQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ8ey04y0-7pSS5gagfiCQrjMaVJBoxy_NPolImcNVTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-AHImYzA1sSv1yPO9EeJObAW1AWSceaxllVKBvl_VJg&s=10",
+          engine: "Diesel Smartstream D2.0 (186 HP / 416 Nm)",
+          transmission: "Tự động 8 cấp",
+          fuel: "Dầu (Diesel)",
+          description:
+            "Crossover sở hữu thiết kế ngoại thất táo bạo, khả năng vận hành mạnh mẽ, bốc và tiết kiệm nhiên liệu tối ưu. Nổi bật với lưới tản nhiệt hình khối thông minh, cần số điện tử dạng nút bấm, cửa sổ trời toàn cảnh và gói an toàn Hyundai SmartSense.",
+        },
+        {
+          id: 13,
+          name: "Hyundai Accent 1.5 AT",
+          brand: "Hyundai",
+          price: 489000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqxAlh0ojNuYt82BpLC-BRYGclFmTXJd-gJrp2lEF6WQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSahuOZxstBhmyAYM9STEFGftWiVL3FaEJV6jgiXXgjVQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1NEb-vWA47bMBzZmMi3bTdDEKeRmafgiCvZAUuKuHlA&s=10",
+          engine: "Xăng Smartstream G1.5 (115 HP / 144 Nm)",
+          transmission: "Tự động vô cấp thông minh iVT",
+          fuel: "Xăng",
+          description:
+            "Sedan hạng B phổ thông, tiện nghi phong phú vượt tầm giá. Thiết kế phong cách Fastback thể thao trẻ trung, màn hình giải trí 8 inch tích hợp Apple CarPlay/Android Auto không dây, sạc điện thoại không dây và tính năng mở cốp thông minh.",
+        },
+        {
+          id: 14,
+          name: "Honda CR-V e:HEV RS",
+          brand: "Honda",
+          price: 1259000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgYwkQ2_Bnn715DhM8OfuYNpzg5ozBqKoyC2evRYhhUw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYKCZvpPeMChk_J4Lbs9BbrSrpBDSw5G69aSbUDdtrsw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Vqeig2JBKNtNlJ5UGdtK69cmsDwRARmVSINyLF-S_Q&s=10",
+          engine: "Xăng 2.0L kết hợp 2 mô-tơ điện (Tổng công suất 204 HP / 335 Nm)",
+          transmission: "Tự động vô cấp E-CVT",
+          fuel: "Xăng Hybrid",
+          description:
+            "SUV 5 chỗ thể thao mang lại trải nghiệm lái phấn khích chuẩn Honda Sensing. Khả năng tiết kiệm nhiên liệu tối ưu chỉ khoảng 5.2L/100km trong đô thị, trang bị cửa sổ trời toàn cảnh Panorama, hệ thống âm thanh 12 loa Bose và màn hình HUD.",
+        },
+        {
+          id: 15,
+          name: "Mazda CX-5 2.0 Premium",
+          brand: "Mazda",
+          price: 829000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW39XsAvfNmzgS3h7r2TjxeeJTUhyLpVsnzGlKpS-mQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTInC9__STOHLHNime6eFjQhx4SSUEX5S8lyJn71cJTqQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIF5WKKGY123T08e8kSO_mXGGGMgDtg41luLhyq88TKw&s=10",
+          engine: "Xăng SkyActiv-G 2.0L (154 HP / 200 Nm)",
+          transmission: "Tự động 6 cấp",
+          fuel: "Xăng",
+          description:
+            "Mẫu Crossover bán chạy hàng đầu phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế. Trang bị màn hình hiển thị kính lái HUD, gương chiếu hậu chống chói tự động, cốp điện rảnh tay, 10 loa Bose cao cấp và gói an toàn chủ động i-Activsense.",
+        },
+        {
+          id: 16,
+          name: "Kia Carnival 2.2D Signature",
+          brand: "Kia",
+          price: 1759000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDrQOfx7kICr3cyGjHqTHm_SMnzFbZOde_TVN6qS1FXw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5v0u6MMN_-u8H5QgBA6eq9gRrBtD3urv_V9zGDT_5ig&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKUw3TRHK3bFJ7Hv5brQb8FBAB1NJEcZdPSkYD5-8ysg&s=10",
+          engine: "Diesel Smartstream 2.2L (199 HP / 440 Nm)",
+          transmission: "Tự động 8 cấp",
+          fuel: "Dầu (Diesel)",
+          description:
+            "Xe gia đình hạng sang (MPV) cỡ lớn rộng rãi, trang bị đầy đủ như khoang hạng thương gia. Hàng ghế thứ hai chỉnh điện thư giãn tích hợp sưởi/làm mát, cửa sổ trời đôi độc lập, rèm che nắng và hệ thống âm thanh 12 loa Bose.",
+        },
+        {
+          id: 17,
+          name: "Audi Q7 45 TFSI quattro",
+          brand: "Audi",
+          price: 3700000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsMi5fmiZg1cQubrLMpSpHHiwFbiC2puLtGW-dhi1Evw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg2Z49zJQSa-QgYOK6PnDsCeXGbIjDlMy_UJgY5AVG0w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXio_hwx7mM0zgI01Sdx4o-ZLySmfpn8qKouBDzFESQA&s=10",
+          engine: "Xăng 2.0L TFSI Mild-Hybrid MHEV (252 HP / 370 Nm)",
+          transmission: "Tự động 8 cấp Tiptronic",
+          fuel: "Xăng",
+          description:
+            "SUV hạng sang 7 chỗ dẫn động 4 bánh toàn thời gian quattro danh tiếng. Thiết kế lưới tản nhiệt Singleframe bát giác bề thế, cụm đèn pha LED Matrix sắc sảo, buồng lái ảo Audi Virtual Cockpit và dàn âm thanh 3D Bang & Olufsen 19 loa.",
+        },
+        {
+          id: 18,
+          name: "Lexus RX350 Luxury",
+          brand: "Lexus",
+          price: 4330000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOKn1MNoCINsLRyMryNK-gqu0xXC7E4vegTJpqDpxwKg&s, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlhxOxreBx7dZ0WVilniwHUvofB_NaKB71xDtEZh1WYA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOMkj7dV-dZSUjqzqpyhMVxWrlA_BEZeQ-CC4u_rdp7Q&s=10",
+          engine: "Xăng 2.4L Turbo I4 (275 HP / 430 Nm)",
+          transmission: "Tự động 8 cấp",
+          fuel: "Xăng",
+          description:
+            "Mẫu SUV xe sang Nhật Bản êm ái, cách âm vượt trội và giữ giá tốt. Nội thất bọc da Semi-Aniline cao cấp, màn hình trung tâm cảm ứng 14 inch, hệ thống âm thanh vòm 21 loa Mark Levinson và gói công nghệ an toàn Lexus Safety System+.",
+        },
+        {
+          id: 19,
+          name: "Lamborghini Urus S",
+          brand: "Lamborghini",
+          price: 16500000000,
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHS2yGPTepN8pLd6xYDDwMDfzd7nNgw0Wb_yTGlGCm0A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKtHAnyoB_1kLYyhE81rizhXi7nkTxwh82w-nitYue7g&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ098BS6eDBP3owhuf17ApxAaDbgMExcwrI0huLgTUudQ&s=10",
+          engine: "Xăng V8 4.0L Twin-Turbo (666 HP / 850 Nm)",
+          transmission: "Tự động 8 cấp",
+          fuel: "Xăng",
+          description:
+            "Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Hệ thống dẫn động 4 bánh toàn thời gian, treo khí nén thích ứng thông minh và núm xoay chế độ lái ANIMA gồm Strada, Sport, Corsa, Terra, Sabbia và Neve.",
         },
         {
           id: 20,
           name: "Ferrari F8 Tributo",
           brand: "Ferrari",
           price: 19000000000,
-          image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800",
-          engine: "3.9L V8 Twin-Turbo (710 HP)",
-          transmission: "Tự động 7 cấp ly hợp kép",
+          image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE3sDpn33xn9qTk5wTWc6EFHdkMEssFXSa6l-0td5o2w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgqtnNRCxzmqTFoL6wSi62G-QtJKf_vgT58IWQOpjJvg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0GaWZqHRGG_hseloDpgEOje7D5M_ahm2lMqzkTrlTg&s=10",
+          engine: "Xăng V8 3.9L Twin-Turbo (720 HP / 770 Nm)",
+          transmission: "Ly hợp kép 7 cấp F1",
           fuel: "Xăng",
           description:
-            "Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm Ý. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h.",
+            "Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h, trang bị hốc gió khí động học S-Duct lấy cảm hứng từ xe đua Công thức 1 giúp tăng lực ép xuống đường.",
         },
       ];
+
+      let currentSlideImages = [];
+      let currentSlideIndex = 0;
+
+      function updateSliderUI() {
+        const mainImg = document.getElementById("mainCarImage");
+        const counter = document.getElementById("slideCounter");
+        if (!mainImg || currentSlideImages.length === 0) return;
+
+        mainImg.src = currentSlideImages[currentSlideIndex];
+        if (counter) {
+          counter.innerText = `${currentSlideIndex + 1} / ${currentSlideImages.length}`;
+        }
+
+        document.querySelectorAll(".car-thumb-btn").forEach((btn, idx) => {
+          if (idx === currentSlideIndex) {
+            btn.classList.add("ring-2", "ring-indigo-500", "opacity-100");
+            btn.classList.remove("opacity-60");
+          } else {
+            btn.classList.remove("ring-2", "ring-indigo-500", "opacity-100");
+            btn.classList.add("opacity-60");
+          }
+        });
+      }
+
+      function changeCarSlide(step) {
+        if (currentSlideImages.length <= 1) return;
+        currentSlideIndex = (currentSlideIndex + step + currentSlideImages.length) % currentSlideImages.length;
+        updateSliderUI();
+      }
+
+      function goToCarSlide(index) {
+        if (index < 0 || index >= currentSlideImages.length) return;
+        currentSlideIndex = index;
+        updateSliderUI();
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") changeCarSlide(-1);
+        if (e.key === "ArrowRight") changeCarSlide(1);
+      });
 
       async function loadCarDetail() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -3508,21 +3481,68 @@ showroom/
         }
 
         const car = (Array.isArray(cars) && cars.find((c) => Number(c.id) === Number(id))) || fallbackCars[0];
+        currentSlideImages = getCarImages(car.image);
+        currentSlideIndex = 0;
+        const hasMultiple = currentSlideImages.length > 1;
 
         document.getElementById("detailContainer").innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     
-                    <!-- Left: Image & Badge -->
-                    <div class="lg:col-span-7 space-y-4">
-                        <div class="relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-900 border border-gray-200 dark:border-white/10 shadow-2xl">
-                            <img src="${getCarImage(car.image)}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
-                            <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                    <!-- Left: Image Slider & Badge -->
+                    <div class="lg:col-span-7 space-y-3">
+                        <div class="relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-900 border border-gray-200 dark:border-white/10 shadow-2xl group">
+                            <img id="mainCarImage" src="${currentSlideImages[0]}" class="w-full h-full object-cover transition-all duration-300" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
+                            
+                            <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
                                 ${escapeHtml(car.brand)}
                             </span>
+
+                            ${
+                              hasMultiple
+                                ? `
+                              <!-- Bộ đếm số ảnh -->
+                              <span id="slideCounter" class="absolute top-4 right-4 bg-black/65 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full border border-white/15">
+                                1 / ${currentSlideImages.length}
+                              </span>
+
+                              <!-- Nút mũi tên Trái -->
+                              <button type="button" onclick="changeCarSlide(-1)" title="Ảnh trước (Mũi tên trái)"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/55 hover:bg-indigo-600 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition shadow-lg">
+                                <i class="fa-solid fa-chevron-left"></i>
+                              </button>
+
+                              <!-- Nút mũi tên Phải -->
+                              <button type="button" onclick="changeCarSlide(1)" title="Ảnh tiếp theo (Mũi tên phải)"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/55 hover:bg-indigo-600 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition shadow-lg">
+                                <i class="fa-solid fa-chevron-right"></i>
+                              </button>
+                            `
+                                : ""
+                            }
                         </div>
 
+                        <!-- Dải ảnh thu nhỏ (Thumbnails) -->
+                        ${
+                          hasMultiple
+                            ? `
+                          <div class="flex gap-2.5 overflow-x-auto py-1">
+                            ${currentSlideImages
+                              .map(
+                                (imgUrl, idx) => `
+                              <button type="button" onclick="goToCarSlide(${idx})"
+                                class="car-thumb-btn relative flex-shrink-0 w-20 h-14 rounded-xl overflow-hidden border border-gray-300 dark:border-white/15 transition ${idx === 0 ? "ring-2 ring-indigo-500 opacity-100" : "opacity-60 hover:opacity-100"}">
+                                <img src="${imgUrl}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
+                              </button>
+                            `,
+                              )
+                              .join("")}
+                          </div>
+                        `
+                            : ""
+                        }
+
                         <!-- 3 Mini Specs -->
-                        <div class="grid grid-cols-3 gap-3 text-xs">
+                        <div class="grid grid-cols-3 gap-3 text-xs pt-1">
                             <div class="bg-gray-50 dark:bg-slate-900/80 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-center">
                                 <i class="fa-solid fa-gauge-high text-indigo-600 dark:text-indigo-500 mb-1"></i>
                                 <div class="text-[10px] text-gray-500 dark:text-gray-400">Động cơ</div>
@@ -3544,7 +3564,7 @@ showroom/
                     <!-- Right: Info & Pricing -->
                     <div class="lg:col-span-5 space-y-6">
                         <div>
-                            <span class="text-xs text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-widest">${car.brand} Supercar</span>
+                            <span class="text-xs text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-widest">${escapeHtml(car.brand)} Supercar</span>
                             <h1 class="text-3xl font-black font-heading text-slate-900 dark:text-white mt-1">${escapeHtml(car.name)}</h1>
                             <div class="text-3xl font-black text-indigo-600 dark:text-indigo-500 font-heading mt-2">
                                 ${Number(car.price).toLocaleString("vi-VN")} VNĐ
@@ -3553,7 +3573,7 @@ showroom/
 
                         <div class="bg-gray-50 dark:bg-slate-900/80 p-4 rounded-2xl border border-gray-200 dark:border-white/10 space-y-2 text-xs">
                             <div class="text-gray-500 dark:text-gray-400 uppercase font-bold text-[10px]">Giới thiệu mẫu xe</div>
-                            <p class="text-slate-700 dark:text-gray-300 leading-relaxed">${escapeHtml(car.description || "Mẫu xe sở hữu thiết kế tuyệt hảo, trang bị động cơ hiệu năng cao và công nghệ an toàn hàng đầu thế giới.")}</p>
+                            <p class="text-slate-700 dark:text-gray-300 leading-relaxed break-words whitespace-pre-line">${escapeHtml(car.description || "Mẫu xe sở hữu thiết kế tuyệt hảo, trang bị động cơ hiệu năng cao và công nghệ an toàn hàng đầu thế giới.")}</p>
                         </div>
 
                         <!-- Loan Preview -->
@@ -3570,10 +3590,10 @@ showroom/
 
                         <!-- Actions -->
                         <div class="space-y-2">
-                            <a href="tel:0706850014" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-600/30">
-                                <i class="fa-solid fa-phone"></i> Gọi Hotline Tư Vấn Ngay: 0706.850.014
+                            <a href="tel:0765650114" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-600/30">
+                                <i class="fa-solid fa-phone"></i> Gọi Hotline Tư Vấn Ngay: 0765.650.114
                             </a>
-                            <a href="../index.html#car-section" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-gray-300 font-bold py-3 rounded-2xl text-xs flex items-center justify-center gap-2 border border-gray-200 dark:border-white/10 transition">
+                            <a href="bo_suu_tap_xe.html" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-gray-300 font-bold py-3 rounded-2xl text-xs flex items-center justify-center gap-2 border border-gray-200 dark:border-white/10 transition">
                                 <i class="fa-solid fa-car"></i> Xem Các Mẫu Xe Khác
                             </a>
                         </div>
@@ -4011,14 +4031,226 @@ if (isset($pdo) && $pdo) {
 
 if (empty($cars)) {
     $cars = [
-        ['name' => 'VinFast VF3', 'brand' => 'VinFast', 'price' => 240000000, 'engine' => 'Động cơ điện đơn (43 HP)', 'fuel' => 'Điện'],
-        ['name' => 'VinFast VF5 Plus', 'brand' => 'VinFast', 'price' => 468000000, 'engine' => 'Động cơ điện (134 HP)', 'fuel' => 'Điện'],
-        ['name' => 'VinFast VF8 Plus', 'brand' => 'VinFast', 'price' => 1270000000, 'engine' => '2 Động cơ điện (402 HP)', 'fuel' => 'Điện'],
-        ['name' => 'Mercedes-Benz C-Class C300 AMG', 'brand' => 'Mercedes-Benz', 'price' => 2099000000, 'engine' => '2.0L Turbo EQ Boost (258 HP)', 'fuel' => 'Xăng Mild-Hybrid'],
-        ['name' => 'Porsche 911 Carrera S', 'brand' => 'Porsche', 'price' => 8500000000, 'engine' => '3.0L Boxer Twin-Turbo (450 HP)', 'fuel' => 'Xăng'],
-        ['name' => 'Mercedes-AMG G63', 'brand' => 'Mercedes-Benz', 'price' => 11750000000, 'engine' => '4.0L V8 Bi-Turbo (585 HP)', 'fuel' => 'Xăng'],
-        ['name' => 'Lamborghini Urus S', 'brand' => 'Lamborghini', 'price' => 16500000000, 'engine' => '4.0L V8 Twin-Turbo (666 HP)', 'fuel' => 'Xăng'],
-        ['name' => 'Ferrari F8 Tributo', 'brand' => 'Ferrari', 'price' => 19000000000, 'engine' => '3.9L V8 Twin-Turbo (710 HP)', 'fuel' => 'Xăng'],
+        [
+            'id' => 20,
+            'name' => 'Ferrari F8 Tributo',
+            'brand' => 'Ferrari',
+            'price' => 19000000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE3sDpn33xn9qTk5wTWc6EFHdkMEssFXSa6l-0td5o2w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgqtnNRCxzmqTFoL6wSi62G-QtJKf_vgT58IWQOpjJvg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0GaWZqHRGG_hseloDpgEOje7D5M_ahm2lMqzkTrlTg&s=10',
+            'engine' => 'Xăng V8 3.9L Twin-Turbo (720 HP / 770 Nm)',
+            'transmission' => 'Ly hợp kép 7 cấp F1',
+            'fuel' => 'Xăng',
+            'description' => 'Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h, trang bị hốc gió khí động học S-Duct lấy cảm hứng từ xe đua Công thức 1 giúp tăng lực ép xuống đường.'
+        ],
+        [
+            'id' => 19,
+            'name' => 'Lamborghini Urus S',
+            'brand' => 'Lamborghini',
+            'price' => 16500000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHS2yGPTepN8pLd6xYDDwMDfzd7nNgw0Wb_yTGlGCm0A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKtHAnyoB_1kLYyhE81rizhXi7nkTxwh82w-nitYue7g&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ098BS6eDBP3owhuf17ApxAaDbgMExcwrI0huLgTUudQ&s=10',
+            'engine' => 'Xăng V8 4.0L Twin-Turbo (666 HP / 850 Nm)',
+            'transmission' => 'Tự động 8 cấp',
+            'fuel' => 'Xăng',
+            'description' => 'Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Hệ thống dẫn động 4 bánh toàn thời gian, treo khí nén thích ứng thông minh và núm xoay chế độ lái ANIMA gồm Strada, Sport, Corsa, Terra, Sabbia và Neve.'
+        ],
+        [
+            'id' => 18,
+            'name' => 'Lexus RX350 Luxury',
+            'brand' => 'Lexus',
+            'price' => 4330000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOKn1MNoCINsLRyMryNK-gqu0xXC7E4vegTJpqDpxwKg&s, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlhxOxreBx7dZ0WVilniwHUvofB_NaKB71xDtEZh1WYA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOMkj7dV-dZSUjqzqpyhMVxWrlA_BEZeQ-CC4u_rdp7Q&s=10',
+            'engine' => 'Xăng 2.4L Turbo I4 (275 HP / 430 Nm)',
+            'transmission' => 'Tự động 8 cấp',
+            'fuel' => 'Xăng',
+            'description' => 'Mẫu SUV xe sang Nhật Bản êm ái, cách âm vượt trội và giữ giá tốt. Nội thất bọc da Semi-Aniline cao cấp, màn hình trung tâm cảm ứng 14 inch, hệ thống âm thanh vòm 21 loa Mark Levinson và gói công nghệ an toàn Lexus Safety System+.'
+        ],
+        [
+            'id' => 17,
+            'name' => 'Audi Q7 45 TFSI quattro',
+            'brand' => 'Audi',
+            'price' => 3700000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsMi5fmiZg1cQubrLMpSpHHiwFbiC2puLtGW-dhi1Evw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg2Z49zJQSa-QgYOK6PnDsCeXGbIjDlMy_UJgY5AVG0w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXio_hwx7mM0zgI01Sdx4o-ZLySmfpn8qKouBDzFESQA&s=10',
+            'engine' => 'Xăng 2.0L TFSI Mild-Hybrid MHEV (252 HP / 370 Nm)',
+            'transmission' => 'Tự động 8 cấp Tiptronic',
+            'fuel' => 'Xăng',
+            'description' => 'SUV hạng sang 7 chỗ dẫn động 4 bánh toàn thời gian quattro danh tiếng. Thiết kế lưới tản nhiệt Singleframe bát giác bề thế, cụm đèn pha LED Matrix sắc sảo, buồng lái ảo Audi Virtual Cockpit và dàn âm thanh 3D Bang & Olufsen 19 loa.'
+        ],
+        [
+            'id' => 16,
+            'name' => 'Kia Carnival 2.2D Signature',
+            'brand' => 'Kia',
+            'price' => 1759000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDrQOfx7kICr3cyGjHqTHm_SMnzFbZOde_TVN6qS1FXw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5v0u6MMN_-u8H5QgBA6eq9gRrBtD3urv_V9zGDT_5ig&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKUw3TRHK3bFJ7Hv5brQb8FBAB1NJEcZdPSkYD5-8ysg&s=10',
+            'engine' => 'Diesel Smartstream 2.2L (199 HP / 440 Nm)',
+            'transmission' => 'Tự động 8 cấp',
+            'fuel' => 'Dầu (Diesel)',
+            'description' => 'Xe gia đình hạng sang (MPV) cỡ lớn rộng rãi, trang bị đầy đủ như khoang hạng thương gia. Hàng ghế thứ hai chỉnh điện thư giãn tích hợp sưởi/làm mát, cửa sổ trời đôi độc lập, rèm che nắng và hệ thống âm thanh 12 loa Bose.'
+        ],
+        [
+            'id' => 15,
+            'name' => 'Mazda CX-5 2.0 Premium',
+            'brand' => 'Mazda',
+            'price' => 829000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW39XsAvfNmzgS3h7r2TjxeeJTUhyLpVsnzGlKpS-mQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTInC9__STOHLHNime6eFjQhx4SSUEX5S8lyJn71cJTqQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIF5WKKGY123T08e8kSO_mXGGGMgDtg41luLhyq88TKw&s=10',
+            'engine' => 'Xăng SkyActiv-G 2.0L (154 HP / 200 Nm)',
+            'transmission' => 'Tự động 6 cấp',
+            'fuel' => 'Xăng',
+            'description' => 'Mẫu Crossover bán chạy hàng đầu phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế. Trang bị màn hình hiển thị kính lái HUD, gương chiếu hậu chống chói tự động, cốp điện rảnh tay, 10 loa Bose cao cấp và gói an toàn chủ động i-Activsense.'
+        ],
+        [
+            'id' => 14,
+            'name' => 'Honda CR-V e:HEV RS',
+            'brand' => 'Honda',
+            'price' => 1259000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgYwkQ2_Bnn715DhM8OfuYNpzg5ozBqKoyC2evRYhhUw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYKCZvpPeMChk_J4Lbs9BbrSrpBDSw5G69aSbUDdtrsw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Vqeig2JBKNtNlJ5UGdtK69cmsDwRARmVSINyLF-S_Q&s=10',
+            'engine' => 'Xăng 2.0L kết hợp 2 mô-tơ điện (Tổng công suất 204 HP / 335 Nm)',
+            'transmission' => 'Tự động vô cấp E-CVT',
+            'fuel' => 'Xăng Hybrid',
+            'description' => 'SUV 5 chỗ thể thao mang lại trải nghiệm lái phấn khích chuẩn Honda Sensing. Khả năng tiết kiệm nhiên liệu tối ưu chỉ khoảng 5.2L/100km trong đô thị, trang bị cửa sổ trời toàn cảnh Panorama, hệ thống âm thanh 12 loa Bose và màn hình HUD.'
+        ],
+        [
+            'id' => 13,
+            'name' => 'Hyundai Accent 1.5 AT',
+            'brand' => 'Hyundai',
+            'price' => 489000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqxAlh0ojNuYt82BpLC-BRYGclFmTXJd-gJrp2lEF6WQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSahuOZxstBhmyAYM9STEFGftWiVL3FaEJV6jgiXXgjVQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1NEb-vWA47bMBzZmMi3bTdDEKeRmafgiCvZAUuKuHlA&s=10',
+            'engine' => 'Xăng Smartstream G1.5 (115 HP / 144 Nm)',
+            'transmission' => 'Tự động vô cấp thông minh iVT',
+            'fuel' => 'Xăng',
+            'description' => 'Sedan hạng B phổ thông, tiện nghi phong phú vượt tầm giá. Thiết kế phong cách Fastback thể thao trẻ trung, màn hình giải trí 8 inch tích hợp Apple CarPlay/Android Auto không dây, sạc điện thoại không dây và tính năng mở cốp thông minh.'
+        ],
+        [
+            'id' => 12,
+            'name' => 'Hyundai Tucson 2.0 Diesel',
+            'brand' => 'Hyundai',
+            'price' => 959000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStMbKbjpRugZbAa8Jxhz2GPdFPKMMrw8fJwjRdQ-TBZQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ8ey04y0-7pSS5gagfiCQrjMaVJBoxy_NPolImcNVTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-AHImYzA1sSv1yPO9EeJObAW1AWSceaxllVKBvl_VJg&s=10',
+            'engine' => 'Diesel Smartstream D2.0 (186 HP / 416 Nm)',
+            'transmission' => 'Tự động 8 cấp',
+            'fuel' => 'Dầu (Diesel)',
+            'description' => 'Crossover sở hữu thiết kế ngoại thất táo bạo, khả năng vận hành mạnh mẽ, bốc và tiết kiệm nhiên liệu tối ưu. Nổi bật với lưới tản nhiệt hình khối thông minh, cần số điện tử dạng nút bấm, cửa sổ trời toàn cảnh và gói an toàn Hyundai SmartSense.'
+        ],
+        [
+            'id' => 11,
+            'name' => 'Ford Everest Titanium+ 4x4',
+            'brand' => 'Ford',
+            'price' => 1468000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiZtZyv9cLXgHdi-7v-PjeTIL5tGeeU3tpnMYplS6XDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTYj1liAKQcUeUhRU01jidOFrEQonbqh2FvYukozZM4w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfRprvZIOazCuK7ZgS3R8vKBIHAlTpdmYSX9Y03eOZBw&s=10',
+            'engine' => 'Bi-Turbo Diesel 2.0L i4 (210 HP / 500 Nm)',
+            'transmission' => 'Tự động 10 cấp điện tử',
+            'fuel' => 'Dầu (Diesel)',
+            'description' => 'SUV 7 chỗ gầm cao hầm hố, khả năng cách âm đỉnh cao và giàu công nghệ an toàn hàng đầu phân khúc. Hệ thống dẫn động 2 cầu 4x4 thông minh, màn hình trung tâm dọc 12 inch chạy SYNC 4A, camera 360 độ sắc nét và hỗ trợ đỗ xe tự động.'
+        ],
+        [
+            'id' => 10,
+            'name' => 'Ford Ranger Raptor 3.0 V6',
+            'brand' => 'Ford',
+            'price' => 1299000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkAP8_0fM7-es-s0TkuWfES4ERnhn3kRzgpiERtCEFyw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX-ZqLNONfwQeU5XwtL9ZqejukswL1TpUpsr1-76jc3w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQH0fOuAoH-XV1q7BGhIXSq8KXrWfeO2ChqH9Z6Zjgvg&s=10',
+            'engine' => 'Xăng EcoBoost 3.0L V6 Twin-Turbo (397 HP / 583 Nm)',
+            'transmission' => 'Tự động 10 cấp điện tử',
+            'fuel' => 'Xăng',
+            'description' => 'Vua bán tải hiệu năng cao chuyên nghiệp, trang bị hệ thống giảm xóc FOX Live Valve 2.5 inch trượt địa hình. Sở hữu 7 chế độ lái linh hoạt (bao gồm chế độ Baja chuyên đua sa mạc), hệ thống khóa vi sai trước/sau và ống xả thể thao điều chỉnh độ vang.'
+        ],
+        [
+            'id' => 9,
+            'name' => 'Toyota Corolla Cross 1.8HEV',
+            'brand' => 'Toyota',
+            'price' => 905000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpA_ZtVNe8sOc_-tGXiFue--SWAvHYn4hqdXnj1v5NYg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNuPdKKZWfVIlpfJtWjiH1WDTCkzs65ZGLNbW8xdkYXA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaemDP4gzPH3lDaNIymrWag_h6ogYiqv8TLc60aEacSA&s=10',
+            'engine' => 'Xăng 1.8L kết hợp mô-tơ điện Hybrid (Tổng công suất 122 HP)',
+            'transmission' => 'Tự động vô cấp E-CVT',
+            'fuel' => 'Xăng Hybrid',
+            'description' => 'SUV đô thị xanh tiết kiệm nhiên liệu tối ưu nhờ công suất tự sạc Hybrid tiên tiến. Trang bị gói công nghệ an toàn Toyota Safety Sense, camera toàn cảnh 360 độ, cửa sổ trời toàn cảnh và vận hành êm ái, bền bỉ chuẩn mực.'
+        ],
+        [
+            'id' => 8,
+            'name' => 'Toyota Camry 2.5Q',
+            'brand' => 'Toyota',
+            'price' => 1405000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYl1j8avzp_a52uX2szBu_X2g82yHbEtkqDDN0XtKJ6A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ16pL8BQW83ACdsEAsk95IbLeS0i347RmCkAbc4zGLLA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkDKY-KgdZor0p_2ggyNXFiRd7VE6K5ydz31QxuOYG8w&s=10',
+            'engine' => 'Xăng Dynamic Force 2.5L (207 HP / 250 Nm)',
+            'transmission' => 'Tự động 8 cấp',
+            'fuel' => 'Xăng',
+            'description' => 'Mẫu sedan hạng D biểu tượng cho sự bền bỉ, sang trọng và êm ái. Khoang hành khách phía sau thiết kế chuẩn doanh nhân với bệ tỳ tay tích hợp bảng điều khiển cảm ứng ngả ghế, rèm che nắng chỉnh điện, điều hòa 3 vùng độc lập và 9 loa JBL cao cấp.'
+        ],
+        [
+            'id' => 7,
+            'name' => 'VinFast VF5 Plus',
+            'brand' => 'VinFast',
+            'price' => 468000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd-uWGNUo1taSToXpQaIDCJxCi0OOXvd5SN34Va8zCgQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFGMSwMiRgj3WEsCu14j3Th0mDeFZDiTmfuN5AIyfgiA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEnAbDWJMk7kjzcYqCfHxsNLGsZ4hGodDqmC_vbKh6lw&s=10',
+            'engine' => 'Động cơ điện đơn (Công suất 134 HP / Mô-men xoắn 135 Nm)',
+            'transmission' => 'Tự động 1 cấp',
+            'fuel' => 'Điện',
+            'description' => 'Mẫu A-SUV chạy điện nhỏ gọn, thiết kế năng động tối ưu cho nhu cầu di chuyển đô thị hàng ngày. Tầm hoạt động hơn 300 km cho mỗi lần sạc đầy, tích hợp trợ lý ảo tiếng Việt thông minh, cảnh báo điểm mù và trang bị 6 túi khí an toàn.'
+        ],
+        [
+            'id' => 6,
+            'name' => 'VinFast VF8 Plus',
+            'brand' => 'VinFast',
+            'price' => 1270000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMgh5eFb69xZCQCeJXpE2n1sx0fIj0gMZRsLUCkF7F2Q&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2fiRyUQE2tzYAfH61XkhF-ZaRi4kbEv1pGYAd6gaKZw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNnZ23dQtN4guhpS1WTpIHS2Azx4Cb_TRBVR3v3oMa8A&s=10',
+            'engine' => '2 mô-tơ điện AWD toàn thời gian (402 HP / 620 Nm)',
+            'transmission' => 'Tự động 1 cấp',
+            'fuel' => 'Điện',
+            'description' => 'SUV điện thông minh phân khúc D mạnh mẽ, trang bị nhiều tính năng trợ lái nâng cao ADAS. Khả năng tăng tốc ấn tượng từ 0-100 km/h dưới 5.5 giây, màn hình trung tâm tràn viền 15.6 inch tối giản, không gian rộng rãi và cửa sổ trời toàn cảnh kính lớn.'
+        ],
+        [
+            'id' => 5,
+            'name' => 'BMW 740i Pure Excellence',
+            'brand' => 'BMW',
+            'price' => 4699000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMNStnEqOgN-AtfJc4ZxIl-FSqSxWD-_KPP9Zjk-BkA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10',
+            'engine' => 'Xăng 3.0L I6 TwinPower Turbo Mild-Hybrid (381 HP / 540 Nm)',
+            'transmission' => 'Tự động 8 cấp Steptronic Sport',
+            'fuel' => 'Xăng Mild-Hybrid',
+            'description' => 'Sedan hạng sang cỡ lớn đỉnh cao công nghệ của BMW. Không gian nội thất xa hoa với thanh pha lê tương tác BMW Interaction Bar, ghế ngồi thương gia bọc da Merino cao cấp tích hợp massage, màn hình rạp chiếu phim rạp phía sau 31.3 inch và dàn âm thanh vòm Bowers & Wilkins Diamond.'
+        ],
+        [
+            'id' => 4,
+            'name' => 'Mercedes-AMG G63',
+            'brand' => 'Mercedes-Benz',
+            'price' => 11750000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9k-mmUkZkHwMhAB8bjPOA9mFIiMkV_1C-dBgyFThkTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHgJI_oRJzR0lzto9sfPraPiSShwHmuhhfQ45LX6a1lA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKEtZnRwUw07P1WR5UkpeZNNF4_2YJJY3Pyyja2xXKOw&s=10',
+            'engine' => 'Xăng V8 4.0L Biturbo AMG (585 HP / 850 Nm)',
+            'transmission' => 'Tự động thể thao 9 cấp AMG SPEEDSHIFT TCT 9G',
+            'fuel' => 'Xăng',
+            'description' => 'Mẫu SUV địa hình hạng sang biểu tượng uy quyền. Thiết kế khung gầm hình thang siêu cứng vững với 3 khóa vi sai độc lập có thể khóa hoàn toàn bằng điện, hệ thống ống xả thể thao đặt bên hông uy lực, nội thất da Nappa hảo hạng kết hợp hệ thống âm thanh vòm Burmester 15 loa.'
+        ],
+        [
+            'id' => 3,
+            'name' => 'Porsche 911 Carrera S',
+            'brand' => 'Porsche',
+            'price' => 8500000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUGbNCOFMrr8i-ELaF9sQVPpIjPWMSJB44Ql_bo2667w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXIwrpx24-3p2ImkIovLVRN_wTXP-Sr-f5Y_LXkgKJDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpMtyFyXiOJ0kzPQgcy_26PGobb5w_z8zugn9VxdYSjg&s=10',
+            'engine' => 'Xăng Boxer 6 xi-lanh 3.0L Twin-Turbo (450 HP / 530 Nm)',
+            'transmission' => 'Ly hợp kép 8 cấp PDK danh tiếng của Porsche',
+            'fuel' => 'Xăng',
+            'description' => 'Biểu tượng xe thể thao hiệu suất cao huyền thoại mang lại cảm giác lái thuần khiết đỉnh cao. Khả năng tăng tốc 0-100 km/h chỉ mất 3.7 giây khi trang bị gói Sport Chrono, tốc độ tối đa đạt 308 km/h, tích hợp hệ thống treo chủ động PASM và thiết kế buồng lái đậm chất xe đua Đức.'
+        ],
+        [
+            'id' => 2,
+            'name' => 'Mercedes-Benz C-Class C300 AMG',
+            'brand' => 'Mercedes-Benz',
+            'price' => 2099000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nJj5R87z1dpwUCcHbj1KwNTJtJBM4sYDjrEIgxRtRA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0jXuoX5_WAmEuVpxNpYUIX-UtNpPa78eTAQECU9_aJQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR98khAhzlP1bBIDo7mN_uNiVMy5ExBrqfae38EzD2oBg&s=10',
+            'engine' => 'Xăng 2.0L Turbo kết hợp công nghệ EQ Boost Mild-Hybrid (258 HP / 400 Nm)',
+            'transmission' => 'Tự động 9 cấp 9G-TRONIC',
+            'fuel' => 'Xăng Mild-Hybrid',
+            'description' => 'Mẫu sedan thể thao mệnh danh là "tiểu S-Class" với gói trang thiết kế ngoại thất AMG Line cuốn hút, màn hình giải trí trung tâm đặt dọc 11.9 inch tích hợp MBUX thế hệ mới, cụm đèn pha thông minh Digital Light tối tân và hệ thống âm thanh vòm Burmester 3D 15 loa sống động.'
+        ],
+        [
+            'id' => 1,
+            'name' => 'VinFast VF3',
+            'brand' => 'VinFast',
+            'price' => 240000000.00,
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFJCmiv3bB_2DDesc8SnYvKr_hq-1IiNwk2YCGZKyqZA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDJ8HxL4j3SfFrNMGCvRD9bwAZjykVF3WG-Xxl5v7h9w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbsZHkDzGDsG_EspjalYDoIEN3dnHiV45pQrIns8UK3w&s=10',
+            'engine' => 'Động cơ điện đơn (Công suất 43 HP / Mô-men xoắn 110 Nm)',
+            'transmission' => 'Tự động 1 cấp',
+            'fuel' => 'Điện',
+            'description' => 'Cơn sốt xe điện mini đô thị tại Việt Nam! Mang phong cách thiết kế hình hộp cá tính, khỏe khoắn, khoảng sáng gầm xe cao 191mm giúp dễ dàng vượt qua các địa hình ngập nước đô thị, là mẫu xe điện bán chạy nhất (Best Seller) tại Showroom 4TL.'
+        ]
     ];
 }
 
@@ -4125,7 +4357,7 @@ if (!$reply) {
     } elseif (strpos($msgNoAccent, 'lai thu') !== false) {
         $reply = "Quý khách hãy bấm nút <strong>'Lái Thử'</strong> trên bất kỳ mẫu xe nào, điền tên và SĐT, hệ thống sẽ lưu lịch hẹn ngay để chuyên viên mang xe tới tận nơi ạ!";
     } else {
-        $reply = "Cảm ơn quý khách đã nhắn tin! Quý khách có thể hỏi về giá xe cụ thể (VD: <em>giá VF3, G63, Porsche 911</em>), theo hãng (<em>xe VinFast, Mercedes</em>), ngân sách (<em>xe dưới 2 tỷ</em>) hoặc gọi Hotline VIP <strong>0706.850.014</strong> ạ!";
+        $reply = "Cảm ơn quý khách đã nhắn tin! Quý khách có thể hỏi về giá xe cụ thể (VD: <em>giá VF3, G63, Porsche 911</em>), theo hãng (<em>xe VinFast, Mercedes</em>), ngân sách (<em>xe dưới 2 tỷ</em>) hoặc gọi Hotline VIP <strong>0765.650.114</strong> ạ!";
     }
 }
 
@@ -4138,9 +4370,9 @@ echo json_encode(["reply" => $reply], JSON_UNESCAPED_UNICODE);
 // Tự động nhận diện môi trường chạy Local (XAMPP) hay Online (Hosting PHP)
 $hostName = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-$isLocal = in_array($remoteAddr, ['127.0.0.1', '::1']) 
-           || strpos($hostName, 'localhost') !== false 
-           || strpos($hostName, '127.0.0.1') !== false;
+$isLocal = in_array($remoteAddr, ['127.0.0.1', '::1'])
+    || strpos($hostName, 'localhost') !== false
+    || strpos($hostName, '127.0.0.1') !== false;
 
 if ($isLocal) {
     $host = "localhost";
@@ -4179,7 +4411,7 @@ try {
             name VARCHAR(255) NOT NULL,
             brand VARCHAR(100) NOT NULL,
             price DECIMAL(15,2) NOT NULL,
-            image VARCHAR(255) DEFAULT 'default.jpg',
+            image TEXT,
             engine VARCHAR(100),
             transmission VARCHAR(100),
             fuel VARCHAR(50),
@@ -4223,6 +4455,8 @@ try {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
+    // Tự động nâng cấp cột image lên TEXT để chứa được nhiều link ảnh
+    $pdo->exec("ALTER TABLE cars MODIFY COLUMN image TEXT");
 
     // 5. Nạp tài khoản Admin mặc định (đã mã hóa mật khẩu) nếu bảng users trống
     if ((int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn() === 0) {
@@ -4242,36 +4476,34 @@ try {
 
     // 7. Nạp trọn bộ 20 mẫu xe mặc định từ schema.sql nếu bảng cars trống
     if ((int)$pdo->query("SELECT COUNT(*) FROM cars")->fetchColumn() === 0) {
-        $pdo->exec("
-            INSERT INTO cars (name, brand, price, image, engine, transmission, fuel, description) VALUES
-            ('VinFast VF3', 'VinFast', 240000000.00, 'https://vinfastquan12.com.vn/wp-content/uploads/2025/02/VinFast_VF3_Mau_trang.webp', 'Động cơ điện đơn (43 HP)', 'Tự động', 'Điện', 'Cơn sốt xe điện mini tại Việt Nam! Kiểu dáng hình hộp cá tính, gầm cao 191mm vượt địa hình ngập nước, Best Seller tại Showroom 4TL.'),
-            ('Mercedes-Benz C-Class C300 AMG', 'Mercedes-Benz', 2099000000.00, 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800', '2.0L Turbo EQ Boost (258 HP)', 'Tự động 9 cấp 9G-TRONIC', 'Xăng Mild-Hybrid', 'Tiểu S-Class với thiết kế thể thao AMG Line, màn hình giải trí trung tâm 11.9 inch định dạng dọc, đèn Digital Light tối tân nhất.'),
-            ('Porsche 911 Carrera S', 'Porsche', 8500000000.00, 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800', '3.0L Boxer Twin-Turbo (450 HP)', 'Tự động 8 cấp PDK', 'Xăng', 'Mẫu xe thể thao huyền thoại mang lại cảm giác lái đỉnh cao, thiết kế timeless vượt thời gian đi cùng gói thể thao Sport Chrono Package.'),
-            ('Mercedes-AMG G63', 'Mercedes-Benz', 11750000000.00, 'https://images.unsplash.com/photo-1520050206274-a1ae44613e6d?w=800', '4.0L V8 Bi-Turbo (585 HP)', 'Tự động 9 cấp AMG Speedshift', 'Xăng', 'Mẫu SUV địa hình hạng sang đẳng cấp biểu tượng hoàng gia. Hệ dẫn động 4 bánh toàn thời gian 4MATIC với 3 khóa vi sai độc lập.'),
-            ('BMW 740i Pure Excellence', 'BMW', 4699000000.00, 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800', '3.0L I6 TwinPower (381 HP)', 'Tự động 8 cấp Steptronic', 'Xăng Mild-Hybrid', 'Sedan hạng sang cao cấp đầy công nghệ của BMW với màn hình Theatre Screen 31.3 inch chuẩn 8K cùng hệ thống âm thanh vòm Bowers & Wilkins Diamond.'),
-            ('VinFast VF8 Plus', 'VinFast', 1270000000.00, 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800', '2 Động cơ điện (402 HP - AWD)', 'Tự động đơn cấp', 'Điện', 'SUV điện thông minh phân khúc D, thiết kế Pininfarina đỉnh cao, tăng tốc 0-100 km/h trong 5.5 giây và trợ lái thông minh ADAS cấp độ 2.'),
-            ('VinFast VF5 Plus', 'VinFast', 468000000.00, 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800', 'Động cơ điện (134 HP - 135 Nm)', 'Tự động đơn cấp', 'Điện', 'A-SUV thuần điện quốc dân nhỏ gọn, chi phí vận hành siêu rẻ chỉ bằng 1/3 xe xăng, thời trang và linh hoạt trong đô thị.'),
-            ('Toyota Camry 2.5Q', 'Toyota', 1405000000.00, 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800', '2.5L Dynamic Force (207 HP)', 'Tự động 8 cấp Direct Shift', 'Xăng', 'Mẫu sedan hạng D chuẩn mực của sự thành đạt, bền bỉ, êm ái bậc nhất phân khúc với gói an toàn Toyota Safety Sense 2.0.'),
-            ('Toyota Corolla Cross 1.8HEV', 'Toyota', 905000000.00, 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800', '1.8L Hybrid Xăng + Điện (122 HP)', 'Vô cấp e-CVT', 'Xăng Hybrid', 'Mẫu Urban SUV tiết kiệm nhiên liệu tối ưu với động cơ Hybrid tiên tiến, khung gầm TNGA vững chắc và vận hành êm ái nhẹ nhàng.'),
-            ('Ford Ranger Raptor 3.0 V6', 'Ford', 1299000000.00, 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800', '3.0L V6 EcoBoost Twin-Turbo (392 HP)', 'Tự động 10 cấp', 'Xăng', 'Vua bán tải hiệu năng cao, trang bị bộ giảm xóc FOX 2.5 inch Live Valve thích ứng theo thời gian thực và chế độ lái sa mạc Baja Mode.'),
-            ('Ford Everest Titanium+ 4x4', 'Ford', 1468000000.00, 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800', '2.0L Bi-Turbo Diesel (210 HP)', 'Tự động 10 cấp điện tử', 'Dầu (Diesel)', 'SUV 7 chỗ thực thụ đậm chất cơ bắp Mỹ, khả năng lội nước 800mm, camera 360 độ và công nghệ đỗ xe tự động 2.0.'),
-            ('Hyundai Tucson 2.0 Diesel', 'Hyundai', 959000000.00, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800', '2.0L Smartstream D2.0 (186 HP)', 'Tự động 8 cấp số nút bấm', 'Dầu (Diesel)', 'Crossover thiết kế tương lai Parametric Jewel, nội thất mở dạng phi thuyền, máy dầu bốc và tiết kiệm bậc nhất.'),
-            ('Hyundai Accent 1.5 AT', 'Hyundai', 489000000.00, 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800', '1.5L Smartstream G (115 HP)', 'Vô cấp thông minh iVT', 'Xăng', 'Sedan hạng B thế hệ hoàn toàn mới, kích thước lớn nhất phân khúc, trang bị gói SmartSense vượt tầm giá.'),
-            ('Honda CR-V e:HEV RS', 'Honda', 1259000000.00, 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800', '2.0L Hybrid Xăng + Điện (204 HP)', 'E-CVT thể thao', 'Xăng Hybrid', 'SUV thể thao thế hệ mới nhập khẩu nguyên chiếc, tiết kiệm nhiên liệu chỉ 3.4L/100km đô thị, gói an toàn Honda SENSING đầy đủ.'),
-            ('Mazda CX-5 2.0 Premium', 'Mazda', 829000000.00, 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800', '2.0L SkyActiv-G (154 HP)', 'Tự động 6 cấp', 'Xăng', 'Mẫu Crossover bán chạy nhất phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế, 10 loa Bose cao cấp và hệ thống an toàn i-Activsense.'),
-            ('Kia Carnival 2.2D Signature', 'Kia', 1759000000.00, 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800', '2.2L Smartstream D2.2 (199 HP)', 'Tự động 8 cấp', 'Dầu (Diesel)', 'Chuyên cơ mặt đất MPV 7 chỗ thương gia siêu tiện nghi, hàng ghế thứ 2 sưởi/làm mát và chế độ thư giãn không trọng lực VIP.'),
-            ('Audi Q7 45 TFSI quattro', 'Audi', 3700000000.00, 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800', '2.0L Turbo Mild-Hybrid (252 HP)', 'Tự động 8 cấp Tiptronic', 'Xăng Mild-Hybrid', 'SUV hạng sang 7 chỗ cỡ lớn dẫn động 4 bánh toàn thời gian quattro danh tiếng, đèn Matrix LED thông minh và buồng lái ảo Audi Virtual Cockpit.'),
-            ('Lexus RX350 Luxury', 'Lexus', 4330000000.00, 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800', '2.4L Turbo T24A-FTS (275 HP)', 'Tự động 8 cấp Direct Shift', 'Xăng', 'Mẫu SUV xe sang Nhật Bản êm ái, cách âm tĩnh lặng đỉnh cao, nội thất da Semi-Aniline cao cấp và hệ thống an toàn Lexus Safety System+ 3.0.'),
-            ('Lamborghini Urus S', 'Lamborghini', 16500000000.00, 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800', '4.0L V8 Twin-Turbo (666 HP)', 'Tự động 8 cấp thể thao', 'Xăng', 'Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Thiết kế góc cạnh đậm chất chiến đấu của hãng xe bò tót Sant\'Agata Bolognese.'),
-            ('Ferrari F8 Tributo', 'Ferrari', 19000000000.00, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800', '3.9L V8 Twin-Turbo (710 HP)', 'Tự động 7 cấp ly hợp kép', 'Xăng', 'Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm Ý. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h.')
-        ");
+        $sql_cars = <<<'SQL'
+INSERT INTO cars (name, brand, price, image, engine, transmission, fuel, description) VALUES
+('VinFast VF3', 'VinFast', 240000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFJCmiv3bB_2DDesc8SnYvKr_hq-1IiNwk2YCGZKyqZA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDJ8HxL4j3SfFrNMGCvRD9bwAZjykVF3WG-Xxl5v7h9w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbsZHkDzGDsG_EspjalYDoIEN3dnHiV45pQrIns8UK3w&s=10', 'Động cơ điện đơn (Công suất 43 HP / Mô-men xoắn 110 Nm)', 'Tự động 1 cấp', 'Điện', 'Cơn sốt xe điện mini đô thị tại Việt Nam! Mang phong cách thiết kế hình hộp cá tính, khỏe khoắn, khoảng sáng gầm xe cao 191mm giúp dễ dàng vượt qua các địa hình ngập nước đô thị, là mẫu xe điện bán chạy nhất (Best Seller) tại Showroom 4TL.'),
+('Mercedes-Benz C-Class C300 AMG', 'Mercedes-Benz', 2099000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nJj5R87z1dpwUCcHbj1KwNTJtJBM4sYDjrEIgxRtRA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0jXuoX5_WAmEuVpxNpYUIX-UtNpPa78eTAQECU9_aJQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR98khAhzlP1bBIDo7mN_uNiVMy5ExBrqfae38EzD2oBg&s=10', 'Xăng 2.0L Turbo kết hợp công nghệ EQ Boost Mild-Hybrid (258 HP / 400 Nm)', 'Tự động 9 cấp 9G-TRONIC', 'Xăng Mild-Hybrid', 'Mẫu sedan thể thao mệnh danh là "tiểu S-Class" với gói trang thiết kế ngoại thất AMG Line cuốn hút, màn hình giải trí trung tâm đặt dọc 11.9 inch tích hợp MBUX thế hệ mới, cụm đèn pha thông minh Digital Light tối tân và hệ thống âm thanh vòm Burmester 3D 15 loa sống động.'),
+('Porsche 911 Carrera S', 'Porsche', 8500000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUGbNCOFMrr8i-ELaF9sQVPpIjPWMSJB44Ql_bo2667w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXIwrpx24-3p2ImkIovLVRN_wTXP-Sr-f5Y_LXkgKJDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpMtyFyXiOJ0kzPQgcy_26PGobb5w_z8zugn9VxdYSjg&s=10', 'Xăng Boxer 6 xi-lanh 3.0L Twin-Turbo (450 HP / 530 Nm)', 'Ly hợp kép 8 cấp PDK danh tiếng của Porsche', 'Xăng', 'Biểu tượng xe thể thao hiệu suất cao huyền thoại mang lại cảm giác lái thuần khiết đỉnh cao. Khả năng tăng tốc 0-100 km/h chỉ mất 3.7 giây khi trang bị gói Sport Chrono, tốc độ tối đa đạt 308 km/h, tích hợp hệ thống treo chủ động PASM và thiết kế buồng lái đậm chất xe đua Đức.'),
+('Mercedes-AMG G63', 'Mercedes-Benz', 11750000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9k-mmUkZkHwMhAB8bjPOA9mFIiMkV_1C-dBgyFThkTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHgJI_oRJzR0lzto9sfPraPiSShwHmuhhfQ45LX6a1lA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKEtZnRwUw07P1WR5UkpeZNNF4_2YJJY3Pyyja2xXKOw&s=10', 'Xăng V8 4.0L Biturbo AMG (585 HP / 850 Nm)', 'Tự động thể thao 9 cấp AMG SPEEDSHIFT TCT 9G', 'Xăng', 'Mẫu SUV địa hình hạng sang biểu tượng uy quyền. Thiết kế khung gầm hình thang siêu cứng vững với 3 khóa vi sai độc lập có thể khóa hoàn toàn bằng điện, hệ thống ống xả thể thao đặt bên hông uy lực, nội thất da Nappa hảo hạng kết hợp hệ thống âm thanh vòm Burmester 15 loa.'),
+('BMW 740i Pure Excellence', 'BMW', 4699000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMNStnEqOgN-AtfJc4ZxIl-FSqSxWD-_KPP9Zjk-BkA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10', 'Xăng 3.0L I6 TwinPower Turbo Mild-Hybrid (381 HP / 540 Nm)', 'Tự động 8 cấp Steptronic Sport', 'Xăng Mild-Hybrid', 'Sedan hạng sang cỡ lớn đỉnh cao công nghệ của BMW. Không gian nội thất xa hoa với thanh pha lê tương tác BMW Interaction Bar, ghế ngồi thương gia bọc da Merino cao cấp tích hợp massage, màn hình rạp chiếu phim rạp phía sau 31.3 inch và dàn âm thanh vòm Bowers & Wilkins Diamond.'),
+('VinFast VF8 Plus', 'VinFast', 1270000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMgh5eFb69xZCQCeJXpE2n1sx0fIj0gMZRsLUCkF7F2Q&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2fiRyUQE2tzYAfH61XkhF-ZaRi4kbEv1pGYAd6gaKZw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNnZ23dQtN4guhpS1WTpIHS2Azx4Cb_TRBVR3v3oMa8A&s=10', '2 mô-tơ điện AWD toàn thời gian (402 HP / 620 Nm)', 'Tự động 1 cấp', 'Điện', 'SUV điện thông minh phân khúc D mạnh mẽ, trang bị nhiều tính năng trợ lái nâng cao ADAS. Khả năng tăng tốc ấn tượng từ 0-100 km/h dưới 5.5 giây, màn hình trung tâm tràn viền 15.6 inch tối giản, không gian rộng rãi và cửa sổ trời toàn cảnh kính lớn.'),
+('VinFast VF5 Plus', 'VinFast', 468000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd-uWGNUo1taSToXpQaIDCJxCi0OOXvd5SN34Va8zCgQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFGMSwMiRgj3WEsCu14j3Th0mDeFZDiTmfuN5AIyfgiA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEnAbDWJMk7kjzcYqCfHxsNLGsZ4hGodDqmC_vbKh6lw&s=10', 'Động cơ điện đơn (Công suất 134 HP / Mô-men xoắn 135 Nm)', 'Tự động 1 cấp', 'Điện', 'Mẫu A-SUV chạy điện nhỏ gọn, thiết kế năng động tối ưu cho nhu cầu di chuyển đô thị hàng ngày. Tầm hoạt động hơn 300 km cho mỗi lần sạc đầy, tích hợp trợ lý ảo tiếng Việt thông minh, cảnh báo điểm mù và trang bị 6 túi khí an toàn.'),
+('Toyota Camry 2.5Q', 'Toyota', 1405000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYl1j8avzp_a52uX2szBu_X2g82yHbEtkqDDN0XtKJ6A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ16pL8BQW83ACdsEAsk95IbLeS0i347RmCkAbc4zGLLA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkDKY-KgdZor0p_2ggyNXFiRd7VE6K5ydz31QxuOYG8w&s=10', 'Xăng Dynamic Force 2.5L (207 HP / 250 Nm)', 'Tự động 8 cấp', 'Xăng', 'Mẫu sedan hạng D biểu tượng cho sự bền bỉ, sang trọng và êm ái. Khoang hành khách phía sau thiết kế chuẩn doanh nhân với bệ tỳ tay tích hợp bảng điều khiển cảm ứng ngả ghế, rèm che nắng chỉnh điện, điều hòa 3 vùng độc lập và 9 loa JBL cao cấp.'),
+('Toyota Corolla Cross 1.8HEV', 'Toyota', 905000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpA_ZtVNe8sOc_-tGXiFue--SWAvHYn4hqdXnj1v5NYg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNuPdKKZWfVIlpfJtWjiH1WDTCkzs65ZGLNbW8xdkYXA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaemDP4gzPH3lDaNIymrWag_h6ogYiqv8TLc60aEacSA&s=10', 'Xăng 1.8L kết hợp mô-tơ điện Hybrid (Tổng công suất 122 HP)', 'Tự động vô cấp E-CVT', 'Xăng Hybrid', 'SUV đô thị xanh tiết kiệm nhiên liệu tối ưu nhờ công suất tự sạc Hybrid tiên tiến. Trang bị gói công nghệ an toàn Toyota Safety Sense, camera toàn cảnh 360 độ, cửa sổ trời toàn cảnh và vận hành êm ái, bền bỉ chuẩn mực.'),
+('Ford Ranger Raptor 3.0 V6', 'Ford', 1299000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkAP8_0fM7-es-s0TkuWfES4ERnhn3kRzgpiERtCEFyw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX-ZqLNONfwQeU5XwtL9ZqejukswL1TpUpsr1-76jc3w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQH0fOuAoH-XV1q7BGhIXSq8KXrWfeO2ChqH9Z6Zjgvg&s=10', 'Xăng EcoBoost 3.0L V6 Twin-Turbo (397 HP / 583 Nm)', 'Tự động 10 cấp điện tử', 'Xăng', 'Vua bán tải hiệu năng cao chuyên nghiệp, trang bị hệ thống giảm xóc FOX Live Valve 2.5 inch trượt địa hình. Sở hữu 7 chế độ lái linh hoạt (bao gồm chế độ Baja chuyên đua sa mạc), hệ thống khóa vi sai trước/sau và ống xả thể thao điều chỉnh độ vang.'),
+('Ford Everest Titanium+ 4x4', 'Ford', 1468000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiZtZyv9cLXgHdi-7v-PjeTIL5tGeeU3tpnMYplS6XDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTYj1liAKQcUeUhRU01jidOFrEQonbqh2FvYukozZM4w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfRprvZIOazCuK7ZgS3R8vKBIHAlTpdmYSX9Y03eOZBw&s=10', 'Bi-Turbo Diesel 2.0L i4 (210 HP / 500 Nm)', 'Tự động 10 cấp điện tử', 'Dầu (Diesel)', 'SUV 7 chỗ gầm cao hầm hố, khả năng cách âm đỉnh cao và giàu công nghệ an toàn hàng đầu phân khúc. Hệ thống dẫn động 2 cầu 4x4 thông minh, màn hình trung tâm dọc 12 inch chạy SYNC 4A, camera 360 độ sắc nét và hỗ trợ đỗ xe tự động.'),
+('Hyundai Tucson 2.0 Diesel', 'Hyundai', 959000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStMbKbjpRugZbAa8Jxhz2GPdFPKMMrw8fJwjRdQ-TBZQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ8ey04y0-7pSS5gagfiCQrjMaVJBoxy_NPolImcNVTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-AHImYzA1sSv1yPO9EeJObAW1AWSceaxllVKBvl_VJg&s=10', 'Diesel Smartstream D2.0 (186 HP / 416 Nm)', 'Tự động 8 cấp', 'Dầu (Diesel)', 'Crossover sở hữu thiết kế ngoại thất táo bạo, khả năng vận hành mạnh mẽ, bốc và tiết kiệm nhiên liệu tối ưu. Nổi bật với lưới tản nhiệt hình khối thông minh, cần số điện tử dạng nút bấm, cửa sổ trời toàn cảnh và gói an toàn Hyundai SmartSense.'),
+('Hyundai Accent 1.5 AT', 'Hyundai', 489000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqxAlh0ojNuYt82BpLC-BRYGclFmTXJd-gJrp2lEF6WQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSahuOZxstBhmyAYM9STEFGftWiVL3FaEJV6jgiXXgjVQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1NEb-vWA47bMBzZmMi3bTdDEKeRmafgiCvZAUuKuHlA&s=10', 'Xăng Smartstream G1.5 (115 HP / 144 Nm)', 'Tự động vô cấp thông minh iVT', 'Xăng', 'Sedan hạng B phổ thông, tiện nghi phong phú vượt tầm giá. Thiết kế phong cách Fastback thể thao trẻ trung, màn hình giải trí 8 inch tích hợp Apple CarPlay/Android Auto không dây, sạc điện thoại không dây và tính năng mở cốp thông minh.'),
+('Honda CR-V e:HEV RS', 'Honda', 1259000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgYwkQ2_Bnn715DhM8OfuYNpzg5ozBqKoyC2evRYhhUw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYKCZvpPeMChk_J4Lbs9BbrSrpBDSw5G69aSbUDdtrsw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Vqeig2JBKNtNlJ5UGdtK69cmsDwRARmVSINyLF-S_Q&s=10', 'Xăng 2.0L kết hợp 2 mô-tơ điện (Tổng công suất 204 HP / 335 Nm)', 'Tự động vô cấp E-CVT', 'Xăng Hybrid', 'SUV 5 chỗ thể thao mang lại trải nghiệm lái phấn khích chuẩn Honda Sensing. Khả năng tiết kiệm nhiên liệu tối ưu chỉ khoảng 5.2L/100km trong đô thị, trang bị cửa sổ trời toàn cảnh Panorama, hệ thống âm thanh 12 loa Bose và màn hình HUD.'),
+('Mazda CX-5 2.0 Premium', 'Mazda', 829000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW39XsAvfNmzgS3h7r2TjxeeJTUhyLpVsnzGlKpS-mQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTInC9__STOHLHNime6eFjQhx4SSUEX5S8lyJn71cJTqQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIF5WKKGY123T08e8kSO_mXGGGMgDtg41luLhyq88TKw&s=10', 'Xăng SkyActiv-G 2.0L (154 HP / 200 Nm)', 'Tự động 6 cấp', 'Xăng', 'Mẫu Crossover bán chạy hàng đầu phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế. Trang bị màn hình hiển thị kính lái HUD, gương chiếu hậu chống chói tự động, cốp điện rảnh tay, 10 loa Bose cao cấp và gói an toàn chủ động i-Activsense.'),
+('Kia Carnival 2.2D Signature', 'Kia', 1759000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDrQOfx7kICr3cyGjHqTHm_SMnzFbZOde_TVN6qS1FXw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5v0u6MMN_-u8H5QgBA6eq9gRrBtD3urv_V9zGDT_5ig&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKUw3TRHK3bFJ7Hv5brQb8FBAB1NJEcZdPSkYD5-8ysg&s=10', 'Diesel Smartstream 2.2L (199 HP / 440 Nm)', 'Tự động 8 cấp', 'Dầu (Diesel)', 'Xe gia đình hạng sang (MPV) cỡ lớn rộng rãi, trang bị đầy đủ như khoang hạng thương gia. Hàng ghế thứ hai chỉnh điện thư giãn tích hợp sưởi/làm mát, cửa sổ trời đôi độc lập, rèm che nắng và hệ thống âm thanh 12 loa Bose.'),
+('Audi Q7 45 TFSI quattro', 'Audi', 3700000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsMi5fmiZg1cQubrLMpSpHHiwFbiC2puLtGW-dhi1Evw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg2Z49zJQSa-QgYOK6PnDsCeXGbIjDlMy_UJgY5AVG0w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXio_hwx7mM0zgI01Sdx4o-ZLySmfpn8qKouBDzFESQA&s=10', 'Xăng 2.0L TFSI Mild-Hybrid MHEV (252 HP / 370 Nm)', 'Tự động 8 cấp Tiptronic', 'Xăng', 'SUV hạng sang 7 chỗ dẫn động 4 bánh toàn thời gian quattro danh tiếng. Thiết kế lưới tản nhiệt Singleframe bát giác bề thế, cụm đèn pha LED Matrix sắc sảo, buồng lái ảo Audi Virtual Cockpit và dàn âm thanh 3D Bang & Olufsen 19 loa.'),
+('Lexus RX350 Luxury', 'Lexus', 4330000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOKn1MNoCINsLRyMryNK-gqu0xXC7E4vegTJpqDpxwKg&s, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlhxOxreBx7dZ0WVilniwHUvofB_NaKB71xDtEZh1WYA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOMkj7dV-dZSUjqzqpyhMVxWrlA_BEZeQ-CC4u_rdp7Q&s=10', 'Xăng 2.4L Turbo I4 (275 HP / 430 Nm)', 'Tự động 8 cấp', 'Xăng', 'Mẫu SUV xe sang Nhật Bản êm ái, cách âm vượt trội và giữ giá tốt. Nội thất bọc da Semi-Aniline cao cấp, màn hình trung tâm cảm ứng 14 inch, hệ thống âm thanh vòm 21 loa Mark Levinson và gói công nghệ an toàn Lexus Safety System+.'),
+('Lamborghini Urus S', 'Lamborghini', 16500000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHS2yGPTepN8pLd6xYDDwMDfzd7nNgw0Wb_yTGlGCm0A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKtHAnyoB_1kLYyhE81rizhXi7nkTxwh82w-nitYue7g&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ098BS6eDBP3owhuf17ApxAaDbgMExcwrI0huLgTUudQ&s=10', 'Xăng V8 4.0L Twin-Turbo (666 HP / 850 Nm)', 'Tự động 8 cấp', 'Xăng', 'Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Hệ thống dẫn động 4 bánh toàn thời gian, treo khí nén thích ứng thông minh và núm xoay chế độ lái ANIMA gồm Strada, Sport, Corsa, Terra, Sabbia và Neve.'),
+('Ferrari F8 Tributo', 'Ferrari', 19000000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE3sDpn33xn9qTk5wTWc6EFHdkMEssFXSa6l-0td5o2w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgqtnNRCxzmqTFoL6wSi62G-QtJKf_vgT58IWQOpjJvg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0GaWZqHRGG_hseloDpgEOje7D5M_ahm2lMqzkTrlTg&s=10', 'Xăng V8 3.9L Twin-Turbo (720 HP / 770 Nm)', 'Ly hợp kép 7 cấp F1', 'Xăng', 'Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h, trang bị hốc gió khí động học S-Duct lấy cảm hứng từ xe đua Công thức 1 giúp tăng lực ép xuống đường.');
+SQL;
+        $pdo->exec($sql_cars);
     }
-
-
 } catch (Exception $e) {
     $pdo = null;
 }
-?>
 ```
 
 ### file edit_car.php:
@@ -4299,6 +4531,12 @@ $transmission = trim($input['transmission'] ?? '');
 $fuel = trim($input['fuel'] ?? '');
 $description = trim($input['description'] ?? '');
 
+// Thêm giới hạn 500 ký tự cho mô tả khi chỉnh sửa
+if (mb_strlen($description, 'UTF-8') > 500) {
+    echo json_encode(["status" => "error", "message" => "Mô tả chi tiết không được vượt quá 500 ký tự!"], JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
 if ($id <= 0 || empty($name) || empty($brand)) {
     echo json_encode(["status" => "error", "message" => "Dữ liệu cập nhật không hợp lệ"], JSON_UNESCAPED_UNICODE);
     exit();
@@ -4310,13 +4548,19 @@ if (!$pdo) {
 }
 
 try {
+    $check = $pdo->prepare("SELECT id FROM cars WHERE id = ?");
+    $check->execute([$id]);
+    if (!$check->fetch()) {
+        echo json_encode(["status" => "error", "message" => "Không tìm thấy xe có ID #{$id} trong cơ sở dữ liệu!"], JSON_UNESCAPED_UNICODE);
+        exit();
+    }
+    
     $stmt = $pdo->prepare("UPDATE cars SET name=?, brand=?, price=?, image=?, engine=?, transmission=?, fuel=?, description=? WHERE id=?");
     $stmt->execute([$name, $brand, $price, $image, $engine, $transmission, $fuel, $description, $id]);
     echo json_encode(["status" => "success", "message" => "Cập nhật thông tin xe thành công!"], JSON_UNESCAPED_UNICODE);
 } catch (Exception $e) {
     echo json_encode(["status" => "error", "message" => "Lỗi CSDL: " . $e->getMessage()], JSON_UNESCAPED_UNICODE);
 }
-?>
 ```
 
 ### file add_car.php:
@@ -4342,6 +4586,12 @@ $transmission = trim($_POST['transmission'] ?? '');
 $fuel = trim($_POST['fuel'] ?? '');
 $image = trim($_POST['image'] ?? '');
 $description = trim($_POST['description'] ?? '');
+
+// Thêm kiểm tra giới hạn 500 ký tự cho mô tả
+if (mb_strlen($description, 'UTF-8') > 500) {
+    echo json_encode(["status" => "error", "message" => "Mô tả chi tiết không được vượt quá 500 ký tự!"], JSON_UNESCAPED_UNICODE);
+    exit();
+}
 
 if (empty($image)) {
     $image = 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800';
@@ -4396,226 +4646,225 @@ if (empty($cars)) {
             'name' => 'Ferrari F8 Tributo',
             'brand' => 'Ferrari',
             'price' => 19000000000.00,
-            'image' => 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800',
-            'engine' => '3.9L V8 Twin-Turbo (710 HP)',
-            'transmission' => 'Tự động 7 cấp ly hợp kép',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE3sDpn33xn9qTk5wTWc6EFHdkMEssFXSa6l-0td5o2w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgqtnNRCxzmqTFoL6wSi62G-QtJKf_vgT58IWQOpjJvg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0GaWZqHRGG_hseloDpgEOje7D5M_ahm2lMqzkTrlTg&s=10',
+            'engine' => 'Xăng V8 3.9L Twin-Turbo (720 HP / 770 Nm)',
+            'transmission' => 'Ly hợp kép 7 cấp F1',
             'fuel' => 'Xăng',
-            'description' => 'Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm Ý. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h.'
+            'description' => 'Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h, trang bị hốc gió khí động học S-Duct lấy cảm hứng từ xe đua Công thức 1 giúp tăng lực ép xuống đường.'
         ],
         [
             'id' => 19,
             'name' => 'Lamborghini Urus S',
             'brand' => 'Lamborghini',
             'price' => 16500000000.00,
-            'image' => 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800',
-            'engine' => '4.0L V8 Twin-Turbo (666 HP)',
-            'transmission' => 'Tự động 8 cấp thể thao',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHS2yGPTepN8pLd6xYDDwMDfzd7nNgw0Wb_yTGlGCm0A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKtHAnyoB_1kLYyhE81rizhXi7nkTxwh82w-nitYue7g&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ098BS6eDBP3owhuf17ApxAaDbgMExcwrI0huLgTUudQ&s=10',
+            'engine' => 'Xăng V8 4.0L Twin-Turbo (666 HP / 850 Nm)',
+            'transmission' => 'Tự động 8 cấp',
             'fuel' => 'Xăng',
-            'description' => 'Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Thiết kế góc cạnh đậm chất chiến đấu của hãng xe bò tót Sant\'Agata Bolognese.'
+            'description' => 'Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Hệ thống dẫn động 4 bánh toàn thời gian, treo khí nén thích ứng thông minh và núm xoay chế độ lái ANIMA gồm Strada, Sport, Corsa, Terra, Sabbia và Neve.'
         ],
         [
             'id' => 18,
             'name' => 'Lexus RX350 Luxury',
             'brand' => 'Lexus',
             'price' => 4330000000.00,
-            'image' => 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800',
-            'engine' => '2.4L Turbo T24A-FTS (275 HP)',
-            'transmission' => 'Tự động 8 cấp Direct Shift',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOKn1MNoCINsLRyMryNK-gqu0xXC7E4vegTJpqDpxwKg&s, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlhxOxreBx7dZ0WVilniwHUvofB_NaKB71xDtEZh1WYA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOMkj7dV-dZSUjqzqpyhMVxWrlA_BEZeQ-CC4u_rdp7Q&s=10',
+            'engine' => 'Xăng 2.4L Turbo I4 (275 HP / 430 Nm)',
+            'transmission' => 'Tự động 8 cấp',
             'fuel' => 'Xăng',
-            'description' => 'Mẫu SUV xe sang Nhật Bản êm ái, cách âm tĩnh lặng đỉnh cao, nội thất da Semi-Aniline cao cấp và hệ thống an toàn Lexus Safety System+ 3.0.'
+            'description' => 'Mẫu SUV xe sang Nhật Bản êm ái, cách âm vượt trội và giữ giá tốt. Nội thất bọc da Semi-Aniline cao cấp, màn hình trung tâm cảm ứng 14 inch, hệ thống âm thanh vòm 21 loa Mark Levinson và gói công nghệ an toàn Lexus Safety System+.'
         ],
         [
             'id' => 17,
             'name' => 'Audi Q7 45 TFSI quattro',
             'brand' => 'Audi',
             'price' => 3700000000.00,
-            'image' => 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800',
-            'engine' => '2.0L Turbo Mild-Hybrid (252 HP)',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsMi5fmiZg1cQubrLMpSpHHiwFbiC2puLtGW-dhi1Evw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg2Z49zJQSa-QgYOK6PnDsCeXGbIjDlMy_UJgY5AVG0w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXio_hwx7mM0zgI01Sdx4o-ZLySmfpn8qKouBDzFESQA&s=10',
+            'engine' => 'Xăng 2.0L TFSI Mild-Hybrid MHEV (252 HP / 370 Nm)',
             'transmission' => 'Tự động 8 cấp Tiptronic',
-            'fuel' => 'Xăng Mild-Hybrid',
-            'description' => 'SUV hạng sang 7 chỗ cỡ lớn dẫn động 4 bánh toàn thời gian quattro danh tiếng, đèn Matrix LED thông minh và buồng lái ảo Audi Virtual Cockpit.'
+            'fuel' => 'Xăng',
+            'description' => 'SUV hạng sang 7 chỗ dẫn động 4 bánh toàn thời gian quattro danh tiếng. Thiết kế lưới tản nhiệt Singleframe bát giác bề thế, cụm đèn pha LED Matrix sắc sảo, buồng lái ảo Audi Virtual Cockpit và dàn âm thanh 3D Bang & Olufsen 19 loa.'
         ],
         [
             'id' => 16,
             'name' => 'Kia Carnival 2.2D Signature',
             'brand' => 'Kia',
             'price' => 1759000000.00,
-            'image' => 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800',
-            'engine' => '2.2L Smartstream D2.2 (199 HP)',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDrQOfx7kICr3cyGjHqTHm_SMnzFbZOde_TVN6qS1FXw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5v0u6MMN_-u8H5QgBA6eq9gRrBtD3urv_V9zGDT_5ig&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKUw3TRHK3bFJ7Hv5brQb8FBAB1NJEcZdPSkYD5-8ysg&s=10',
+            'engine' => 'Diesel Smartstream 2.2L (199 HP / 440 Nm)',
             'transmission' => 'Tự động 8 cấp',
             'fuel' => 'Dầu (Diesel)',
-            'description' => 'Chuyên cơ mặt đất MPV 7 chỗ thương gia siêu tiện nghi, hàng ghế thứ 2 sưởi/làm mát và chế độ thư giãn không trọng lực VIP.'
+            'description' => 'Xe gia đình hạng sang (MPV) cỡ lớn rộng rãi, trang bị đầy đủ như khoang hạng thương gia. Hàng ghế thứ hai chỉnh điện thư giãn tích hợp sưởi/làm mát, cửa sổ trời đôi độc lập, rèm che nắng và hệ thống âm thanh 12 loa Bose.'
         ],
         [
             'id' => 15,
             'name' => 'Mazda CX-5 2.0 Premium',
             'brand' => 'Mazda',
             'price' => 829000000.00,
-            'image' => 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800',
-            'engine' => '2.0L SkyActiv-G (154 HP)',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW39XsAvfNmzgS3h7r2TjxeeJTUhyLpVsnzGlKpS-mQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTInC9__STOHLHNime6eFjQhx4SSUEX5S8lyJn71cJTqQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIF5WKKGY123T08e8kSO_mXGGGMgDtg41luLhyq88TKw&s=10',
+            'engine' => 'Xăng SkyActiv-G 2.0L (154 HP / 200 Nm)',
             'transmission' => 'Tự động 6 cấp',
             'fuel' => 'Xăng',
-            'description' => 'Mẫu Crossover bán chạy nhất phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế, 10 loa Bose cao cấp và hệ thống an toàn i-Activsense.'
+            'description' => 'Mẫu Crossover bán chạy hàng đầu phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế. Trang bị màn hình hiển thị kính lái HUD, gương chiếu hậu chống chói tự động, cốp điện rảnh tay, 10 loa Bose cao cấp và gói an toàn chủ động i-Activsense.'
         ],
         [
             'id' => 14,
             'name' => 'Honda CR-V e:HEV RS',
             'brand' => 'Honda',
             'price' => 1259000000.00,
-            'image' => 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800',
-            'engine' => '2.0L Hybrid Xăng + Điện (204 HP)',
-            'transmission' => 'E-CVT thể thao',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgYwkQ2_Bnn715DhM8OfuYNpzg5ozBqKoyC2evRYhhUw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYKCZvpPeMChk_J4Lbs9BbrSrpBDSw5G69aSbUDdtrsw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Vqeig2JBKNtNlJ5UGdtK69cmsDwRARmVSINyLF-S_Q&s=10',
+            'engine' => 'Xăng 2.0L kết hợp 2 mô-tơ điện (Tổng công suất 204 HP / 335 Nm)',
+            'transmission' => 'Tự động vô cấp E-CVT',
             'fuel' => 'Xăng Hybrid',
-            'description' => 'SUV thể thao thế hệ mới nhập khẩu nguyên chiếc, tiết kiệm nhiên liệu chỉ 3.4L/100km đô thị, gói an toàn Honda SENSING đầy đủ.'
+            'description' => 'SUV 5 chỗ thể thao mang lại trải nghiệm lái phấn khích chuẩn Honda Sensing. Khả năng tiết kiệm nhiên liệu tối ưu chỉ khoảng 5.2L/100km trong đô thị, trang bị cửa sổ trời toàn cảnh Panorama, hệ thống âm thanh 12 loa Bose và màn hình HUD.'
         ],
         [
             'id' => 13,
             'name' => 'Hyundai Accent 1.5 AT',
             'brand' => 'Hyundai',
             'price' => 489000000.00,
-            'image' => 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800',
-            'engine' => '1.5L Smartstream G (115 HP)',
-            'transmission' => 'Vô cấp thông minh iVT',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqxAlh0ojNuYt82BpLC-BRYGclFmTXJd-gJrp2lEF6WQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSahuOZxstBhmyAYM9STEFGftWiVL3FaEJV6jgiXXgjVQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1NEb-vWA47bMBzZmMi3bTdDEKeRmafgiCvZAUuKuHlA&s=10',
+            'engine' => 'Xăng Smartstream G1.5 (115 HP / 144 Nm)',
+            'transmission' => 'Tự động vô cấp thông minh iVT',
             'fuel' => 'Xăng',
-            'description' => 'Sedan hạng B thế hệ hoàn toàn mới, kích thước lớn nhất phân khúc, trang bị gói SmartSense vượt tầm giá.'
+            'description' => 'Sedan hạng B phổ thông, tiện nghi phong phú vượt tầm giá. Thiết kế phong cách Fastback thể thao trẻ trung, màn hình giải trí 8 inch tích hợp Apple CarPlay/Android Auto không dây, sạc điện thoại không dây và tính năng mở cốp thông minh.'
         ],
         [
             'id' => 12,
             'name' => 'Hyundai Tucson 2.0 Diesel',
             'brand' => 'Hyundai',
             'price' => 959000000.00,
-            'image' => 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800',
-            'engine' => '2.0L Smartstream D2.0 (186 HP)',
-            'transmission' => 'Tự động 8 cấp số nút bấm',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStMbKbjpRugZbAa8Jxhz2GPdFPKMMrw8fJwjRdQ-TBZQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ8ey04y0-7pSS5gagfiCQrjMaVJBoxy_NPolImcNVTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-AHImYzA1sSv1yPO9EeJObAW1AWSceaxllVKBvl_VJg&s=10',
+            'engine' => 'Diesel Smartstream D2.0 (186 HP / 416 Nm)',
+            'transmission' => 'Tự động 8 cấp',
             'fuel' => 'Dầu (Diesel)',
-            'description' => 'Crossover thiết kế tương lai Parametric Jewel, nội thất mở dạng phi thuyền, máy dầu bốc và tiết kiệm bậc nhất.'
+            'description' => 'Crossover sở hữu thiết kế ngoại thất táo bạo, khả năng vận hành mạnh mẽ, bốc và tiết kiệm nhiên liệu tối ưu. Nổi bật với lưới tản nhiệt hình khối thông minh, cần số điện tử dạng nút bấm, cửa sổ trời toàn cảnh và gói an toàn Hyundai SmartSense.'
         ],
         [
             'id' => 11,
             'name' => 'Ford Everest Titanium+ 4x4',
             'brand' => 'Ford',
             'price' => 1468000000.00,
-            'image' => 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800',
-            'engine' => '2.0L Bi-Turbo Diesel (210 HP)',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiZtZyv9cLXgHdi-7v-PjeTIL5tGeeU3tpnMYplS6XDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTYj1liAKQcUeUhRU01jidOFrEQonbqh2FvYukozZM4w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfRprvZIOazCuK7ZgS3R8vKBIHAlTpdmYSX9Y03eOZBw&s=10',
+            'engine' => 'Bi-Turbo Diesel 2.0L i4 (210 HP / 500 Nm)',
             'transmission' => 'Tự động 10 cấp điện tử',
             'fuel' => 'Dầu (Diesel)',
-            'description' => 'SUV 7 chỗ thực thụ đậm chất cơ bắp Mỹ, khả năng lội nước 800mm, camera 360 độ và công nghệ đỗ xe tự động 2.0.'
+            'description' => 'SUV 7 chỗ gầm cao hầm hố, khả năng cách âm đỉnh cao và giàu công nghệ an toàn hàng đầu phân khúc. Hệ thống dẫn động 2 cầu 4x4 thông minh, màn hình trung tâm dọc 12 inch chạy SYNC 4A, camera 360 độ sắc nét và hỗ trợ đỗ xe tự động.'
         ],
         [
             'id' => 10,
             'name' => 'Ford Ranger Raptor 3.0 V6',
             'brand' => 'Ford',
             'price' => 1299000000.00,
-            'image' => 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800',
-            'engine' => '3.0L V6 EcoBoost Twin-Turbo (392 HP)',
-            'transmission' => 'Tự động 10 cấp',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkAP8_0fM7-es-s0TkuWfES4ERnhn3kRzgpiERtCEFyw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX-ZqLNONfwQeU5XwtL9ZqejukswL1TpUpsr1-76jc3w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQH0fOuAoH-XV1q7BGhIXSq8KXrWfeO2ChqH9Z6Zjgvg&s=10',
+            'engine' => 'Xăng EcoBoost 3.0L V6 Twin-Turbo (397 HP / 583 Nm)',
+            'transmission' => 'Tự động 10 cấp điện tử',
             'fuel' => 'Xăng',
-            'description' => 'Vua bán tải hiệu năng cao, trang bị bộ giảm xóc FOX 2.5 inch Live Valve thích ứng theo thời gian thực và chế độ lái sa mạc Baja Mode.'
+            'description' => 'Vua bán tải hiệu năng cao chuyên nghiệp, trang bị hệ thống giảm xóc FOX Live Valve 2.5 inch trượt địa hình. Sở hữu 7 chế độ lái linh hoạt (bao gồm chế độ Baja chuyên đua sa mạc), hệ thống khóa vi sai trước/sau và ống xả thể thao điều chỉnh độ vang.'
         ],
         [
             'id' => 9,
             'name' => 'Toyota Corolla Cross 1.8HEV',
             'brand' => 'Toyota',
             'price' => 905000000.00,
-            'image' => 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800',
-            'engine' => '1.8L Hybrid Xăng + Điện (122 HP)',
-            'transmission' => 'Vô cấp e-CVT',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpA_ZtVNe8sOc_-tGXiFue--SWAvHYn4hqdXnj1v5NYg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNuPdKKZWfVIlpfJtWjiH1WDTCkzs65ZGLNbW8xdkYXA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaemDP4gzPH3lDaNIymrWag_h6ogYiqv8TLc60aEacSA&s=10',
+            'engine' => 'Xăng 1.8L kết hợp mô-tơ điện Hybrid (Tổng công suất 122 HP)',
+            'transmission' => 'Tự động vô cấp E-CVT',
             'fuel' => 'Xăng Hybrid',
-            'description' => 'Mẫu Urban SUV tiết kiệm nhiên liệu tối ưu với động cơ Hybrid tiên tiến, khung gầm TNGA vững chắc và vận hành êm ái nhẹ nhàng.'
+            'description' => 'SUV đô thị xanh tiết kiệm nhiên liệu tối ưu nhờ công suất tự sạc Hybrid tiên tiến. Trang bị gói công nghệ an toàn Toyota Safety Sense, camera toàn cảnh 360 độ, cửa sổ trời toàn cảnh và vận hành êm ái, bền bỉ chuẩn mực.'
         ],
         [
             'id' => 8,
             'name' => 'Toyota Camry 2.5Q',
             'brand' => 'Toyota',
             'price' => 1405000000.00,
-            'image' => 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800',
-            'engine' => '2.5L Dynamic Force 4-cylinders (207 HP)',
-            'transmission' => 'Tự động 8 cấp Direct Shift',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYl1j8avzp_a52uX2szBu_X2g82yHbEtkqDDN0XtKJ6A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ16pL8BQW83ACdsEAsk95IbLeS0i347RmCkAbc4zGLLA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkDKY-KgdZor0p_2ggyNXFiRd7VE6K5ydz31QxuOYG8w&s=10',
+            'engine' => 'Xăng Dynamic Force 2.5L (207 HP / 250 Nm)',
+            'transmission' => 'Tự động 8 cấp',
             'fuel' => 'Xăng',
-            'description' => 'Mẫu sedan hạng D chuẩn mực của sự thành đạt, bền bỉ, êm ái bậc nhất phân khúc với gói an toàn Toyota Safety Sense 2.0.'
+            'description' => 'Mẫu sedan hạng D biểu tượng cho sự bền bỉ, sang trọng và êm ái. Khoang hành khách phía sau thiết kế chuẩn doanh nhân với bệ tỳ tay tích hợp bảng điều khiển cảm ứng ngả ghế, rèm che nắng chỉnh điện, điều hòa 3 vùng độc lập và 9 loa JBL cao cấp.'
         ],
         [
             'id' => 7,
             'name' => 'VinFast VF5 Plus',
             'brand' => 'VinFast',
             'price' => 468000000.00,
-            'image' => 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800',
-            'engine' => 'Động cơ điện (134 HP - 135 Nm)',
-            'transmission' => 'Tự động đơn cấp',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd-uWGNUo1taSToXpQaIDCJxCi0OOXvd5SN34Va8zCgQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFGMSwMiRgj3WEsCu14j3Th0mDeFZDiTmfuN5AIyfgiA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEnAbDWJMk7kjzcYqCfHxsNLGsZ4hGodDqmC_vbKh6lw&s=10',
+            'engine' => 'Động cơ điện đơn (Công suất 134 HP / Mô-men xoắn 135 Nm)',
+            'transmission' => 'Tự động 1 cấp',
             'fuel' => 'Điện',
-            'description' => 'A-SUV thuần điện quốc dân nhỏ gọn, chi phí vận hành siêu rẻ chỉ bằng 1/3 xe xăng, thời trang và linh hoạt trong đô thị.'
+            'description' => 'Mẫu A-SUV chạy điện nhỏ gọn, thiết kế năng động tối ưu cho nhu cầu di chuyển đô thị hàng ngày. Tầm hoạt động hơn 300 km cho mỗi lần sạc đầy, tích hợp trợ lý ảo tiếng Việt thông minh, cảnh báo điểm mù và trang bị 6 túi khí an toàn.'
         ],
         [
             'id' => 6,
             'name' => 'VinFast VF8 Plus',
             'brand' => 'VinFast',
             'price' => 1270000000.00,
-            'image' => 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800',
-            'engine' => '2 Động cơ điện (402 HP - AWD)',
-            'transmission' => 'Tự động đơn cấp',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMgh5eFb69xZCQCeJXpE2n1sx0fIj0gMZRsLUCkF7F2Q&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2fiRyUQE2tzYAfH61XkhF-ZaRi4kbEv1pGYAd6gaKZw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNnZ23dQtN4guhpS1WTpIHS2Azx4Cb_TRBVR3v3oMa8A&s=10',
+            'engine' => '2 mô-tơ điện AWD toàn thời gian (402 HP / 620 Nm)',
+            'transmission' => 'Tự động 1 cấp',
             'fuel' => 'Điện',
-            'description' => 'SUV điện thông minh phân khúc D, thiết kế Pininfarina đỉnh cao, tăng tốc 0-100 km/h trong 5.5 giây và trợ lái thông minh ADAS cấp độ 2.'
+            'description' => 'SUV điện thông minh phân khúc D mạnh mẽ, trang bị nhiều tính năng trợ lái nâng cao ADAS. Khả năng tăng tốc ấn tượng từ 0-100 km/h dưới 5.5 giây, màn hình trung tâm tràn viền 15.6 inch tối giản, không gian rộng rãi và cửa sổ trời toàn cảnh kính lớn.'
         ],
         [
             'id' => 5,
             'name' => 'BMW 740i Pure Excellence',
             'brand' => 'BMW',
             'price' => 4699000000.00,
-            'image' => 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800',
-            'engine' => '3.0L I6 TwinPower (381 HP)',
-            'transmission' => 'Tự động 8 cấp Steptronic',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMNStnEqOgN-AtfJc4ZxIl-FSqSxWD-_KPP9Zjk-BkA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10',
+            'engine' => 'Xăng 3.0L I6 TwinPower Turbo Mild-Hybrid (381 HP / 540 Nm)',
+            'transmission' => 'Tự động 8 cấp Steptronic Sport',
             'fuel' => 'Xăng Mild-Hybrid',
-            'description' => 'Sedan hạng sang cao cấp đầy công nghệ của BMW với màn hình Theatre Screen 31.3 inch chuẩn 8K cùng hệ thống âm thanh vòm Bowers & Wilkins Diamond.'
+            'description' => 'Sedan hạng sang cỡ lớn đỉnh cao công nghệ của BMW. Không gian nội thất xa hoa với thanh pha lê tương tác BMW Interaction Bar, ghế ngồi thương gia bọc da Merino cao cấp tích hợp massage, màn hình rạp chiếu phim rạp phía sau 31.3 inch và dàn âm thanh vòm Bowers & Wilkins Diamond.'
         ],
         [
             'id' => 4,
             'name' => 'Mercedes-AMG G63',
             'brand' => 'Mercedes-Benz',
             'price' => 11750000000.00,
-            'image' => 'https://images.unsplash.com/photo-1520050206274-a1ae44613e6d?w=800',
-            'engine' => '4.0L V8 Bi-Turbo (585 HP)',
-            'transmission' => 'Tự động 9 cấp AMG Speedshift',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9k-mmUkZkHwMhAB8bjPOA9mFIiMkV_1C-dBgyFThkTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHgJI_oRJzR0lzto9sfPraPiSShwHmuhhfQ45LX6a1lA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKEtZnRwUw07P1WR5UkpeZNNF4_2YJJY3Pyyja2xXKOw&s=10',
+            'engine' => 'Xăng V8 4.0L Biturbo AMG (585 HP / 850 Nm)',
+            'transmission' => 'Tự động thể thao 9 cấp AMG SPEEDSHIFT TCT 9G',
             'fuel' => 'Xăng',
-            'description' => 'Mẫu SUV địa hình hạng sang đẳng cấp biểu tượng hoàng gia. Hệ dẫn động 4 bánh toàn thời gian 4MATIC với 3 khóa vi sai độc lập.'
+            'description' => 'Mẫu SUV địa hình hạng sang biểu tượng uy quyền. Thiết kế khung gầm hình thang siêu cứng vững với 3 khóa vi sai độc lập có thể khóa hoàn toàn bằng điện, hệ thống ống xả thể thao đặt bên hông uy lực, nội thất da Nappa hảo hạng kết hợp hệ thống âm thanh vòm Burmester 15 loa.'
         ],
         [
             'id' => 3,
             'name' => 'Porsche 911 Carrera S',
             'brand' => 'Porsche',
             'price' => 8500000000.00,
-            'image' => 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800',
-            'engine' => '3.0L Boxer Twin-Turbo (450 HP)',
-            'transmission' => 'Tự động 8 cấp PDK',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUGbNCOFMrr8i-ELaF9sQVPpIjPWMSJB44Ql_bo2667w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXIwrpx24-3p2ImkIovLVRN_wTXP-Sr-f5Y_LXkgKJDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpMtyFyXiOJ0kzPQgcy_26PGobb5w_z8zugn9VxdYSjg&s=10',
+            'engine' => 'Xăng Boxer 6 xi-lanh 3.0L Twin-Turbo (450 HP / 530 Nm)',
+            'transmission' => 'Ly hợp kép 8 cấp PDK danh tiếng của Porsche',
             'fuel' => 'Xăng',
-            'description' => 'Mẫu xe thể thao huyền thoại mang lại cảm giác lái đỉnh cao, thiết kế timeless vượt thời gian đi cùng gói thể thao Sport Chrono Package.'
+            'description' => 'Biểu tượng xe thể thao hiệu suất cao huyền thoại mang lại cảm giác lái thuần khiết đỉnh cao. Khả năng tăng tốc 0-100 km/h chỉ mất 3.7 giây khi trang bị gói Sport Chrono, tốc độ tối đa đạt 308 km/h, tích hợp hệ thống treo chủ động PASM và thiết kế buồng lái đậm chất xe đua Đức.'
         ],
         [
             'id' => 2,
             'name' => 'Mercedes-Benz C-Class C300 AMG',
             'brand' => 'Mercedes-Benz',
             'price' => 2099000000.00,
-            'image' => 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800',
-            'engine' => '2.0L Turbo Mild-Hybrid EQ Boost (258 HP)',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nJj5R87z1dpwUCcHbj1KwNTJtJBM4sYDjrEIgxRtRA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0jXuoX5_WAmEuVpxNpYUIX-UtNpPa78eTAQECU9_aJQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR98khAhzlP1bBIDo7mN_uNiVMy5ExBrqfae38EzD2oBg&s=10',
+            'engine' => 'Xăng 2.0L Turbo kết hợp công nghệ EQ Boost Mild-Hybrid (258 HP / 400 Nm)',
             'transmission' => 'Tự động 9 cấp 9G-TRONIC',
             'fuel' => 'Xăng Mild-Hybrid',
-            'description' => 'Tiểu S-Class với thiết kế thể thao AMG Line, màn hình giải trí trung tâm 11.9 inch định dạng dọc, đèn Digital Light tối tân nhất.'
+            'description' => 'Mẫu sedan thể thao mệnh danh là "tiểu S-Class" với gói trang thiết kế ngoại thất AMG Line cuốn hút, màn hình giải trí trung tâm đặt dọc 11.9 inch tích hợp MBUX thế hệ mới, cụm đèn pha thông minh Digital Light tối tân và hệ thống âm thanh vòm Burmester 3D 15 loa sống động.'
         ],
         [
             'id' => 1,
             'name' => 'VinFast VF3',
             'brand' => 'VinFast',
             'price' => 240000000.00,
-            'image' => 'https://vinfastquan12.com.vn/wp-content/uploads/2025/02/VinFast_VF3_Mau_trang.webp',
-            'engine' => 'Động cơ điện đơn (43 HP)',
-            'transmission' => 'Tự động',
+            'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFJCmiv3bB_2DDesc8SnYvKr_hq-1IiNwk2YCGZKyqZA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDJ8HxL4j3SfFrNMGCvRD9bwAZjykVF3WG-Xxl5v7h9w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbsZHkDzGDsG_EspjalYDoIEN3dnHiV45pQrIns8UK3w&s=10',
+            'engine' => 'Động cơ điện đơn (Công suất 43 HP / Mô-men xoắn 110 Nm)',
+            'transmission' => 'Tự động 1 cấp',
             'fuel' => 'Điện',
-            'description' => 'Cơn sốt xe điện mini tại Việt Nam! Kiểu dáng hình hộp cá tính, gầm cao 191mm vượt địa hình ngập nước, Best Seller tại Showroom 4TL.'
+            'description' => 'Cơn sốt xe điện mini đô thị tại Việt Nam! Mang phong cách thiết kế hình hộp cá tính, khỏe khoắn, khoảng sáng gầm xe cao 191mm giúp dễ dàng vượt qua các địa hình ngập nước đô thị, là mẫu xe điện bán chạy nhất (Best Seller) tại Showroom 4TL.'
         ]
     ];
 }
 
 echo json_encode($cars, JSON_UNESCAPED_UNICODE);
-?>
 ```
 
 ### file train_bot.html:
@@ -5158,7 +5407,7 @@ CREATE TABLE cars (
     name VARCHAR(255) NOT NULL,
     brand VARCHAR(100) NOT NULL,
     price DECIMAL(15,2) NOT NULL,
-    image VARCHAR(255) DEFAULT 'default.jpg',
+    image TEXT,
     engine VARCHAR(100),
     transmission VARCHAR(100),
     fuel VARCHAR(50),
@@ -5218,26 +5467,26 @@ INSERT INTO bot_knowledge (keywords, response) VALUES
 ('tra gop, vay', 'Showroom 4TL hỗ trợ trả góp qua ngân hàng lên đến 80% giá trị xe trong thời gian tối đa 7 năm với lãi suất ưu đãi chỉ từ 7.5%/năm.');
 
 INSERT INTO cars (name, brand, price, image, engine, transmission, fuel, description) VALUES
-('VinFast VF3', 'VinFast', 240000000.00, 'https://vinfastquan12.com.vn/wp-content/uploads/2025/02/VinFast_VF3_Mau_trang.webp', 'Động cơ điện đơn (43 HP)', 'Tự động', 'Điện', 'Cơn sốt xe điện mini tại Việt Nam! Kiểu dáng hình hộp cá tính, gầm cao 191mm vượt địa hình ngập nước, Best Seller tại Showroom 4TL.'),
-('Mercedes-Benz C-Class C300 AMG', 'Mercedes-Benz', 2099000000.00, 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800', '2.0L Turbo EQ Boost (258 HP)', 'Tự động 9 cấp 9G-TRONIC', 'Xăng Mild-Hybrid', 'Tiểu S-Class với thiết kế thể thao AMG Line, màn hình giải trí trung tâm 11.9 inch định dạng dọc, đèn Digital Light tối tân nhất.'),
-('Porsche 911 Carrera S', 'Porsche', 8500000000.00, 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800', '3.0L Boxer Twin-Turbo (450 HP)', 'Tự động 8 cấp PDK', 'Xăng', 'Mẫu xe thể thao huyền thoại mang lại cảm giác lái đỉnh cao, thiết kế timeless vượt thời gian đi cùng gói thể thao Sport Chrono Package.'),
-('Mercedes-AMG G63', 'Mercedes-Benz', 11750000000.00, 'https://images.unsplash.com/photo-1520050206274-a1ae44613e6d?w=800', '4.0L V8 Bi-Turbo (585 HP)', 'Tự động 9 cấp AMG Speedshift', 'Xăng', 'Mẫu SUV địa hình hạng sang đẳng cấp biểu tượng hoàng gia. Hệ dẫn động 4 bánh toàn thời gian 4MATIC với 3 khóa vi sai độc lập.'),
-('BMW 740i Pure Excellence', 'BMW', 4699000000.00, 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800', '3.0L I6 TwinPower (381 HP)', 'Tự động 8 cấp Steptronic', 'Xăng Mild-Hybrid', 'Sedan hạng sang cao cấp đầy công nghệ của BMW với màn hình Theatre Screen 31.3 inch chuẩn 8K cùng hệ thống âm thanh vòm Bowers & Wilkins Diamond.'),
-('VinFast VF8 Plus', 'VinFast', 1270000000.00, 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800', '2 Động cơ điện (402 HP - AWD)', 'Tự động đơn cấp', 'Điện', 'SUV điện thông minh phân khúc D, thiết kế Pininfarina đỉnh cao, tăng tốc 0-100 km/h trong 5.5 giây và trợ lái thông minh ADAS cấp độ 2.'),
-('VinFast VF5 Plus', 'VinFast', 468000000.00, 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800', 'Động cơ điện (134 HP - 135 Nm)', 'Tự động đơn cấp', 'Điện', 'A-SUV thuần điện quốc dân nhỏ gọn, chi phí vận hành siêu rẻ chỉ bằng 1/3 xe xăng, thời trang và linh hoạt trong đô thị.'),
-('Toyota Camry 2.5Q', 'Toyota', 1405000000.00, 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800', '2.5L Dynamic Force (207 HP)', 'Tự động 8 cấp Direct Shift', 'Xăng', 'Mẫu sedan hạng D chuẩn mực của sự thành đạt, bền bỉ, êm ái bậc nhất phân khúc với gói an toàn Toyota Safety Sense 2.0.'),
-('Toyota Corolla Cross 1.8HEV', 'Toyota', 905000000.00, 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800', '1.8L Hybrid Xăng + Điện (122 HP)', 'Vô cấp e-CVT', 'Xăng Hybrid', 'Mẫu Urban SUV tiết kiệm nhiên liệu tối ưu với động cơ Hybrid tiên tiến, khung gầm TNGA vững chắc và vận hành êm ái nhẹ nhàng.'),
-('Ford Ranger Raptor 3.0 V6', 'Ford', 1299000000.00, 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800', '3.0L V6 EcoBoost Twin-Turbo (392 HP)', 'Tự động 10 cấp', 'Xăng', 'Vua bán tải hiệu năng cao, trang bị bộ giảm xóc FOX 2.5 inch Live Valve thích ứng theo thời gian thực và chế độ lái sa mạc Baja Mode.'),
-('Ford Everest Titanium+ 4x4', 'Ford', 1468000000.00, 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800', '2.0L Bi-Turbo Diesel (210 HP)', 'Tự động 10 cấp điện tử', 'Dầu (Diesel)', 'SUV 7 chỗ thực thụ đậm chất cơ bắp Mỹ, khả năng lội nước 800mm, camera 360 độ và công nghệ đỗ xe tự động 2.0.'),
-('Hyundai Tucson 2.0 Diesel', 'Hyundai', 959000000.00, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800', '2.0L Smartstream D2.0 (186 HP)', 'Tự động 8 cấp số nút bấm', 'Dầu (Diesel)', 'Crossover thiết kế tương lai Parametric Jewel, nội thất mở dạng phi thuyền, máy dầu bốc và tiết kiệm bậc nhất.'),
-('Hyundai Accent 1.5 AT', 'Hyundai', 489000000.00, 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800', '1.5L Smartstream G (115 HP)', 'Vô cấp thông minh iVT', 'Xăng', 'Sedan hạng B thế hệ hoàn toàn mới, kích thước lớn nhất phân khúc, trang bị gói SmartSense vượt tầm giá.'),
-('Honda CR-V e:HEV RS', 'Honda', 1259000000.00, 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800', '2.0L Hybrid Xăng + Điện (204 HP)', 'E-CVT thể thao', 'Xăng Hybrid', 'SUV thể thao thế hệ mới nhập khẩu nguyên chiếc, tiết kiệm nhiên liệu chỉ 3.4L/100km đô thị, gói an toàn Honda SENSING đầy đủ.'),
-('Mazda CX-5 2.0 Premium', 'Mazda', 829000000.00, 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800', '2.0L SkyActiv-G (154 HP)', 'Tự động 6 cấp', 'Xăng', 'Mẫu Crossover bán chạy nhất phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế, 10 loa Bose cao cấp và hệ thống an toàn i-Activsense.'),
-('Kia Carnival 2.2D Signature', 'Kia', 1759000000.00, 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800', '2.2L Smartstream D2.2 (199 HP)', 'Tự động 8 cấp', 'Dầu (Diesel)', 'Chuyên cơ mặt đất MPV 7 chỗ thương gia siêu tiện nghi, hàng ghế thứ 2 sưởi/làm mát và chế độ thư giãn không trọng lực VIP.'),
-('Audi Q7 45 TFSI quattro', 'Audi', 3700000000.00, 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800', '2.0L Turbo Mild-Hybrid (252 HP)', 'Tự động 8 cấp Tiptronic', 'Xăng Mild-Hybrid', 'SUV hạng sang 7 chỗ cỡ lớn dẫn động 4 bánh toàn thời gian quattro danh tiếng, đèn Matrix LED thông minh và buồng lái ảo Audi Virtual Cockpit.'),
-('Lexus RX350 Luxury', 'Lexus', 4330000000.00, 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800', '2.4L Turbo T24A-FTS (275 HP)', 'Tự động 8 cấp Direct Shift', 'Xăng', 'Mẫu SUV xe sang Nhật Bản êm ái, cách âm tĩnh lặng đỉnh cao, nội thất da Semi-Aniline cao cấp và hệ thống an toàn Lexus Safety System+ 3.0.'),
-('Lamborghini Urus S', 'Lamborghini', 16500000000.00, 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800', '4.0L V8 Twin-Turbo (666 HP)', 'Tự động 8 cấp thể thao', 'Xăng', 'Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Thiết kế góc cạnh đậm chất chiến đấu của hãng xe bò tót Sant\'Agata Bolognese.'),
-('Ferrari F8 Tributo', 'Ferrari', 19000000000.00, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800', '3.9L V8 Twin-Turbo (710 HP)', 'Tự động 7 cấp ly hợp kép', 'Xăng', 'Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm Ý. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h.');
+('VinFast VF3', 'VinFast', 240000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFJCmiv3bB_2DDesc8SnYvKr_hq-1IiNwk2YCGZKyqZA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDJ8HxL4j3SfFrNMGCvRD9bwAZjykVF3WG-Xxl5v7h9w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbsZHkDzGDsG_EspjalYDoIEN3dnHiV45pQrIns8UK3w&s=10', 'Động cơ điện đơn (Công suất 43 HP / Mô-men xoắn 110 Nm)', 'Tự động 1 cấp', 'Điện', 'Cơn sốt xe điện mini đô thị tại Việt Nam! Mang phong cách thiết kế hình hộp cá tính, khỏe khoắn, khoảng sáng gầm xe cao 191mm giúp dễ dàng vượt qua các địa hình ngập nước đô thị, là mẫu xe điện bán chạy nhất (Best Seller) tại Showroom 4TL.'),
+('Mercedes-Benz C-Class C300 AMG', 'Mercedes-Benz', 2099000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nJj5R87z1dpwUCcHbj1KwNTJtJBM4sYDjrEIgxRtRA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0jXuoX5_WAmEuVpxNpYUIX-UtNpPa78eTAQECU9_aJQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR98khAhzlP1bBIDo7mN_uNiVMy5ExBrqfae38EzD2oBg&s=10', 'Xăng 2.0L Turbo kết hợp công nghệ EQ Boost Mild-Hybrid (258 HP / 400 Nm)', 'Tự động 9 cấp 9G-TRONIC', 'Xăng Mild-Hybrid', 'Mẫu sedan thể thao mệnh danh là "tiểu S-Class" với gói trang thiết kế ngoại thất AMG Line cuốn hút, màn hình giải trí trung tâm đặt dọc 11.9 inch tích hợp MBUX thế hệ mới, cụm đèn pha thông minh Digital Light tối tân và hệ thống âm thanh vòm Burmester 3D 15 loa sống động.'),
+('Porsche 911 Carrera S', 'Porsche', 8500000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUGbNCOFMrr8i-ELaF9sQVPpIjPWMSJB44Ql_bo2667w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXIwrpx24-3p2ImkIovLVRN_wTXP-Sr-f5Y_LXkgKJDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpMtyFyXiOJ0kzPQgcy_26PGobb5w_z8zugn9VxdYSjg&s=10', 'Xăng Boxer 6 xi-lanh 3.0L Twin-Turbo (450 HP / 530 Nm)', 'Ly hợp kép 8 cấp PDK danh tiếng của Porsche', 'Xăng', 'Biểu tượng xe thể thao hiệu suất cao huyền thoại mang lại cảm giác lái thuần khiết đỉnh cao. Khả năng tăng tốc 0-100 km/h chỉ mất 3.7 giây khi trang bị gói Sport Chrono, tốc độ tối đa đạt 308 km/h, tích hợp hệ thống treo chủ động PASM và thiết kế buồng lái đậm chất xe đua Đức.'),
+('Mercedes-AMG G63', 'Mercedes-Benz', 11750000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9k-mmUkZkHwMhAB8bjPOA9mFIiMkV_1C-dBgyFThkTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHgJI_oRJzR0lzto9sfPraPiSShwHmuhhfQ45LX6a1lA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKEtZnRwUw07P1WR5UkpeZNNF4_2YJJY3Pyyja2xXKOw&s=10', 'Xăng V8 4.0L Biturbo AMG (585 HP / 850 Nm)', 'Tự động thể thao 9 cấp AMG SPEEDSHIFT TCT 9G', 'Xăng', 'Mẫu SUV địa hình hạng sang biểu tượng uy quyền. Thiết kế khung gầm hình thang siêu cứng vững với 3 khóa vi sai độc lập có thể khóa hoàn toàn bằng điện, hệ thống ống xả thể thao đặt bên hông uy lực, nội thất da Nappa hảo hạng kết hợp hệ thống âm thanh vòm Burmester 15 loa.'),
+('BMW 740i Pure Excellence', 'BMW', 4699000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMNStnEqOgN-AtfJc4ZxIl-FSqSxWD-_KPP9Zjk-BkA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTpu21ap_2ACAfDEwwDAA0bGGi1yx5bZ0rMJ9gDkNsew&s=10', 'Xăng 3.0L I6 TwinPower Turbo Mild-Hybrid (381 HP / 540 Nm)', 'Tự động 8 cấp Steptronic Sport', 'Xăng Mild-Hybrid', 'Sedan hạng sang cỡ lớn đỉnh cao công nghệ của BMW. Không gian nội thất xa hoa với thanh pha lê tương tác BMW Interaction Bar, ghế ngồi thương gia bọc da Merino cao cấp tích hợp massage, màn hình rạp chiếu phim rạp phía sau 31.3 inch và dàn âm thanh vòm Bowers & Wilkins Diamond.'),
+('VinFast VF8 Plus', 'VinFast', 1270000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMgh5eFb69xZCQCeJXpE2n1sx0fIj0gMZRsLUCkF7F2Q&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2fiRyUQE2tzYAfH61XkhF-ZaRi4kbEv1pGYAd6gaKZw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNnZ23dQtN4guhpS1WTpIHS2Azx4Cb_TRBVR3v3oMa8A&s=10', '2 mô-tơ điện AWD toàn thời gian (402 HP / 620 Nm)', 'Tự động 1 cấp', 'Điện', 'SUV điện thông minh phân khúc D mạnh mẽ, trang bị nhiều tính năng trợ lái nâng cao ADAS. Khả năng tăng tốc ấn tượng từ 0-100 km/h dưới 5.5 giây, màn hình trung tâm tràn viền 15.6 inch tối giản, không gian rộng rãi và cửa sổ trời toàn cảnh kính lớn.'),
+('VinFast VF5 Plus', 'VinFast', 468000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd-uWGNUo1taSToXpQaIDCJxCi0OOXvd5SN34Va8zCgQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFGMSwMiRgj3WEsCu14j3Th0mDeFZDiTmfuN5AIyfgiA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEnAbDWJMk7kjzcYqCfHxsNLGsZ4hGodDqmC_vbKh6lw&s=10', 'Động cơ điện đơn (Công suất 134 HP / Mô-men xoắn 135 Nm)', 'Tự động 1 cấp', 'Điện', 'Mẫu A-SUV chạy điện nhỏ gọn, thiết kế năng động tối ưu cho nhu cầu di chuyển đô thị hàng ngày. Tầm hoạt động hơn 300 km cho mỗi lần sạc đầy, tích hợp trợ lý ảo tiếng Việt thông minh, cảnh báo điểm mù và trang bị 6 túi khí an toàn.'),
+('Toyota Camry 2.5Q', 'Toyota', 1405000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYl1j8avzp_a52uX2szBu_X2g82yHbEtkqDDN0XtKJ6A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ16pL8BQW83ACdsEAsk95IbLeS0i347RmCkAbc4zGLLA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkDKY-KgdZor0p_2ggyNXFiRd7VE6K5ydz31QxuOYG8w&s=10', 'Xăng Dynamic Force 2.5L (207 HP / 250 Nm)', 'Tự động 8 cấp', 'Xăng', 'Mẫu sedan hạng D biểu tượng cho sự bền bỉ, sang trọng và êm ái. Khoang hành khách phía sau thiết kế chuẩn doanh nhân với bệ tỳ tay tích hợp bảng điều khiển cảm ứng ngả ghế, rèm che nắng chỉnh điện, điều hòa 3 vùng độc lập và 9 loa JBL cao cấp.'),
+('Toyota Corolla Cross 1.8HEV', 'Toyota', 905000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpA_ZtVNe8sOc_-tGXiFue--SWAvHYn4hqdXnj1v5NYg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNuPdKKZWfVIlpfJtWjiH1WDTCkzs65ZGLNbW8xdkYXA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaemDP4gzPH3lDaNIymrWag_h6ogYiqv8TLc60aEacSA&s=10', 'Xăng 1.8L kết hợp mô-tơ điện Hybrid (Tổng công suất 122 HP)', 'Tự động vô cấp E-CVT', 'Xăng Hybrid', 'SUV đô thị xanh tiết kiệm nhiên liệu tối ưu nhờ công suất tự sạc Hybrid tiên tiến. Trang bị gói công nghệ an toàn Toyota Safety Sense, camera toàn cảnh 360 độ, cửa sổ trời toàn cảnh và vận hành êm ái, bền bỉ chuẩn mực.'),
+('Ford Ranger Raptor 3.0 V6', 'Ford', 1299000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkAP8_0fM7-es-s0TkuWfES4ERnhn3kRzgpiERtCEFyw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX-ZqLNONfwQeU5XwtL9ZqejukswL1TpUpsr1-76jc3w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQH0fOuAoH-XV1q7BGhIXSq8KXrWfeO2ChqH9Z6Zjgvg&s=10', 'Xăng EcoBoost 3.0L V6 Twin-Turbo (397 HP / 583 Nm)', 'Tự động 10 cấp điện tử', 'Xăng', 'Vua bán tải hiệu năng cao chuyên nghiệp, trang bị hệ thống giảm xóc FOX Live Valve 2.5 inch trượt địa hình. Sở hữu 7 chế độ lái linh hoạt (bao gồm chế độ Baja chuyên đua sa mạc), hệ thống khóa vi sai trước/sau và ống xả thể thao điều chỉnh độ vang.'),
+('Ford Everest Titanium+ 4x4', 'Ford', 1468000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiZtZyv9cLXgHdi-7v-PjeTIL5tGeeU3tpnMYplS6XDw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTYj1liAKQcUeUhRU01jidOFrEQonbqh2FvYukozZM4w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfRprvZIOazCuK7ZgS3R8vKBIHAlTpdmYSX9Y03eOZBw&s=10', 'Bi-Turbo Diesel 2.0L i4 (210 HP / 500 Nm)', 'Tự động 10 cấp điện tử', 'Dầu (Diesel)', 'SUV 7 chỗ gầm cao hầm hố, khả năng cách âm đỉnh cao và giàu công nghệ an toàn hàng đầu phân khúc. Hệ thống dẫn động 2 cầu 4x4 thông minh, màn hình trung tâm dọc 12 inch chạy SYNC 4A, camera 360 độ sắc nét và hỗ trợ đỗ xe tự động.'),
+('Hyundai Tucson 2.0 Diesel', 'Hyundai', 959000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStMbKbjpRugZbAa8Jxhz2GPdFPKMMrw8fJwjRdQ-TBZQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ8ey04y0-7pSS5gagfiCQrjMaVJBoxy_NPolImcNVTA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-AHImYzA1sSv1yPO9EeJObAW1AWSceaxllVKBvl_VJg&s=10', 'Diesel Smartstream D2.0 (186 HP / 416 Nm)', 'Tự động 8 cấp', 'Dầu (Diesel)', 'Crossover sở hữu thiết kế ngoại thất táo bạo, khả năng vận hành mạnh mẽ, bốc và tiết kiệm nhiên liệu tối ưu. Nổi bật với lưới tản nhiệt hình khối thông minh, cần số điện tử dạng nút bấm, cửa sổ trời toàn cảnh và gói an toàn Hyundai SmartSense.'),
+('Hyundai Accent 1.5 AT', 'Hyundai', 489000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqxAlh0ojNuYt82BpLC-BRYGclFmTXJd-gJrp2lEF6WQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSahuOZxstBhmyAYM9STEFGftWiVL3FaEJV6jgiXXgjVQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1NEb-vWA47bMBzZmMi3bTdDEKeRmafgiCvZAUuKuHlA&s=10', 'Xăng Smartstream G1.5 (115 HP / 144 Nm)', 'Tự động vô cấp thông minh iVT', 'Xăng', 'Sedan hạng B phổ thông, tiện nghi phong phú vượt tầm giá. Thiết kế phong cách Fastback thể thao trẻ trung, màn hình giải trí 8 inch tích hợp Apple CarPlay/Android Auto không dây, sạc điện thoại không dây và tính năng mở cốp thông minh.'),
+('Honda CR-V e:HEV RS', 'Honda', 1259000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgYwkQ2_Bnn715DhM8OfuYNpzg5ozBqKoyC2evRYhhUw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYKCZvpPeMChk_J4Lbs9BbrSrpBDSw5G69aSbUDdtrsw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Vqeig2JBKNtNlJ5UGdtK69cmsDwRARmVSINyLF-S_Q&s=10', 'Xăng 2.0L kết hợp 2 mô-tơ điện (Tổng công suất 204 HP / 335 Nm)', 'Tự động vô cấp E-CVT', 'Xăng Hybrid', 'SUV 5 chỗ thể thao mang lại trải nghiệm lái phấn khích chuẩn Honda Sensing. Khả năng tiết kiệm nhiên liệu tối ưu chỉ khoảng 5.2L/100km trong đô thị, trang bị cửa sổ trời toàn cảnh Panorama, hệ thống âm thanh 12 loa Bose và màn hình HUD.'),
+('Mazda CX-5 2.0 Premium', 'Mazda', 829000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpW39XsAvfNmzgS3h7r2TjxeeJTUhyLpVsnzGlKpS-mQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTInC9__STOHLHNime6eFjQhx4SSUEX5S8lyJn71cJTqQ&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIF5WKKGY123T08e8kSO_mXGGGMgDtg41luLhyq88TKw&s=10', 'Xăng SkyActiv-G 2.0L (154 HP / 200 Nm)', 'Tự động 6 cấp', 'Xăng', 'Mẫu Crossover bán chạy hàng đầu phân khúc nhờ ngôn ngữ thiết kế KODO tinh tế. Trang bị màn hình hiển thị kính lái HUD, gương chiếu hậu chống chói tự động, cốp điện rảnh tay, 10 loa Bose cao cấp và gói an toàn chủ động i-Activsense.'),
+('Kia Carnival 2.2D Signature', 'Kia', 1759000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDrQOfx7kICr3cyGjHqTHm_SMnzFbZOde_TVN6qS1FXw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5v0u6MMN_-u8H5QgBA6eq9gRrBtD3urv_V9zGDT_5ig&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKUw3TRHK3bFJ7Hv5brQb8FBAB1NJEcZdPSkYD5-8ysg&s=10', 'Diesel Smartstream 2.2L (199 HP / 440 Nm)', 'Tự động 8 cấp', 'Dầu (Diesel)', 'Xe gia đình hạng sang (MPV) cỡ lớn rộng rãi, trang bị đầy đủ như khoang hạng thương gia. Hàng ghế thứ hai chỉnh điện thư giãn tích hợp sưởi/làm mát, cửa sổ trời đôi độc lập, rèm che nắng và hệ thống âm thanh 12 loa Bose.'),
+('Audi Q7 45 TFSI quattro', 'Audi', 3700000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsMi5fmiZg1cQubrLMpSpHHiwFbiC2puLtGW-dhi1Evw&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg2Z49zJQSa-QgYOK6PnDsCeXGbIjDlMy_UJgY5AVG0w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXio_hwx7mM0zgI01Sdx4o-ZLySmfpn8qKouBDzFESQA&s=10', 'Xăng 2.0L TFSI Mild-Hybrid MHEV (252 HP / 370 Nm)', 'Tự động 8 cấp Tiptronic', 'Xăng', 'SUV hạng sang 7 chỗ dẫn động 4 bánh toàn thời gian quattro danh tiếng. Thiết kế lưới tản nhiệt Singleframe bát giác bề thế, cụm đèn pha LED Matrix sắc sảo, buồng lái ảo Audi Virtual Cockpit và dàn âm thanh 3D Bang & Olufsen 19 loa.'),
+('Lexus RX350 Luxury', 'Lexus', 4330000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOKn1MNoCINsLRyMryNK-gqu0xXC7E4vegTJpqDpxwKg&s, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlhxOxreBx7dZ0WVilniwHUvofB_NaKB71xDtEZh1WYA&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOMkj7dV-dZSUjqzqpyhMVxWrlA_BEZeQ-CC4u_rdp7Q&s=10', 'Xăng 2.4L Turbo I4 (275 HP / 430 Nm)', 'Tự động 8 cấp', 'Xăng', 'Mẫu SUV xe sang Nhật Bản êm ái, cách âm vượt trội và giữ giá tốt. Nội thất bọc da Semi-Aniline cao cấp, màn hình trung tâm cảm ứng 14 inch, hệ thống âm thanh vòm 21 loa Mark Levinson và gói công nghệ an toàn Lexus Safety System+.'),
+('Lamborghini Urus S', 'Lamborghini', 16500000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHS2yGPTepN8pLd6xYDDwMDfzd7nNgw0Wb_yTGlGCm0A&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKtHAnyoB_1kLYyhE81rizhXi7nkTxwh82w-nitYue7g&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ098BS6eDBP3owhuf17ApxAaDbgMExcwrI0huLgTUudQ&s=10', 'Xăng V8 4.0L Twin-Turbo (666 HP / 850 Nm)', 'Tự động 8 cấp', 'Xăng', 'Siêu SUV sở hữu sức mạnh 666 mã lực, tăng tốc 0-100 km/h trong 3.5 giây. Hệ thống dẫn động 4 bánh toàn thời gian, treo khí nén thích ứng thông minh và núm xoay chế độ lái ANIMA gồm Strada, Sport, Corsa, Terra, Sabbia và Neve.'),
+('Ferrari F8 Tributo', 'Ferrari', 19000000000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE3sDpn33xn9qTk5wTWc6EFHdkMEssFXSa6l-0td5o2w&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgqtnNRCxzmqTFoL6wSi62G-QtJKf_vgT58IWQOpjJvg&s=10, https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0GaWZqHRGG_hseloDpgEOje7D5M_ahm2lMqzkTrlTg&s=10', 'Xăng V8 3.9L Twin-Turbo (720 HP / 770 Nm)', 'Ly hợp kép 7 cấp F1', 'Xăng', 'Siêu xe thể thao động cơ đặt giữa kinh điển của thương hiệu Ngựa chồm. Tăng tốc 0-100 km/h trong 2.9 giây, tốc độ tối đa 340 km/h, trang bị hốc gió khí động học S-Duct lấy cảm hứng từ xe đua Công thức 1 giúp tăng lực ép xuống đường.');
 ```
 
 ### file save_order.php:
@@ -5472,14 +5721,14 @@ window.addEventListener("storage", (e) => {
   }
 });
 
-// 7. Hàm chuẩn hóa đường dẫn ảnh xe (Hỗ trợ cả link online lẫn ảnh trong thư mục images/)
+// 7. Hàm chuẩn hóa danh sách ảnh xe (Hỗ trợ nhiều link/file ngăn cách bằng dấu phẩy)
 const FALLBACK_CAR_IMG = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800";
 
-function getCarImage(img) {
-  if (!img || String(img).trim() === "" || img === "default.jpg") {
+function normalizeSingleImage(singleImg) {
+  if (!singleImg || String(singleImg).trim() === "" || singleImg === "default.jpg") {
     return FALLBACK_CAR_IMG;
   }
-  const cleanImg = String(img).trim();
+  const cleanImg = String(singleImg).trim();
   if (cleanImg.startsWith("http://") || cleanImg.startsWith("https://")) {
     return cleanImg;
   }
@@ -5488,6 +5737,21 @@ function getCarImage(img) {
     return prefix + cleanImg;
   }
   return prefix + "images/" + cleanImg.replace(/^\/+/, "");
+}
+
+function getCarImages(imgString) {
+  if (!imgString || String(imgString).trim() === "" || imgString === "default.jpg") {
+    return [FALLBACK_CAR_IMG];
+  }
+  const list = String(imgString)
+    .split(/[\n,]+/)
+    .map((item) => item.trim())
+    .filter((item) => item !== "");
+  return list.length > 0 ? list.map(normalizeSingleImage) : [FALLBACK_CAR_IMG];
+}
+
+function getCarImage(img) {
+  return getCarImages(img)[0];
 }
 
 // 8. Hàm chống XSS dùng chung cho toàn bộ website
@@ -5538,4 +5802,1052 @@ try {
     echo json_encode(["status" => "error", "message" => "Lỗi CSDL: " . $e->getMessage()], JSON_UNESCAPED_UNICODE);
 }
 ?>
+```
+
+### file bo_suu_tap_xe.html
+```html
+<!doctype html>
+<html lang="vi" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bộ Sưu Tập Siêu Xe - SHOWROOM 4TL</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Thẻ gọi JS & CSS từ thư mục gốc -->
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body
+    class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 transition-colors duration-300 min-h-screen selection:bg-indigo-600 selection:text-white">
+    <!-- KHUNG CHỨA THÔNG BÁO TOAST -->
+    <div
+      id="toastContainer"
+      class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none"></div>
+
+    <!-- NAVBAR -->
+    <header
+      class="sticky top-0 z-40 bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-gray-200/80 dark:border-white/10 px-4 md:px-8 py-3.5 transition-all duration-300 shadow-sm">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="../index.html" class="flex items-center gap-3 group">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-900 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30">
+            <i class="fa-solid fa-shield-halved text-lg"></i>
+          </div>
+          <div>
+            <div
+              class="text-2xl font-black tracking-wider text-slate-900 dark:text-white font-heading leading-none flex items-center gap-1">
+              4TL
+              <span class="text-indigo-600">MOTORS</span>
+            </div>
+            <span class="text-[10px] font-semibold text-gray-500 dark:text-gray-400 tracking-widest uppercase">
+              Supercar Collection
+            </span>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-3">
+          <button
+            onclick="openCompareModal()"
+            class="relative bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl text-xs font-bold border border-indigo-500/30 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-code-compare"></i>
+            So Sánh Xe (
+            <span id="compareCount">0</span>
+            )
+          </button>
+          <a
+            href="../index.html"
+            class="bg-gray-100 hover:bg-gray-200 text-slate-700 dark:bg-slate-800 dark:text-gray-200 px-4 py-2 rounded-xl text-xs font-bold border border-gray-200 dark:border-white/10 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-arrow-left"></i>
+            Trang Chủ
+          </a>
+          <button
+            id="themeToggle"
+            type="button"
+            class="w-10 h-10 rounded-xl bg-gray-100 text-amber-500 dark:bg-slate-800 dark:text-yellow-400 flex items-center justify-center border border-gray-200 dark:border-white/10 transition shadow-sm">
+            <i id="themeIcon" class="fa-solid fa-sun text-base"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- BRAND LOGO / QUICK FILTER STRIP -->
+    <section
+      class="py-6 bg-gray-100/80 dark:bg-slate-950/90 border-b border-gray-200 dark:border-white/10 overflow-x-auto">
+      <div
+        class="max-w-7xl mx-auto px-4 flex items-center gap-2 sm:gap-3 justify-start md:justify-center min-w-max"
+        id="brandPillContainer"></div>
+    </section>
+
+    <!-- MAIN CAR SHOWROOM & INVENTORY -->
+    <main id="car-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span
+            class="text-xs font-bold text-indigo-600 dark:text-indigo-500 tracking-widest uppercase flex items-center gap-1.5">
+            <i class="fa-solid fa-car-side"></i>
+            BỘ SƯU TẬP XE 2026
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black font-heading mt-1 text-slate-900 dark:text-white">
+            TOÀN BỘ SIÊU XE & XE SANG SẴN GIAO
+          </h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <span
+            id="carCountBadge"
+            class="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/10 shadow-sm">
+            Đang hiển thị:
+            <strong class="text-indigo-600">0</strong>
+            xe
+          </span>
+          <button onclick="resetAllFilters()" class="text-xs text-gray-500 hover:text-indigo-600 underline transition">
+            <i class="fa-solid fa-rotate-left mr-1"></i>
+            Đặt lại bộ lọc
+          </button>
+        </div>
+      </div>
+
+      <!-- ADVANCED FILTER & SEARCH PANEL -->
+      <div class="glass-panel p-5 rounded-3xl space-y-4 shadow-xl border border-gray-200/80 dark:border-white/10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div class="relative lg:col-span-2">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Tìm kiếm theo tên xe, hãng xe..."
+              class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <select
+              id="brandFilter"
+              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500">
+              <option value="">Tất cả thương hiệu</option>
+            </select>
+          </div>
+          <div>
+            <select
+              id="priceFilter"
+              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500">
+              <option value="">Tất cả phân khúc giá</option>
+              <option value="under-3b">Dưới 3 Tỷ VNĐ</option>
+              <option value="3b-10b">3 Tỷ - 10 Tỷ VNĐ</option>
+              <option value="over-10b">Trên 10 Tỷ VNĐ (Siêu xe)</option>
+            </select>
+          </div>
+          <div>
+            <select
+              id="fuelFilter"
+              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-900/90 border border-gray-300 dark:border-white/10 rounded-2xl text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500">
+              <option value="">Tất cả nhiên liệu</option>
+              <option value="Điện">⚡ Xe thuần điện (EV)</option>
+              <option value="Xăng">⛽ Xe máy xăng</option>
+              <option value="Hybrid">🔋 Xe Hybrid</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAR INVENTORY GRID -->
+      <div id="carGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2"></div>
+    </main>
+
+    <!-- MODAL 1: CHI TIẾT XE -->
+    <div
+      id="detailModal"
+      class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 items-center justify-center p-4 overflow-y-auto hidden"
+      style="display: none">
+      <div
+        class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 relative shadow-2xl border border-gray-200 dark:border-white/15 max-h-[90vh] overflow-y-auto space-y-6">
+        <button
+          onclick="closeModal('detailModal')"
+          class="absolute top-5 right-5 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white flex items-center justify-center transition">
+          ✕
+        </button>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: MÃ QR ĐẶT CỌC -->
+    <div
+      id="qrModal"
+      class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 items-center justify-center p-4 hidden"
+      style="display: none">
+      <div
+        class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-3xl max-w-sm w-full p-6 text-center relative shadow-2xl border border-gray-200 dark:border-indigo-500/30 space-y-4">
+        <button
+          onclick="closeModal('qrModal')"
+          class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white flex items-center justify-center transition">
+          ✕
+        </button>
+        <div
+          class="w-12 h-12 rounded-full bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-500 mx-auto flex items-center justify-center text-xl">
+          <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <h3 class="text-lg font-black uppercase text-slate-900 dark:text-white font-heading">
+          QUÉT MÃ QR ĐẶT CỌC GIỮ XE
+        </h3>
+        <p class="text-xs text-gray-500 dark:text-gray-300" id="qrCarName">Thanh toán cọc giữ xe tại Showroom 4TL</p>
+        <div class="bg-white p-3 rounded-2xl inline-block shadow-lg border border-gray-200">
+          <img
+            id="qrImage"
+            src="../images/qrcode.jpg"
+            alt="Mã QR Đặt Cọc"
+            class="w-48 h-48 mx-auto object-contain"
+            onerror="this.src = FALLBACK_CAR_IMG" />
+        </div>
+        <div
+          class="bg-gray-100 dark:bg-slate-800 p-3 rounded-xl text-left text-xs space-y-1 text-slate-700 dark:text-gray-300 border border-gray-200 dark:border-white/10">
+          <div class="flex justify-between">
+            <span>Ngân hàng:</span>
+            <strong class="text-slate-900 dark:text-white">MB Bank</strong>
+          </div>
+          <div class="flex justify-between">
+            <span>Số tài khoản:</span>
+            <strong class="text-indigo-600 dark:text-indigo-400 font-mono">0765650114</strong>
+          </div>
+          <div class="flex justify-between">
+            <span>Nội dung CK:</span>
+            <strong class="text-amber-600 dark:text-yellow-400 font-mono" id="qrMemo">COC XE 4TL</strong>
+          </div>
+        </div>
+        <div class="space-y-2 text-left">
+          <input
+            type="text"
+            id="qrCustomerName"
+            placeholder="Họ tên người chuyển khoản *"
+            class="w-full px-3 py-2 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-white/10 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+          <input
+            type="tel"
+            id="qrCustomerPhone"
+            placeholder="Số điện thoại xác nhận *"
+            class="w-full px-3 py-2 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-white/10 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+        </div>
+        <button
+          onclick="confirmDepositSuccess()"
+          class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3 rounded-xl text-xs transition shadow-md shadow-indigo-600/30">
+          <i class="fa-solid fa-circle-check mr-1.5"></i>
+          Tôi Đã Hoàn Tất Chuyển Khoản
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL 3: SO SÁNH XE ĐỐI ĐẦU -->
+    <div
+      id="compareModal"
+      class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 items-center justify-center p-4 overflow-y-auto hidden"
+      style="display: none">
+      <div
+        class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-3xl max-w-5xl w-full p-6 sm:p-8 relative shadow-2xl border border-gray-200 dark:border-white/15 max-h-[90vh] overflow-y-auto space-y-6">
+        <div class="flex justify-between items-center border-b border-gray-200 dark:border-white/10 pb-4">
+          <div>
+            <h3 class="text-2xl font-black font-heading text-slate-900 dark:text-white">SO SÁNH THÔNG SỐ XE ĐỐI ĐẦU</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              Xem trực quan thông số, phân khúc và mức giá giữa các mẫu xe.
+            </p>
+          </div>
+          <button
+            onclick="closeModal('compareModal')"
+            class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 text-gray-500 hover:text-gray-900 dark:text-gray-300 flex items-center justify-center transition">
+            ✕
+          </button>
+        </div>
+        <div id="compareTableContainer" class="overflow-x-auto"></div>
+      </div>
+    </div>
+
+    <!-- MODAL 4: ĐĂNG KÝ LÁI THỬ -->
+    <div
+      id="bookingModal"
+      class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 items-center justify-center p-4 hidden"
+      style="display: none">
+      <div
+        class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl border border-gray-200 dark:border-white/15 space-y-4">
+        <button
+          onclick="closeModal('bookingModal')"
+          class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 text-gray-500 hover:text-gray-900 dark:text-gray-300 flex items-center justify-center transition">
+          ✕
+        </button>
+        <h3 class="text-xl font-black font-heading text-slate-900 dark:text-white">ĐĂNG KÝ TRẢI NGHIỆM LÁI THỬ</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400">
+          Đội ngũ Showroom 4TL sẽ chuẩn bị xe sẵn sàng đón tiếp quý khách.
+        </p>
+        <form onsubmit="handleModalBooking(event)" class="space-y-3 text-xs">
+          <div>
+            <label class="block text-gray-600 dark:text-gray-400 mb-1">Mẫu xe chọn lái thử</label>
+            <input
+              type="text"
+              id="modalBookingCar"
+              readonly
+              class="w-full px-3.5 py-2.5 bg-gray-100 dark:bg-slate-800 border border-gray-300 dark:border-white/10 rounded-xl text-slate-900 dark:text-white font-bold" />
+          </div>
+          <div>
+            <label class="block text-gray-600 dark:text-gray-400 mb-1">Họ và tên của quý khách</label>
+            <input
+              type="text"
+              id="modalBookingName"
+              required
+              placeholder="Nguyễn Văn A"
+              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-white/10 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-gray-600 dark:text-gray-400 mb-1">Số điện thoại liên hệ</label>
+            <input
+              type="tel"
+              id="modalBookingPhone"
+              required
+              placeholder="0900.xxx.xxx"
+              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-white/10 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-gray-600 dark:text-gray-400 mb-1">Thời gian dự kiến</label>
+            <input
+              type="date"
+              id="modalBookingDate"
+              required
+              class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-white/10 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg shadow-indigo-600/30">
+            Xác Nhận Đăng Ký Lái Thử
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- LUXURY FLOATING AI CHATBOT WIDGET -->
+    <div class="fixed bottom-6 right-6 z-50">
+      <!-- Chat Bubble Button -->
+      <button
+        id="chatBubbleBtn"
+        onclick="toggleChat()"
+        type="button"
+        aria-label="Mở Trợ lý AI 4TL"
+        class="relative pulse-ring w-14 h-14 bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition duration-300 group cursor-pointer">
+        <i id="chatBubbleIcon" class="fa-solid fa-headset text-2xl group-hover:rotate-12 transition"></i>
+        <span
+          class="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full shadow-sm"></span>
+      </button>
+
+      <!-- Chat Window -->
+      <div
+        id="chatWindow"
+        class="hidden absolute bottom-20 right-0 w-[calc(100vw-3rem)] sm:w-96 max-h-[calc(100vh-120px)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-gray-200 dark:border-white/15 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[520px] transition-all origin-bottom-right"
+        style="display: none">
+        <!-- Chat Header -->
+        <div
+          class="bg-gradient-to-r from-violet-700 to-indigo-600 p-4 text-white flex justify-between items-center shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white shadow-inner">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold leading-tight">4TL AI Assistant</h4>
+              <span class="text-[10px] text-indigo-200 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Trực tuyến 24/7
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <a
+              href="bot_train.html"
+              target="_blank"
+              title="Mở trang tư vấn AI toàn màn hình"
+              class="w-7 h-7 rounded-full bg-black/20 text-white hover:bg-black/40 flex items-center justify-center text-xs transition">
+              <i class="fa-solid fa-up-right-from-square text-[10px]"></i>
+            </a>
+            <button
+              onclick="toggleChat()"
+              type="button"
+              title="Đóng chat"
+              class="w-7 h-7 rounded-full bg-black/20 text-white hover:bg-black/40 flex items-center justify-center text-xs transition">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Suggestions -->
+        <div
+          class="p-2.5 bg-gray-100/80 dark:bg-slate-950/60 border-b border-gray-200 dark:border-white/10 flex gap-1.5 overflow-x-auto text-[11px] whitespace-nowrap">
+          <button
+            onclick="quickPrompt('Giá xe VinFast VF3?')"
+            class="px-2.5 py-1 rounded-full bg-white dark:bg-white/10 hover:bg-indigo-600 text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-transparent transition">
+            ⚡ Giá VF3
+          </button>
+          <button
+            onclick="quickPrompt('Tư vấn xe dưới 2 tỷ')"
+            class="px-2.5 py-1 rounded-full bg-white dark:bg-white/10 hover:bg-indigo-600 text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-transparent transition">
+            💰 Dưới 2 tỷ
+          </button>
+          <button
+            onclick="quickPrompt('Tư vấn thủ tục trả góp')"
+            class="px-2.5 py-1 rounded-full bg-white dark:bg-white/10 hover:bg-indigo-600 text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-transparent transition">
+            💳 Trả góp
+          </button>
+          <button
+            onclick="quickPrompt('Đăng ký lái thử xe')"
+            class="px-2.5 py-1 rounded-full bg-white dark:bg-white/10 hover:bg-indigo-600 text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-transparent transition">
+            🏎️ Lái thử
+          </button>
+        </div>
+
+        <!-- Chat Messages Box -->
+        <div id="chatBox" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+          <div
+            class="bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] self-start border border-gray-200 dark:border-white/10 shadow-sm leading-relaxed">
+            👋 Xin kính chào quý khách! Em là Trợ lý AI Showroom 4TL. Em có thể hỗ trợ quý khách tra cứu thông số kỹ
+            thuật, bảng giá lăn bánh, chính sách trả góp hay lịch lái thử hôm nay ạ?
+          </div>
+        </div>
+
+        <!-- Chat Input Form -->
+        <div class="p-3 bg-gray-50 dark:bg-slate-950 border-t border-gray-200 dark:border-white/10 flex gap-2">
+          <input
+            type="text"
+            id="chatInput"
+            onkeydown="if (event.key === 'Enter') sendChatMessage();"
+            placeholder="Nhập câu hỏi (VD: giá C300, VF3, G63)..."
+            class="flex-1 bg-white dark:bg-slate-900 border border-gray-300 dark:border-white/10 px-3.5 py-2.5 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+          <button
+            onclick="sendChatMessage()"
+            class="bg-indigo-600 hover:bg-violet-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+      let allCars = [];
+      let comparedCars = [];
+      let currentBrandFilter = "Tất cả";
+
+      function showToast(message, type = "success") {
+        const container = document.getElementById("toastContainer");
+        if (!container) return;
+        const toast = document.createElement("div");
+        toast.className = `px-4 py-3 rounded-2xl text-xs font-bold shadow-xl border backdrop-blur-md transition-all duration-300 flex items-center gap-2 ${
+          type === "success"
+            ? "bg-emerald-500/90 text-white border-emerald-400"
+            : "bg-rose-500/90 text-white border-rose-400"
+        }`;
+        toast.innerHTML = `<i class="fa-solid ${type === "success" ? "fa-circle-check" : "fa-triangle-exclamation"} text-sm"></i> ${escapeHtml(message)}`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          setTimeout(() => toast.remove(), 300);
+        }, 3500);
+      }
+
+      function formatCurrency(amount) {
+        if (!amount) return "Liên hệ";
+        return Number(amount).toLocaleString("vi-VN") + " VNĐ";
+      }
+
+      function formatBillion(amount) {
+        const val = Number(amount);
+        if (val >= 1e9) {
+          return (val / 1e9).toFixed(1) + " Tỷ";
+        }
+        return val.toLocaleString("vi-VN") + " VNĐ";
+      }
+
+      async function fetchCars() {
+        try {
+          const res = await fetch("../php/get_cars.php?t=" + Date.now(), { cache: "no-store" });
+          const data = await res.json();
+          allCars = Array.isArray(data) ? data : [];
+        } catch (e) {
+          allCars = [];
+        }
+        renderBrandPills();
+        populateBrandDropdown();
+        filterCars();
+      }
+
+      function renderBrandPills() {
+        const brands = ["Tất cả", ...[...new Set(allCars.map((c) => c.brand))].sort()];
+        document.getElementById("brandPillContainer").innerHTML = brands
+          .map(
+            (b) => `
+          <button data-brand="${b}" onclick="filterByBrandQuick('${b}')" class="brand-pill px-4 py-1.5 rounded-full text-xs font-bold border border-gray-200 dark:border-white/10 ${currentBrandFilter === b ? "active bg-indigo-600 text-white" : "bg-white text-slate-700 dark:bg-slate-900 dark:text-gray-300"}">${b}</button>
+        `,
+          )
+          .join("");
+      }
+
+      function filterByBrandQuick(brand) {
+        currentBrandFilter = brand;
+        document.querySelectorAll(".brand-pill").forEach((btn) => {
+          if (btn.dataset.brand === brand) {
+            btn.classList.add("active", "bg-indigo-600", "text-white");
+            btn.classList.remove("bg-white", "text-slate-700", "dark:bg-slate-900", "dark:text-gray-300");
+          } else {
+            btn.classList.remove("active", "bg-indigo-600", "text-white");
+            btn.classList.add("bg-white", "text-slate-700", "dark:bg-slate-900", "dark:text-gray-300");
+          }
+        });
+        const select = document.getElementById("brandFilter");
+        if (select) select.value = brand === "Tất cả" ? "" : brand;
+        filterCars();
+      }
+
+      function populateBrandDropdown() {
+        const brands = [...new Set(allCars.map((c) => c.brand))].sort();
+        const select = document.getElementById("brandFilter");
+        if (!select) return;
+        select.innerHTML = '<option value="">Tất cả thương hiệu</option>';
+        brands.forEach((b) => {
+          const opt = document.createElement("option");
+          opt.value = b;
+          opt.textContent = b;
+          select.appendChild(opt);
+        });
+      }
+
+      function slideCardImage(carId, step) {
+        const car = allCars.find((c) => Number(c.id) === Number(carId));
+        if (!car) return;
+        const imgs = getCarImages(car.image);
+        if (imgs.length <= 1) return;
+
+        const imgEl = document.getElementById(`card-img-${carId}`);
+        const badgeEl = document.getElementById(`card-badge-${carId}`);
+        if (!imgEl) return;
+
+        let idx = parseInt(imgEl.dataset.idx || "0", 10);
+        idx = (idx + step + imgs.length) % imgs.length;
+        imgEl.dataset.idx = idx;
+        imgEl.src = imgs[idx];
+        if (badgeEl) badgeEl.innerText = `${idx + 1}/${imgs.length}`;
+      }
+
+      function renderCars(cars) {
+        const grid = document.getElementById("carGrid");
+        document.getElementById("carCountBadge").innerHTML =
+          `Đang hiển thị: <strong class="text-indigo-600">${cars.length}</strong> xe`;
+
+        if (cars.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-16 text-center space-y-3">
+              <i class="fa-solid fa-car-tunnel text-4xl text-gray-400"></i>
+              <p class="text-sm text-gray-500 font-medium">Không tìm thấy siêu xe phù hợp với bộ lọc.</p>
+              <button onclick="resetAllFilters()" class="text-xs text-indigo-600 font-bold underline">Xóa bộ lọc tìm kiếm</button>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = cars
+          .map((car) => {
+            const isCompared = comparedCars.some((c) => Number(c.id) === Number(car.id));
+            const carImgs = getCarImages(car.image);
+            const hasMulti = carImgs.length > 1;
+            return `
+            <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group bg-white dark:bg-slate-900/60 border border-gray-200 dark:border-white/10 shadow-md">
+              <div class="relative overflow-hidden aspect-[16/10] bg-slate-900">
+                <img id="card-img-${car.id}" data-idx="0" src="${carImgs[0]}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer" onclick="window.location.href='detail.html?id=${car.id}'" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
+                <span class="absolute top-3 left-3 bg-indigo-600/90 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  ${escapeHtml(car.brand)}
+                </span>
+                <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-full">
+                  <i class="fa-solid fa-bolt mr-1"></i>${escapeHtml(car.fuel || "Xăng")}
+                </span>
+                ${
+                  hasMulti
+                    ? `
+                  <button type="button" onclick="event.stopPropagation(); slideCardImage(${car.id}, -1)"
+                    class="opacity-0 group-hover:opacity-100 absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-indigo-600 text-white flex items-center justify-center text-xs transition shadow-md">
+                    <i class="fa-solid fa-chevron-left"></i>
+                  </button>
+                  <button type="button" onclick="event.stopPropagation(); slideCardImage(${car.id}, 1)"
+                    class="opacity-0 group-hover:opacity-100 absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-indigo-600 text-white flex items-center justify-center text-xs transition shadow-md">
+                    <i class="fa-solid fa-chevron-right"></i>
+                  </button>
+                  <span id="card-badge-${car.id}" class="absolute bottom-2.5 right-2.5 bg-black/65 backdrop-blur text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    1/${carImgs.length}
+                  </span>
+                `
+                    : ""
+                }
+              </div>
+              <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div>
+                  <h3 onclick="window.location.href='detail.html?id=${car.id}'" class="text-xl font-black text-slate-900 dark:text-white cursor-pointer hover:text-indigo-500 line-clamp-1">${escapeHtml(car.name)}</h3>
+                  <div class="text-indigo-600 dark:text-indigo-400 font-heading text-2xl font-black my-1">${formatCurrency(car.price)}</div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">${escapeHtml(car.description || "Động cơ hiệu năng cao, thiết kế sang trọng và trang bị công nghệ đỉnh cao.")}</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100 dark:border-white/10">
+                  <button onclick="openQRModalById(${car.id})" class="bg-indigo-600 hover:bg-violet-700 text-white font-bold py-2.5 px-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-qrcode"></i> Đặt Cọc
+                  </button>
+                  <button onclick="openBookingModalById(${car.id})" class="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-gray-200 font-bold py-2.5 px-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 border border-gray-200 dark:border-white/10">
+                    <i class="fa-solid fa-calendar-days"></i> Lái Thử
+                  </button>
+                </div>
+
+                <div class="flex items-center justify-between pt-1">
+                  <button onclick="window.location.href='detail.html?id=${car.id}'" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                    Xem chi tiết thông số <i class="fa-solid fa-arrow-right ml-0.5"></i>
+                  </button>
+                  <button onclick="toggleCompareCar(${car.id})" class="text-xs font-semibold px-2.5 py-1 rounded-lg ${isCompared ? "bg-indigo-600 text-white" : "bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300"} transition">
+                    <i class="fa-solid fa-code-compare mr-1"></i> ${isCompared ? "Đang so sánh" : "+ So sánh"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+      }
+
+      function filterCars() {
+        const search = document.getElementById("searchInput").value.toLowerCase().trim();
+        const brand = document.getElementById("brandFilter").value;
+        const priceRange = document.getElementById("priceFilter").value;
+        const fuel = document.getElementById("fuelFilter").value;
+
+        let filtered = allCars.filter((c) => {
+          const matchSearch =
+            !search || c.name.toLowerCase().includes(search) || c.brand.toLowerCase().includes(search);
+          const matchBrand = !brand || c.brand === brand;
+          const matchFuel = !fuel || (c.fuel && c.fuel.toLowerCase().includes(fuel.toLowerCase()));
+
+          let matchPrice = true;
+          const price = Number(c.price);
+          if (priceRange === "under-3b") matchPrice = price < 3e9;
+          else if (priceRange === "3b-10b") matchPrice = price >= 3e9 && price <= 10e9;
+          else if (priceRange === "over-10b") matchPrice = price > 10e9;
+
+          return matchSearch && matchBrand && matchPrice && matchFuel;
+        });
+        renderCars(filtered);
+      }
+
+      function resetAllFilters() {
+        document.getElementById("searchInput").value = "";
+        document.getElementById("brandFilter").value = "";
+        document.getElementById("priceFilter").value = "";
+        document.getElementById("fuelFilter").value = "";
+        currentBrandFilter = "Tất cả";
+        renderBrandPills();
+        renderCars(allCars);
+      }
+
+      function openModal(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.style.display = "flex";
+          el.classList.remove("hidden");
+        }
+      }
+
+      function closeModal(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.style.display = "none";
+          el.classList.add("hidden");
+        }
+      }
+
+      ["detailModal", "compareModal", "qrModal", "bookingModal"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("click", (e) => {
+            if (e.target === el) closeModal(id);
+          });
+        }
+      });
+
+      let currentDepositCar = null;
+
+      function openQRModalById(id) {
+        const car = allCars.find((c) => Number(c.id) === Number(id));
+        if (!car) return;
+        currentDepositCar = car;
+        document.getElementById("qrCarName").innerText = `Đặt cọc ưu tiên mẫu: ${car.name}`;
+        document.getElementById("qrMemo").innerText = `COC ${car.id} ${car.name}`.substring(0, 30);
+        const qrImg = document.getElementById("qrImage");
+        qrImg.src = `https://img.vietqr.io/image/MB-0765650114-compact2.png?amount=500000000&addInfo=${encodeURIComponent("COC " + car.name)}`;
+        openModal("qrModal");
+      }
+
+      async function confirmDepositSuccess() {
+        const name = document.getElementById("qrCustomerName").value.trim();
+        const phone = document.getElementById("qrCustomerPhone").value.trim();
+        const memo = document.getElementById("qrMemo").innerText;
+
+        if (!name || !phone) {
+          showToast("Vui lòng điền đầy đủ họ tên và số điện thoại!", "error");
+          return;
+        }
+
+        try {
+          const res = await fetch("../php/save_order.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "deposit",
+              car_name: currentDepositCar ? currentDepositCar.name : "Xe Showroom 4TL",
+              car_price: currentDepositCar ? currentDepositCar.price : 0,
+              memo: memo,
+              customer_name: name,
+              customer_phone: phone,
+            }),
+          });
+          const result = await res.json();
+          if (result.status !== "success") {
+            showToast(result.message || "Lỗi lưu giao dịch đặt cọc!", "error");
+            return;
+          }
+        } catch (e) {}
+
+        showToast("Đã ghi nhận thông tin đặt cọc thành công! Nhân viên sẽ liên hệ lại ngay.", "success");
+        document.getElementById("qrCustomerName").value = "";
+        document.getElementById("qrCustomerPhone").value = "";
+        closeModal("qrModal");
+      }
+
+      function openBookingModalById(id) {
+        const car = allCars.find((c) => Number(c.id) === Number(id));
+        const carName = car ? car.name : "Tất cả mẫu xe";
+        document.getElementById("modalBookingCar").value = carName;
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById("modalBookingDate").value = tomorrow.toISOString().split("T")[0];
+        openModal("bookingModal");
+      }
+
+      async function handleModalBooking(e) {
+        e.preventDefault();
+        const car = document.getElementById("modalBookingCar").value;
+        const name = document.getElementById("modalBookingName").value;
+        const phone = document.getElementById("modalBookingPhone").value;
+        const date = document.getElementById("modalBookingDate").value;
+        try {
+          await fetch("../php/save_order.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ type: "booking", name, phone, car, date, note: "Đặt lái thử từ trang Bộ sưu tập" }),
+          });
+        } catch (e) {}
+        showToast("Đăng ký lịch lái thử thành công cho quý khách: " + name, "success");
+        closeModal("bookingModal");
+      }
+
+      function toggleCompareCar(id) {
+        const targetId = Number(id);
+        const idx = comparedCars.findIndex((c) => Number(c.id) === targetId);
+        if (idx > -1) {
+          comparedCars.splice(idx, 1);
+          showToast("Đã gỡ xe khỏi bảng so sánh.", "success");
+        } else {
+          if (comparedCars.length >= 3) {
+            showToast("Chỉ có thể so sánh tối đa 3 mẫu xe cùng lúc!", "error");
+            return;
+          }
+          const car = allCars.find((c) => Number(c.id) === targetId);
+          if (car) {
+            comparedCars.push(car);
+            showToast(`Đã thêm ${car.name} vào bảng so sánh.`, "success");
+          }
+        }
+        document.getElementById("compareCount").innerText = comparedCars.length;
+        renderCars(allCars);
+      }
+
+      function openCompareModal() {
+        if (comparedCars.length === 0 && allCars.length >= 2) {
+          comparedCars = [allCars[0], allCars[1]];
+        }
+        document.getElementById("compareCount").innerText = comparedCars.length;
+        const container = document.getElementById("compareTableContainer");
+        if (!container) return;
+
+        container.innerHTML = `
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-3 bg-gray-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-xs">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="font-bold text-slate-700 dark:text-gray-300">Thêm xe so sánh:</span>
+              <select onchange="handleAddCarToCompare(this.value)" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 text-slate-800 dark:text-white">
+                <option value="">-- Chọn thêm xe --</option>
+                ${allCars
+                  .filter((c) => !comparedCars.some((cc) => Number(cc.id) === Number(c.id)))
+                  .map((c) => `<option value="${c.id}">${escapeHtml(c.name)} (${formatBillion(c.price)})</option>`)
+                  .join("")}
+              </select>
+            </div>
+            <button onclick="comparedCars=[]; closeModal('compareModal'); document.getElementById('compareCount').innerText='0'; renderCars(allCars);" class="text-indigo-600 dark:text-indigo-400 hover:underline font-bold">
+              <i class="fa-solid fa-trash mr-1"></i>Xóa hết so sánh
+            </button>
+          </div>
+          <table class="w-full table-fixed text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-white/10">
+                <th class="p-3 text-gray-500 w-36">Thông Số</th>
+                ${comparedCars
+                  .map(
+                    (c) => `
+                  <th class="p-3 text-slate-900 dark:text-white font-bold text-base min-w-[220px]">
+                    <div class="relative group mb-2">
+                      <img src="${getCarImage(c.image)}" class="w-full h-36 object-cover rounded-xl border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
+                      <button onclick="toggleCompareCar(${c.id}); openCompareModal();" title="Bỏ xe này" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">✕</button>
+                    </div>
+                    <div class="leading-tight">${escapeHtml(c.name)}</div>
+                    <div class="text-indigo-600 dark:text-indigo-400 font-heading text-lg mt-1">${formatCurrency(c.price)}</div>
+                  </th>
+                `,
+                  )
+                  .join("")}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-white/10 text-slate-700 dark:text-gray-300">
+              <tr>
+                <td class="p-3 font-bold text-gray-500">Hãng</td>
+                ${comparedCars.map((c) => `<td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 text-indigo-300 font-bold">${escapeHtml(c.brand)}</span></td>`).join("")}
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-gray-500">Động Cơ</td>
+                ${comparedCars.map((c) => `<td class="p-3">${escapeHtml(c.engine || "N/A")}</td>`).join("")}
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-gray-500">Hộp Số</td>
+                ${comparedCars.map((c) => `<td class="p-3">${escapeHtml(c.transmission || "Tự động")}</td>`).join("")}
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-gray-500">Nhiên Liệu</td>
+                ${comparedCars.map((c) => `<td class="p-3 font-semibold text-slate-900 dark:text-white">${escapeHtml(c.fuel || "Xăng")}</td>`).join("")}
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-gray-500">Mô Tả</td>
+                ${comparedCars.map((c) => `<td class="p-3 leading-relaxed text-[11px] text-gray-500 dark:text-gray-400 break-words">${escapeHtml(c.description || "N/A")}</td>`).join("")}
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-gray-500">Thao Tác</td>
+                ${comparedCars
+                  .map(
+                    (c) => `
+                  <td class="p-3 space-y-1.5">
+                    <button onclick="closeModal('compareModal'); openBookingModalById(${c.id})" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-2 rounded-xl text-xs transition">Lái Thử</button>
+                    <button onclick="closeModal('compareModal'); window.location.href='detail.html?id=${c.id}'" class="w-full bg-gray-100 dark:bg-slate-800 text-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs transition">Xem Chi Tiết</button>
+                  </td>
+                `,
+                  )
+                  .join("")}
+              </tr>
+            </tbody>
+          </table>
+        `;
+        openModal("compareModal");
+      }
+
+      function handleAddCarToCompare(carId) {
+        if (!carId) return;
+        toggleCompareCar(carId);
+        openCompareModal();
+      }
+
+      // CHATBOT ASSISTANT LOGIC (Gọi API PHP ở thư mục gốc: ../php/bot_train.php)
+      function toggleChat() {
+        const chatWin = document.getElementById("chatWindow");
+        const chatIcon = document.getElementById("chatBubbleIcon");
+        if (!chatWin) return;
+
+        const isCurrentlyHidden = chatWin.style.display === "none" || chatWin.classList.contains("hidden");
+
+        if (isCurrentlyHidden) {
+          chatWin.classList.remove("hidden");
+          chatWin.style.display = "flex";
+          if (chatIcon) {
+            chatIcon.className = "fa-solid fa-xmark text-2xl transition";
+          }
+          const chatBox = document.getElementById("chatBox");
+          if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+          setTimeout(() => {
+            const input = document.getElementById("chatInput");
+            if (input) input.focus();
+          }, 100);
+        } else {
+          chatWin.classList.add("hidden");
+          chatWin.style.display = "none";
+          if (chatIcon) {
+            chatIcon.className = "fa-solid fa-headset text-2xl group-hover:rotate-12 transition";
+          }
+        }
+      }
+
+      function quickPrompt(text) {
+        document.getElementById("chatInput").value = text;
+        sendChatMessage();
+      }
+
+      async function sendChatMessage() {
+        const input = document.getElementById("chatInput");
+        const text = input.value.trim();
+        if (!text) return;
+
+        const chatBox = document.getElementById("chatBox");
+
+        chatBox.innerHTML += `
+          <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-xs shadow-md leading-relaxed">
+              ${escapeHtml(text)}
+          </div>
+        `;
+        input.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        const typingId = "typing-" + Date.now();
+        chatBox.innerHTML += `
+          <div id="${typingId}" class="bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-gray-400 p-2.5 rounded-2xl rounded-tl-none max-w-[50%] self-start text-xs border border-gray-200 dark:border-white/5 flex items-center gap-1">
+              <span class="animate-bounce">●</span><span class="animate-bounce delay-100">●</span><span class="animate-bounce delay-200">●</span>
+          </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+          const res = await fetch("../php/bot_train.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text }),
+          });
+          const data = await res.json();
+
+          const typingEl = document.getElementById(typingId);
+          if (typingEl) typingEl.remove();
+
+          chatBox.innerHTML += `
+            <div class="bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] self-start border border-gray-200 dark:border-white/10 shadow-sm leading-relaxed">
+                ${data.reply}
+            </div>
+          `;
+          chatBox.scrollTop = chatBox.scrollHeight;
+        } catch (err) {
+          const typingEl = document.getElementById(typingId);
+          if (typingEl) typingEl.remove();
+
+          chatBox.innerHTML += `
+            <div class="bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] self-start border border-gray-200 dark:border-white/10 shadow-sm leading-relaxed">
+                Dạ quý khách cần tư vấn chi tiết về mẫu xe nào, xin vui lòng gọi trực tiếp Hotline VIP <strong>0765.650.114</strong> để được phục vụ 24/7 ạ!
+            </div>
+          `;
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+      }
+
+      document.getElementById("searchInput").addEventListener("input", filterCars);
+      document.getElementById("brandFilter").addEventListener("change", filterCars);
+      document.getElementById("priceFilter").addEventListener("change", filterCars);
+      document.getElementById("fuelFilter").addEventListener("change", filterCars);
+
+      fetchCars();
+    </script>
+
+    <!-- LUXURY FLOATING AI CHATBOT WIDGET HTML -->
+    <div class="fixed bottom-6 right-6 z-50">
+      <button
+        id="chatBubbleBtn"
+        onclick="toggleChat()"
+        type="button"
+        aria-label="Mở Trợ lý AI 4TL"
+        class="relative pulse-ring w-14 h-14 bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition duration-300 group cursor-pointer">
+        <i id="chatBubbleIcon" class="fa-solid fa-headset text-2xl group-hover:rotate-12 transition"></i>
+        <span
+          class="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full shadow-sm"></span>
+      </button>
+
+      <div
+        id="chatWindow"
+        class="hidden absolute bottom-20 right-0 w-[calc(100vw-3rem)] sm:w-96 max-h-[calc(100vh-120px)] bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-gray-200 dark:border-white/15 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[520px] transition-all origin-bottom-right"
+        style="display: none">
+        <div
+          class="bg-gradient-to-r from-violet-700 to-indigo-600 p-4 text-white flex justify-between items-center shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white shadow-inner">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold leading-tight">4TL AI Assistant</h4>
+              <span class="text-[10px] text-indigo-200 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Trực tuyến 24/7
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <a
+              href="bot_train.html"
+              target="_blank"
+              title="Mở trang tư vấn AI toàn màn hình"
+              class="w-7 h-7 rounded-full bg-black/20 text-white hover:bg-black/40 flex items-center justify-center text-xs transition">
+              <i class="fa-solid fa-up-right-from-square text-[10px]"></i>
+            </a>
+            <button
+              onclick="toggleChat()"
+              type="button"
+              title="Đóng chat"
+              class="w-7 h-7 rounded-full bg-black/20 text-white hover:bg-black/40 flex items-center justify-center text-xs transition">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="p-2.5 bg-gray-100/80 dark:bg-slate-950/60 border-b border-gray-200 dark:border-white/10 flex gap-1.5 overflow-x-auto text-[11px] whitespace-nowrap">
+          <button
+            onclick="quickPrompt('Giá xe VinFast VF3?')"
+            class="px-2.5 py-1 rounded-full bg-white dark:bg-white/10 hover:bg-indigo-600 text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-transparent transition">
+            ⚡ Giá VF3
+          </button>
+          <button
+            onclick="quickPrompt('Tư vấn xe dưới 2 tỷ')"
+            class="px-2.5 py-1 rounded-full bg-white dark:bg-white/10 hover:bg-indigo-600 text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-transparent transition">
+            💰 Dưới 2 tỷ
+          </button>
+          <button
+            onclick="quickPrompt('Tư vấn thủ tục trả góp')"
+            class="px-2.5 py-1 rounded-full bg-white dark:bg-white/10 hover:bg-indigo-600 text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-transparent transition">
+            💳 Trả góp
+          </button>
+          <button
+            onclick="quickPrompt('Đăng ký lái thử xe')"
+            class="px-2.5 py-1 rounded-full bg-white dark:bg-white/10 hover:bg-indigo-600 text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-transparent transition">
+            🏎️ Lái thử
+          </button>
+        </div>
+
+        <div id="chatBox" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+          <div
+            class="bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] self-start border border-gray-200 dark:border-white/10 shadow-sm leading-relaxed">
+            👋 Xin kính chào quý khách! Em là Trợ lý AI Showroom 4TL. Em có thể hỗ trợ quý khách tra cứu thông số kỹ
+            thuật, bảng giá lăn bánh, chính sách trả góp hay lịch lái thử hôm nay ạ?
+          </div>
+        </div>
+
+        <div class="p-3 bg-gray-50 dark:bg-slate-950 border-t border-gray-200 dark:border-white/10 flex gap-2">
+          <input
+            type="text"
+            id="chatInput"
+            onkeydown="if (event.key === 'Enter') sendChatMessage();"
+            placeholder="Nhập câu hỏi (VD: giá C300, VF3, G63)..."
+            class="flex-1 bg-white dark:bg-slate-900 border border-gray-300 dark:border-white/10 px-3.5 py-2.5 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500" />
+          <button
+            onclick="sendChatMessage()"
+            class="bg-indigo-600 hover:bg-violet-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
 ```
