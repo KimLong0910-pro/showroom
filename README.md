@@ -121,15 +121,6 @@ webbanxe/
             Dự Toán Trả Góp
           </a>
           <!-- Comparison Nav Link -->
-          <button
-            onclick="toggleCompareModal()"
-            class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5 font-semibold text-sm">
-            <i class="fa-solid fa-code-compare text-xs text-indigo-500"></i>
-            <span>So Sánh Xe</span>
-            <span id="compareNavCount" class="bg-indigo-600 text-white text-[10px] px-1.5 py-0.2 rounded-full hidden">
-              0
-            </span>
-          </button>
           <a
             href="#map-section"
             class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
@@ -888,31 +879,6 @@ webbanxe/
     </footer>
 
     <!-- STICKY COMPARISON DOCK (Appears when >= 1 car is selected) -->
-    <div
-      id="comparisonDock"
-      class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-indigo-500/40 px-5 py-3 rounded-2xl shadow-2xl items-center gap-4 hidden transition-all duration-300"
-      style="display: none">
-      <div class="flex items-center gap-2" id="compareThumbnails">
-        <!-- Selected cars thumbnails -->
-      </div>
-      <div class="h-6 w-px bg-gray-300 dark:bg-white/20"></div>
-      <button
-        onclick="openCompareModal()"
-        class="bg-indigo-600 hover:bg-violet-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md transition flex items-center gap-1.5">
-        <i class="fa-solid fa-code-compare"></i>
-        <span>
-          So Sánh Ngay (
-          <span id="compareCount">0</span>
-          /3)
-        </span>
-      </button>
-      <button
-        onclick="clearComparison()"
-        title="Xóa tất cả"
-        class="text-gray-400 hover:text-indigo-600 dark:hover:text-white text-xs">
-        ✕
-      </button>
-    </div>
 
     <!-- MODAL 1: CHI TIẾT XE -->
     <div
@@ -1000,33 +966,6 @@ webbanxe/
           <i class="fa-solid fa-circle-check mr-1.5"></i>
           Tôi Đã Hoàn Tất Chuyển Khoản
         </button>
-      </div>
-    </div>
-
-    <!-- MODAL 3: SO SÁNH XE ĐỐI ĐẦU -->
-    <div
-      id="compareModal"
-      class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 items-center justify-center p-4 overflow-y-auto hidden"
-      style="display: none">
-      <div
-        class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-3xl max-w-5xl w-full p-6 sm:p-8 relative shadow-2xl border border-gray-200 dark:border-white/15 max-h-[90vh] overflow-y-auto space-y-6">
-        <div class="flex justify-between items-center border-b border-gray-200 dark:border-white/10 pb-4">
-          <div>
-            <h3 class="text-2xl font-black font-heading text-slate-900 dark:text-white">SO SÁNH THÔNG SỐ XE ĐỐI ĐẦU</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400">
-              Xem trực quan thông số, phân khúc và mức giá giữa các mẫu xe bạn đang phân vân.
-            </p>
-          </div>
-          <button
-            onclick="closeModal('compareModal')"
-            class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white flex items-center justify-center transition">
-            ✕
-          </button>
-        </div>
-
-        <div id="compareTableContainer" class="overflow-x-auto">
-          <!-- Injected via JavaScript -->
-        </div>
       </div>
     </div>
 
@@ -1489,7 +1428,6 @@ webbanxe/
       ];
 
       let allCars = [];
-      let comparedCars = [];
 
       function openBookingModalById(id) {
         const car = allCars.find((c) => Number(c.id) === Number(id));
@@ -1520,7 +1458,7 @@ webbanxe/
 
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
-          ["detailModal", "compareModal", "qrModal", "bookingModal"].forEach(closeModal);
+          ["detailModal", "qrModal", "bookingModal"].forEach(closeModal);
           const chatWin = document.getElementById("chatWindow");
           if (chatWin && (chatWin.style.display === "flex" || !chatWin.classList.contains("hidden"))) {
             toggleChat();
@@ -1528,7 +1466,7 @@ webbanxe/
         }
       });
 
-      ["detailModal", "compareModal", "qrModal", "bookingModal"].forEach((id) => {
+      ["detailModal", "qrModal", "bookingModal"].forEach((id) => {
         const el = document.getElementById(id);
         if (el) {
           el.addEventListener("click", function (e) {
@@ -1661,190 +1599,10 @@ webbanxe/
         attributeFilter: ["class"],
       });
 
-      function toggleCompareCar(id) {
-        const targetId = Number(id);
-        const car = allCars.find((c) => Number(c.id) === targetId);
-        if (!car) return;
-
-        const idx = comparedCars.findIndex((c) => Number(c.id) === targetId);
-        if (idx > -1) {
-          comparedCars.splice(idx, 1);
-        } else {
-          if (comparedCars.length >= 3) {
-            showToast("Chỉ có thể so sánh tối đa 3 mẫu xe cùng lúc!", "error");
-            return;
-          }
-          comparedCars.push(car);
-        }
-
-        updateCompareDock();
-      }
-
-      function updateCompareDock() {
-        const dock = document.getElementById("comparisonDock");
-        const thumbs = document.getElementById("compareThumbnails");
-        const count = document.getElementById("compareCount");
-        const navBadge = document.getElementById("compareNavCount");
-
-        if (count) count.innerText = comparedCars.length;
-        if (navBadge) {
-          navBadge.innerText = comparedCars.length;
-          if (comparedCars.length > 0) {
-            navBadge.classList.remove("hidden");
-          } else {
-            navBadge.classList.add("hidden");
-          }
-        }
-
-        if (dock) {
-          if (comparedCars.length > 0) {
-            dock.classList.remove("hidden");
-            dock.style.display = "flex";
-          } else {
-            dock.classList.add("hidden");
-            dock.style.display = "none";
-          }
-        }
-
-        if (thumbs) {
-          thumbs.innerHTML = comparedCars
-            .map(
-              (c) => `
-              <div class="relative group" title="${escapeHtml(c.name)}">
-                  <img src="${getCarImage(c.image)}" class="w-10 h-10 object-cover rounded-xl border-2 border-indigo-500 shadow" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
-                  <button onclick="toggleCompareCar(${Number(c.id)})" title="Bỏ xe này" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-indigo-600 hover:bg-violet-700 rounded-full text-[9px] text-white flex items-center justify-center shadow">✕</button>
-              </div>
-          `,
-            )
-            .join("");
-        }
-      }
-
-      function clearComparison() {
-        comparedCars = [];
-        updateCompareDock();
-      }
-
-      function toggleCompareModal() {
-        if (comparedCars.length === 0) {
-          if (allCars.length >= 2) {
-            comparedCars = [allCars[0], allCars[1]];
-            updateCompareDock();
-          } else if (allCars.length === 1) {
-            comparedCars = [allCars[0]];
-            updateCompareDock();
-          }
-        }
-        openCompareModal();
-      }
-
-      function openCompareModal() {
-        if (comparedCars.length === 0 && allCars.length >= 2) {
-          comparedCars = [allCars[0], allCars[1]];
-          updateCompareDock();
-        }
-
-        const container = document.getElementById("compareTableContainer");
-        if (!container) return;
-
-        container.innerHTML = `
-                <div class="mb-4 flex flex-wrap items-center justify-between gap-3 bg-gray-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-gray-200 dark:border-white/10 text-xs">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="font-bold text-slate-700 dark:text-gray-300">Thêm xe vào bảng so sánh:</span>
-                        <select onchange="handleAddCarToCompare(this.value)" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-gray-300 dark:border-white/10 text-slate-800 dark:text-white">
-                            <option value="">-- Chọn thêm xe để so sánh --</option>
-                            ${allCars
-                              .filter((c) => !comparedCars.some((cc) => Number(cc.id) === Number(c.id)))
-                              .map(
-                                (c) => `
-                                <option value="${c.id}">${escapeHtml(c.name)} (${formatBillion(c.price)})</option>
-                            `,
-                              )
-                              .join("")}
-                        </select>
-                    </div>
-                    <button onclick="clearComparison(); closeModal('compareModal');" class="text-indigo-600 dark:text-indigo-400 hover:underline font-bold">
-                        <i class="fa-solid fa-trash mr-1"></i>Xóa hết so sánh
-                    </button>
-                </div>
-
-                <table class="w-full table-fixed text-left border-collapse text-xs">
-                    <thead>
-                        <tr class="border-b border-gray-200 dark:border-white/10">
-                            <th class="p-3 text-gray-500 dark:text-gray-400 w-36">Thông Số</th>
-                            ${comparedCars
-                              .map(
-                                (c) => `
-                                <th class="p-3 text-slate-900 dark:text-white font-bold text-base min-w-[220px]">
-                                    <div class="relative group mb-2">
-                                        <img src="${getCarImage(c.image)}" class="w-full h-36 object-cover rounded-xl border border-gray-200 dark:border-white/10" onerror="this.onerror=null; this.src=FALLBACK_CAR_IMG">
-                                        <button onclick="toggleCompareCar(${c.id}); openCompareModal();" title="Bỏ xe này" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-indigo-600 hover:bg-violet-700 text-white flex items-center justify-center text-xs shadow hover:scale-110 transition">✕</button>
-                                    </div>
-                                    <div class="leading-tight">${escapeHtml(c.name)}</div>
-                                    <div class="text-indigo-600 dark:text-indigo-500 font-heading text-lg mt-1">${formatCurrency(c.price)}</div>
-                                </th>
-                            `,
-                              )
-                              .join("")}
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-white/10 text-slate-700 dark:text-gray-300">
-                        <tr>
-                            <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Hãng Sản Xuất</td>
-                            ${comparedCars.map((c) => `<td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-600/10 dark:bg-indigo-600/30 text-indigo-600 dark:text-red-300 font-bold">${escapeHtml(c.brand)}</span></td>`).join("")}
-                        </tr>
-                        <tr>
-                            <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Động Cơ & Công Suất</td>
-                            ${comparedCars.map((c) => `<td class="p-3 font-medium">${escapeHtml(c.engine || "Đang cập nhật")}</td>`).join("")}
-                        </tr>
-                        <tr>
-                            <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Hộp Số</td>
-                            ${comparedCars.map((c) => `<td class="p-3 font-medium">${escapeHtml(c.transmission || "Tự động")}</td>`).join("")}
-                        </tr>
-                        <tr>
-                            <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Nhiên Liệu</td>
-                            ${comparedCars.map((c) => `<td class="p-3 font-semibold text-slate-900 dark:text-white">${escapeHtml(c.fuel || "Xăng")}</td>`).join("")}
-                        </tr>
-                        <tr>
-                            <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Mô Tả & Điểm Nhấn</td>
-                            ${comparedCars.map((c) => `<td class="p-3 leading-relaxed text-[11px] text-gray-600 dark:text-gray-400 break-words break-all whitespace-pre-line align-top">${escapeHtml(c.description || "Chưa có thông tin")}</td>`).join("")}
-                        </tr>
-                        <tr>
-                            <td class="p-3 font-bold text-gray-500 dark:text-gray-400">Thao Tác</td>
-                            ${comparedCars
-                              .map(
-                                (c) => `
-                                <td class="p-3 space-y-1.5">
-                                    <button onclick="closeModal('compareModal'); openBookingModalById(${c.id})" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-2 rounded-xl text-xs transition shadow">
-                                        Đăng Ký Lái Thử
-                                    </button>
-                                    <button onclick="closeModal('compareModal'); openDetailModal(${c.id})" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-gray-200 font-bold py-2 rounded-xl text-xs transition border border-gray-300 dark:border-white/10">
-                                        Xem Chi Tiết
-                                    </button>
-                                </td>
-                            `,
-                              )
-                              .join("")}
-                        </tr>
-                    </tbody>
-                </table>
-            `;
-
-        openModal("compareModal");
-      }
-
-      function handleAddCarToCompare(carId) {
-        if (!carId) return;
-        toggleCompareCar(carId);
-        openCompareModal();
-      }
-
       function openDetailModal(id) {
         const targetId = Number(id);
         const car = allCars.find((c) => Number(c.id) === targetId);
         if (!car) return;
-
-        const isCompared = comparedCars.some((c) => Number(c.id) === targetId);
 
         document.getElementById("modalContent").innerHTML = `
                 <div class="relative rounded-2xl overflow-hidden mb-5">
@@ -1886,16 +1644,12 @@ webbanxe/
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
                     <button onclick="closeModal('detailModal'); openQRModalById(${car.id})" class="bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3 rounded-2xl text-xs transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-qrcode"></i> Đặt Cọc Giữ Xe
                     </button>
                     <button onclick="closeModal('detailModal'); openBookingModalById(${car.id})" class="bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white font-bold py-3 rounded-2xl text-xs border border-gray-300 dark:border-white/10 transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-car-side"></i> Lái Thử Tận Nơi
-                    </button>
-                    <button onclick="toggleCompareCar(${car.id}); closeModal('detailModal');" class="${isCompared ? "bg-emerald-600 text-white" : "bg-gray-100 hover:bg-gray-200 text-slate-800 dark:bg-slate-800 dark:text-white"} font-bold py-3 rounded-2xl text-xs border border-gray-300 dark:border-white/10 transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-code-compare"></i> ${isCompared ? "Đang so sánh" : "+ So sánh xe"}
-                    </button>
                 </div>
                 
                 <div class="pt-1 text-center">
