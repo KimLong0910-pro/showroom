@@ -10,10 +10,11 @@ webbanxe/
 │   └── style.css                        # Kiểu dáng dùng chung cho website
 ├── html/
 │   ├── admin.html                       # Trang quản trị xe và đơn hàng
-│   ├── bo_suu_tap_xe.html               # Trang danh sách, lọc và so sánh xe
+│   ├── car_collection.html              # Trang danh sách, lọc và so sánh xe
 │   ├── bot_train.html                   # Giao diện chatbot tư vấn xe
 │   ├── detail.html                      # Trang thông tin chi tiết xe
 │   ├── login.html                       # Trang đăng nhập quản trị
+|   ├── orders_history.html              # Ghi lại lịch sử đơn hàng và tiến độ
 │   └── train_bot.html                   # Trang quản lý dữ liệu huấn luyện chatbot
 ├── images/
 │   └── qrcode.jpg                       # Mã QR đặt cọc
@@ -32,6 +33,7 @@ webbanxe/
 │   ├── logout.php                       # Đăng xuất quản trị
 │   ├── manage_orders.php                # Quản lý lịch hẹn và đơn đặt cọc
 │   ├── save_order.php                   # Lưu lịch hẹn và thông tin đặt cọc
+|   ├── get_customer_orders.php         
 │   └── train_bot.php                    # Quản lý dữ liệu huấn luyện chatbot
 ├── sql/
 │   └── schema.sql                       # Tạo bảng và nạp dữ liệu mẫu
@@ -72,7 +74,7 @@ webbanxe/
         Ưu Đãi Đặc Biệt
       </span>
       <span>Tặng gói bảo hiểm thân vỏ 2 năm + Gói phủ Ceramic VIP khi cọc xe online trong tháng</span>
-      <a href="html/bo_suu_tap_xe.html" class="underline ml-2 hover:text-yellow-200">Khám Phá Ngay &rarr;</a>
+      <a href="html/car_collection.html" class="underline ml-2 hover:text-yellow-200">Khám Phá Ngay &rarr;</a>
     </div>
 
     <!-- MAIN HEADER / NAVBAR -->
@@ -107,7 +109,7 @@ webbanxe/
             Trang Chủ
           </a>
           <a
-            href="html/bo_suu_tap_xe.html"
+            href="html/car_collection.html"
             class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
             <i class="fa-solid fa-car text-xs"></i>
             Bộ Sưu Tập Xe
@@ -133,6 +135,12 @@ webbanxe/
             class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
             <i class="fa-solid fa-map-location-dot text-xs"></i>
             Showroom
+          </a>
+          <a
+            href="html/orders_history.html"
+            class="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-clock-rotate-left text-xs text-indigo-500"></i>
+            Đơn Của Tôi
           </a>
           <a
             href="html/admin.html"
@@ -211,7 +219,7 @@ webbanxe/
             <div class="mt-8 flex flex-wrap items-center gap-4">
               <!-- Nút chính -->
               <a
-                href="html/bo_suu_tap_xe.html"
+                href="html/car_collection.html"
                 class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:scale-[1.02] hover:from-indigo-500 hover:to-purple-500">
                 <span>Khám Phá Bộ Sưu Tập</span>
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -815,19 +823,19 @@ webbanxe/
             <h4 class="text-white font-bold uppercase text-xs tracking-wider">Dòng Xe Bán Chạy</h4>
             <ul class="space-y-2">
               <li>
-                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">Porsche 911 Series</a>
+                <a href="html/car_collection.html" class="hover:text-indigo-400 transition">Porsche 911 Series</a>
               </li>
               <li>
-                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">Mercedes-AMG G63</a>
+                <a href="html/car_collection.html" class="hover:text-indigo-400 transition">Mercedes-AMG G63</a>
               </li>
               <li>
-                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">VinFast VF3 & VF8</a>
+                <a href="html/car_collection.html" class="hover:text-indigo-400 transition">VinFast VF3 & VF8</a>
               </li>
               <li>
-                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">Ferrari F8 Tributo</a>
+                <a href="html/car_collection.html" class="hover:text-indigo-400 transition">Ferrari F8 Tributo</a>
               </li>
               <li>
-                <a href="html/bo_suu_tap_xe.html" class="hover:text-indigo-400 transition">BMW 7-Series</a>
+                <a href="html/car_collection.html" class="hover:text-indigo-400 transition">BMW 7-Series</a>
               </li>
             </ul>
           </div>
@@ -1955,6 +1963,8 @@ webbanxe/
             return;
           }
 
+          localStorage.setItem("4tl_customer_phone", cusPhone.replace(/[^0-9]/g, ""));
+
           showToast(
             "Đã lưu thông tin giao dịch cọc! Kế toán sẽ gọi xác nhận qua SĐT " + cusPhone + " trong 15 phút.",
             "success",
@@ -1982,6 +1992,8 @@ webbanxe/
           });
 
           const result = await res.json();
+
+          localStorage.setItem("4tl_customer_phone", phone.replace(/[^0-9]/g, ""));
 
           if (result.status === "success") {
             showToast("Đã lưu lịch lái thử thành công cho khách hàng: " + name, "success");
@@ -2018,6 +2030,8 @@ webbanxe/
           });
 
           const result = await res.json();
+
+          localStorage.setItem("4tl_customer_phone", phone.replace(/[^0-9]/g, ""));
 
           if (result.status === "success") {
             showToast("Đã tiếp nhận lịch hẹn lái thử của quý khách " + name + "!", "success");
@@ -2553,9 +2567,10 @@ webbanxe/
                         </span>
                     </td>
                     <td class="p-3 text-right space-x-2">
-                        <button onclick="updateOrder('deposits', ${d.id}, 'verified')" class="text-emerald-500 hover:underline font-bold">Xác nhận</button>
-                        <button onclick="deleteOrder('deposits', ${d.id})" class="text-indigo-500 hover:underline font-bold">Xóa</button>
-                    </td>
+                      <button onclick="updateOrder('deposits', ${d.id}, 'verified')" class="text-emerald-500 hover:underline font-bold">Xác nhận</button>
+                      <button onclick="updateOrder('deposits', ${d.id}, 'cancelled')" class="text-amber-500 hover:underline font-bold">Hủy</button>
+                      <button onclick="deleteOrder('deposits', ${d.id})" class="text-rose-500 hover:underline font-bold">Xóa</button>
+                  </td>
                 </tr>
             `,
                   )
@@ -2582,9 +2597,10 @@ webbanxe/
                         </span>
                     </td>
                     <td class="p-3 text-right space-x-2">
-                        <button onclick="updateOrder('bookings', ${b.id}, 'confirmed')" class="text-emerald-500 hover:underline font-bold">Duyệt</button>
-                        <button onclick="deleteOrder('bookings', ${b.id})" class="text-indigo-500 hover:underline font-bold">Xóa</button>
-                    </td>
+                      <button onclick="updateOrder('bookings', ${b.id}, 'confirmed')" class="text-emerald-500 hover:underline font-bold">Duyệt</button>
+                      <button onclick="updateOrder('bookings', ${b.id}, 'cancelled')" class="text-amber-500 hover:underline font-bold">Hủy</button>
+                      <button onclick="deleteOrder('bookings', ${b.id})" class="text-rose-500 hover:underline font-bold">Xóa</button>
+                  </td>
                 </tr>
             `,
                   )
@@ -3593,7 +3609,7 @@ webbanxe/
                             <a href="tel:0765650114" class="w-full bg-indigo-600 hover:bg-violet-700 text-white font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-600/30">
                                 <i class="fa-solid fa-phone"></i> Gọi Hotline Tư Vấn Ngay: 0765.650.114
                             </a>
-                            <a href="bo_suu_tap_xe.html" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-gray-300 font-bold py-3 rounded-2xl text-xs flex items-center justify-center gap-2 border border-gray-200 dark:border-white/10 transition">
+                            <a href="car_collection.html" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-gray-300 font-bold py-3 rounded-2xl text-xs flex items-center justify-center gap-2 border border-gray-200 dark:border-white/10 transition">
                                 <i class="fa-solid fa-car"></i> Xem Các Mẫu Xe Khác
                             </a>
                         </div>
@@ -5804,7 +5820,7 @@ try {
 ?>
 ```
 
-### file bo_suu_tap_xe.html
+### file car_collection.html
 ```html
 <!doctype html>
 <html lang="vi" class="dark">
@@ -5854,6 +5870,12 @@ try {
         </a>
 
         <div class="flex items-center gap-3">
+          <a
+            href="orders_history.html"
+            class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-3.5 py-2 rounded-xl text-xs font-bold border border-emerald-500/30 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            Đơn Của Tôi
+          </a>
           <button
             onclick="openCompareModal()"
             class="relative bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl text-xs font-bold border border-indigo-500/30 transition flex items-center gap-1.5">
@@ -6513,6 +6535,8 @@ try {
           }
         } catch (e) {}
 
+        localStorage.setItem("4tl_customer_phone", phone.replace(/[^0-9]/g, ""));
+
         showToast("Đã ghi nhận thông tin đặt cọc thành công! Nhân viên sẽ liên hệ lại ngay.", "success");
         document.getElementById("qrCustomerName").value = "";
         document.getElementById("qrCustomerPhone").value = "";
@@ -6542,6 +6566,9 @@ try {
             body: JSON.stringify({ type: "booking", name, phone, car, date, note: "Đặt lái thử từ trang Bộ sưu tập" }),
           });
         } catch (e) {}
+
+        localStorage.setItem("4tl_customer_phone", phone.replace(/[^0-9]/g, ""));
+
         showToast("Đăng ký lịch lái thử thành công cho quý khách: " + name, "success");
         closeModal("bookingModal");
       }
@@ -6850,4 +6877,520 @@ try {
     </div>
   </body>
 </html>
+```
+
+### file orders_history.html:
+```html
+<!doctype html>
+<html lang="vi" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lịch Sử Đơn Hàng & Lái Thử - SHOWROOM 4TL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+
+  <body
+    class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-gray-100 transition-colors duration-300 min-h-screen selection:bg-indigo-600 selection:text-white">
+    <!-- TOAST CONTAINER -->
+    <div
+      id="toastContainer"
+      class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none"></div>
+
+    <!-- NAVBAR -->
+    <header
+      class="sticky top-0 z-40 bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-gray-200/80 dark:border-white/10 px-4 md:px-8 py-3.5 transition-all duration-300 shadow-sm">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="../index.html" class="flex items-center gap-3 group">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-900 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30">
+            <i class="fa-solid fa-shield-halved text-lg"></i>
+          </div>
+          <div>
+            <div
+              class="text-2xl font-black tracking-wider text-slate-900 dark:text-white font-heading leading-none flex items-center gap-1">
+              4TL
+              <span class="text-indigo-600">MOTORS</span>
+            </div>
+            <span class="text-[10px] font-semibold text-gray-500 dark:text-gray-400 tracking-widest uppercase">
+              Order Tracking
+            </span>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-3">
+          <a
+            href="car_collection.html"
+            class="hidden sm:flex bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl text-xs font-bold border border-indigo-500/30 transition items-center gap-1.5">
+            <i class="fa-solid fa-car"></i>
+            Bộ Sưu Tập Xe
+          </a>
+          <a
+            href="../index.html"
+            class="bg-gray-100 hover:bg-gray-200 text-slate-700 dark:bg-slate-800 dark:text-gray-200 px-4 py-2 rounded-xl text-xs font-bold border border-gray-200 dark:border-white/10 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-arrow-left"></i>
+            Trang Chủ
+          </a>
+          <button
+            id="themeToggle"
+            type="button"
+            title="Chuyển chế độ Sáng / Tối"
+            class="w-10 h-10 rounded-xl bg-gray-100 text-amber-500 dark:bg-slate-800 dark:text-yellow-400 flex items-center justify-center border border-gray-200 dark:border-white/10 transition shadow-sm">
+            <i id="themeIcon" class="fa-solid fa-sun text-base"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <!-- HEADER & SEARCH FORM -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl space-y-6">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <span
+            class="text-xs font-bold text-indigo-600 dark:text-indigo-400 tracking-widest uppercase inline-flex items-center gap-1.5">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            CỔNG THÔNG TIN KHÁCH HÀNG
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-black font-heading text-slate-900 dark:text-white">
+            TRA CỨU LỊCH SỬ ĐẶT CỌC & LÁI THỬ
+          </h1>
+          <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+            Nhập số điện thoại bạn đã dùng khi đặt cọc giữ xe hoặc đăng ký lái thử để theo dõi tiến độ xử lý từ Showroom
+            4TL.
+          </p>
+        </div>
+
+        <form
+          id="lookupForm"
+          onsubmit="handleLookupSubmit(event)"
+          class="max-w-xl mx-auto flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <i class="fa-solid fa-phone absolute left-4 top-3.5 text-gray-400 text-sm"></i>
+            <input
+              type="tel"
+              id="lookupPhoneInput"
+              required
+              placeholder="Nhập số điện thoại của bạn (VD: 0909123456)..."
+              class="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-white/15 rounded-2xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 transition" />
+          </div>
+          <button
+            type="submit"
+            class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold px-6 py-3 rounded-2xl text-sm transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 shrink-0">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Tra Cứu Ngay</span>
+          </button>
+        </form>
+
+        <div id="savedPhoneHint" class="hidden text-center text-xs text-gray-500 dark:text-gray-400">
+          Đang hiển thị lịch sử cho SĐT:
+          <strong id="currentSearchedPhone" class="text-indigo-600 dark:text-indigo-400 font-mono"></strong>
+          <button
+            type="button"
+            onclick="refreshCurrentLookup()"
+            class="ml-2 text-emerald-600 dark:text-emerald-400 hover:underline font-bold">
+            <i class="fa-solid fa-rotate"></i>
+            Làm mới tiến độ
+          </button>
+        </div>
+      </div>
+
+      <!-- EMPTY / INITIAL STATE -->
+      <div
+        id="emptyStateBox"
+        class="bg-white dark:bg-slate-900/60 p-10 rounded-3xl border border-gray-200 dark:border-white/10 text-center space-y-3">
+        <div
+          class="w-14 h-14 rounded-2xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 mx-auto flex items-center justify-center text-2xl">
+          <i class="fa-solid fa-file-invoice"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">Chưa có dữ liệu hiển thị</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+          Hãy nhập số điện thoại của bạn ở khung phía trên để kiểm tra trạng thái xác nhận chuyển khoản đặt cọc hoặc
+          lịch hẹn lái thử xe.
+        </p>
+      </div>
+
+      <!-- RESULTS CONTAINER -->
+      <div id="resultsContainer" class="hidden space-y-8">
+        <!-- SECTION 1: ĐƠN ĐẶT CỌC GIỮ XE -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-black font-heading text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-qrcode text-indigo-600 dark:text-indigo-400"></i>
+              ĐƠN ĐẶT CỌC GIỮ XE
+            </h2>
+            <span
+              id="customerDepositCount"
+              class="text-xs font-bold px-3 py-1 rounded-full bg-indigo-600/10 text-indigo-600 dark:text-indigo-400">
+              0 đơn
+            </span>
+          </div>
+          <div id="customerDepositList" class="grid grid-cols-1 gap-4"></div>
+        </section>
+
+        <!-- SECTION 2: LỊCH HẸN LÁI THỬ & TƯ VẤN -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-black font-heading text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-calendar-check text-emerald-500"></i>
+              LỊCH HẸN LÁI THỬ & TƯ VẤN
+            </h2>
+            <span
+              id="customerBookingCount"
+              class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              0 lịch hẹn
+            </span>
+          </div>
+          <div id="customerBookingList" class="grid grid-cols-1 gap-4"></div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function showToast(message, type = "success") {
+        const container = document.getElementById("toastContainer");
+        if (!container) return;
+        const toast = document.createElement("div");
+        toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold border backdrop-blur-xl ${
+          type === "success"
+            ? "bg-emerald-950/90 border-emerald-500/40 text-emerald-300"
+            : "bg-rose-950/90 border-rose-500/40 text-rose-300"
+        }`;
+        toast.innerHTML = `<i class="fa-solid ${type === "success" ? "fa-circle-check text-emerald-400" : "fa-triangle-exclamation text-rose-400"}"></i><span>${escapeHtml(message)}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3200);
+      }
+
+      function formatCurrency(num) {
+        const val = Number(num) || 0;
+        if (val <= 0) return "Theo thỏa thuận";
+        return Math.round(val).toLocaleString("vi-VN") + " VNĐ";
+      }
+
+      // Tạo thanh tiến độ 3 bước cho Đơn Đặt Cọc
+      function renderDepositProgress(status) {
+        if (status === "cancelled") {
+          return `
+            <div class="mt-4 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-bold flex items-center gap-2">
+              <i class="fa-solid fa-circle-xmark text-base"></i>
+              <span>Đơn đặt cọc này đã bị hủy. Vui lòng liên hệ Hotline 0765.650.114 nếu cần hỗ trợ hoàn/đổi.</span>
+            </div>
+          `;
+        }
+
+        const isVerified = status === "verified";
+        return `
+          <div class="mt-4 pt-4 border-t border-gray-200 dark:border-white/10">
+            <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+              <!-- Bước 1 -->
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow">
+                  <i class="fa-solid fa-check text-xs"></i>
+                </div>
+                <span class="font-bold text-slate-800 dark:text-white">1. Đã gửi yêu cầu</span>
+                <span class="text-[10px] text-gray-400">Hệ thống đã ghi nhận</span>
+              </div>
+
+              <!-- Bước 2 -->
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-7 h-7 rounded-full ${isVerified ? "bg-emerald-500 text-white" : "bg-amber-500 text-white animate-pulse"} flex items-center justify-center font-bold shadow">
+                  <i class="fa-solid ${isVerified ? "fa-check" : "fa-hourglass-half"} text-xs"></i>
+                </div>
+                <span class="font-bold ${isVerified ? "text-slate-800 dark:text-white" : "text-amber-500"}">2. Kế toán đối soát</span>
+                <span class="text-[10px] text-gray-400">${isVerified ? "Đã khớp giao dịch" : "Đang kiểm tra CK"}</span>
+              </div>
+
+              <!-- Bước 3 -->
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-7 h-7 rounded-full ${isVerified ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/40" : "bg-gray-200 dark:bg-slate-800 text-gray-400"} flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-car-side text-xs"></i>
+                </div>
+                <span class="font-bold ${isVerified ? "text-indigo-600 dark:text-indigo-400" : "text-gray-400"}">3. Giữ xe & Bàn giao</span>
+                <span class="text-[10px] text-gray-400">${isVerified ? "Xe đã khóa giữ cho bạn" : "Chờ xác nhận cọc"}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Tạo thanh tiến độ 3 bước cho Lịch Lái Thử
+      function renderBookingProgress(status) {
+        if (status === "cancelled") {
+          return `
+            <div class="mt-4 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-bold flex items-center gap-2">
+              <i class="fa-solid fa-circle-xmark text-base"></i>
+              <span>Lịch hẹn này đã hủy. Bạn có thể đặt lại lịch mới bất cứ lúc nào!</span>
+            </div>
+          `;
+        }
+
+        const isConfirmed = status === "confirmed";
+        return `
+          <div class="mt-4 pt-4 border-t border-gray-200 dark:border-white/10">
+            <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+              <!-- Bước 1 -->
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow">
+                  <i class="fa-solid fa-check text-xs"></i>
+                </div>
+                <span class="font-bold text-slate-800 dark:text-white">1. Đã đăng ký</span>
+                <span class="text-[10px] text-gray-400">Tiếp nhận thông tin</span>
+              </div>
+
+              <!-- Bước 2 -->
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-7 h-7 rounded-full ${isConfirmed ? "bg-emerald-500 text-white" : "bg-amber-500 text-white animate-pulse"} flex items-center justify-center font-bold shadow">
+                  <i class="fa-solid ${isConfirmed ? "fa-check" : "fa-phone-volume"} text-xs"></i>
+                </div>
+                <span class="font-bold ${isConfirmed ? "text-slate-800 dark:text-white" : "text-amber-500"}">2. Chuyên viên xác nhận</span>
+                <span class="text-[10px] text-gray-400">${isConfirmed ? "Đã chốt lịch hẹn" : "Chờ Admin duyệt"}</span>
+              </div>
+
+              <!-- Bước 3 -->
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-7 h-7 rounded-full ${isConfirmed ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/40" : "bg-gray-200 dark:bg-slate-800 text-gray-400"} flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-key text-xs"></i>
+                </div>
+                <span class="font-bold ${isConfirmed ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}">3. Sẵn sàng trải nghiệm</span>
+                <span class="text-[10px] text-gray-400">${isConfirmed ? "Xe đã chuẩn bị sẵn" : "Chờ xác nhận"}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      async function lookupOrdersByPhone(phone, silent = false) {
+        const clean = String(phone || "").replace(/[^0-9]/g, "");
+        if (clean.length < 8) {
+          if (!silent) showToast("Vui lòng nhập số điện thoại hợp lệ!", "error");
+          return;
+        }
+
+        try {
+          const res = await fetch(`../php/get_customer_orders.php?phone=${encodeURIComponent(clean)}&t=${Date.now()}`, {
+            cache: "no-store",
+          });
+          const data = await res.json();
+
+          if (data.status !== "success") {
+            if (!silent) showToast(data.message || "Không thể tra cứu dữ liệu!", "error");
+            return;
+          }
+
+          localStorage.setItem("4tl_customer_phone", clean);
+          document.getElementById("lookupPhoneInput").value = clean;
+          document.getElementById("currentSearchedPhone").innerText = clean;
+          document.getElementById("savedPhoneHint").classList.remove("hidden");
+
+          const deposits = data.deposits || [];
+          const bookings = data.bookings || [];
+
+          document.getElementById("emptyStateBox").classList.add("hidden");
+          document.getElementById("resultsContainer").classList.remove("hidden");
+
+          // Render Đơn đặt cọc
+          document.getElementById("customerDepositCount").innerText = `${deposits.length} đơn`;
+          const depContainer = document.getElementById("customerDepositList");
+          depContainer.innerHTML =
+            deposits.length === 0
+              ? `<div class="bg-white dark:bg-slate-900/60 p-6 rounded-2xl border border-gray-200 dark:border-white/10 text-xs text-gray-500 text-center">Không tìm thấy đơn đặt cọc nào gắn với SĐT này.</div>`
+              : deposits
+                  .map((d) => {
+                    const badgeClass =
+                      d.status === "verified"
+                        ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+                        : d.status === "cancelled"
+                          ? "bg-rose-500/15 text-rose-500 border-rose-500/30"
+                          : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30";
+                    const statusLabel =
+                      d.status === "verified"
+                        ? "Đã xác nhận nhận cọc"
+                        : d.status === "cancelled"
+                          ? "Đã hủy đơn"
+                          : "Đang chờ kế toán đối soát";
+
+                    return `
+                      <div class="bg-white dark:bg-slate-900/80 p-5 sm:p-6 rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div>
+                            <div class="flex items-center gap-2 text-xs text-gray-400 font-mono">
+                              <span>Mã đơn: #COC-${Number(d.id)}</span>
+                              <span>•</span>
+                              <span>${escapeHtml(d.created_at || "")}</span>
+                            </div>
+                            <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">${escapeHtml(d.car_name)}</h3>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 space-x-3">
+                              <span>Khách hàng: <strong class="text-slate-800 dark:text-gray-200">${escapeHtml(d.customer_name)}</strong></span>
+                              <span>Nội dung CK: <strong class="font-mono text-amber-600 dark:text-yellow-400">${escapeHtml(d.memo)}</strong></span>
+                            </div>
+                          </div>
+                          <div class="sm:text-right space-y-1.5">
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold border ${badgeClass}">
+                              ${statusLabel}
+                            </span>
+                            <div class="text-sm font-black text-indigo-600 dark:text-indigo-400 font-heading">
+                              Giá xe: ${formatCurrency(d.car_price)}
+                            </div>
+                          </div>
+                        </div>
+                        ${renderDepositProgress(d.status)}
+                      </div>
+                    `;
+                  })
+                  .join("");
+
+          // Render Lịch lái thử
+          document.getElementById("customerBookingCount").innerText = `${bookings.length} lịch hẹn`;
+          const bookContainer = document.getElementById("customerBookingList");
+          bookContainer.innerHTML =
+            bookings.length === 0
+              ? `<div class="bg-white dark:bg-slate-900/60 p-6 rounded-2xl border border-gray-200 dark:border-white/10 text-xs text-gray-500 text-center">Không tìm thấy lịch hẹn lái thử nào gắn với SĐT này.</div>`
+              : bookings
+                  .map((b) => {
+                    const badgeClass =
+                      b.status === "confirmed"
+                        ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+                        : b.status === "cancelled"
+                          ? "bg-rose-500/15 text-rose-500 border-rose-500/30"
+                          : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30";
+                    const statusLabel =
+                      b.status === "confirmed"
+                        ? "Admin đã duyệt & chốt lịch"
+                        : b.status === "cancelled"
+                          ? "Lịch hẹn đã hủy"
+                          : "Đang chờ chuyên viên xác nhận";
+
+                    return `
+                      <div class="bg-white dark:bg-slate-900/80 p-5 sm:p-6 rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div>
+                            <div class="flex items-center gap-2 text-xs text-gray-400 font-mono">
+                              <span>Mã lịch hẹn: #LT-${Number(b.id)}</span>
+                              <span>•</span>
+                              <span>Ngày hẹn: <strong class="text-slate-700 dark:text-gray-200">${escapeHtml(b.booking_date || "Linh hoạt")}</strong></span>
+                            </div>
+                            <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">${escapeHtml(b.car_name)}</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              Khách hàng: <strong class="text-slate-800 dark:text-gray-200">${escapeHtml(b.customer_name)}</strong>
+                              ${b.note ? ` • Ghi chú: <span class="italic">${escapeHtml(b.note)}</span>` : ""}
+                            </p>
+                          </div>
+                          <div class="sm:text-right">
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold border ${badgeClass}">
+                              ${statusLabel}
+                            </span>
+                          </div>
+                        </div>
+                        ${renderBookingProgress(b.status)}
+                      </div>
+                    `;
+                  })
+                  .join("");
+
+          if (!silent) {
+            showToast(`Tìm thấy ${deposits.length} đơn cọc và ${bookings.length} lịch hẹn!`, "success");
+          }
+        } catch (err) {
+          if (!silent) showToast("Lỗi kết nối máy chủ PHP!", "error");
+        }
+      }
+
+      function handleLookupSubmit(e) {
+        e.preventDefault();
+        const phone = document.getElementById("lookupPhoneInput").value;
+        lookupOrdersByPhone(phone, false);
+      }
+
+      function refreshCurrentLookup() {
+        const phone = document.getElementById("lookupPhoneInput").value;
+        if (phone) lookupOrdersByPhone(phone, false);
+      }
+
+      // Tự động điền SĐT nếu truyền qua URL (?phone=...) hoặc đã lưu trong localStorage
+      window.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const urlPhone = params.get("phone");
+        const savedPhone = localStorage.getItem("4tl_customer_phone");
+        const targetPhone = urlPhone || savedPhone;
+
+        if (targetPhone) {
+          document.getElementById("lookupPhoneInput").value = targetPhone;
+          lookupOrdersByPhone(targetPhone, true);
+        }
+      });
+    </script>
+  </body>
+</html>
+```
+
+### file get_customer_orders.php: 
+```php
+<?php
+require_once 'db.php';
+header("Content-Type: application/json; charset=UTF-8");
+
+// Nhận số điện thoại từ GET hoặc POST JSON
+$input = json_decode(file_get_contents('php://input'), true) ?: [];
+$rawPhone = $_GET['phone'] ?? $input['phone'] ?? '';
+
+// Chuẩn hóa SĐT: chỉ giữ lại chữ số để tránh lệch do dấu chấm/khoảng trắng (VD: 0909.123.456 -> 0909123456)
+$cleanPhone = preg_replace('/[^0-9]/', '', trim($rawPhone));
+
+if (strlen($cleanPhone) < 8) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Vui lòng nhập số điện thoại hợp lệ (ít nhất 8 chữ số)!"
+    ], JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+if (!$pdo) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Không thể kết nối cơ sở dữ liệu MySQL."
+    ], JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+try {
+    // 1. Lấy danh sách đơn đặt cọc theo SĐT (so sánh sau khi loại bỏ dấu chấm/khoảng trắng)
+    $stmtDep = $pdo->prepare("
+        SELECT id, car_name, car_price, memo, customer_name, customer_phone, status, created_at
+        FROM deposits
+        WHERE REPLACE(REPLACE(REPLACE(customer_phone, '.', ''), ' ', ''), '-', '') = ?
+        ORDER BY id DESC
+    ");
+    $stmtDep->execute([$cleanPhone]);
+    $deposits = $stmtDep->fetchAll();
+
+    // 2. Lấy danh sách lịch lái thử / tư vấn theo SĐT
+    $stmtBook = $pdo->prepare("
+        SELECT id, customer_name, phone, car_name, booking_date, note, status, created_at
+        FROM bookings
+        WHERE REPLACE(REPLACE(REPLACE(phone, '.', ''), ' ', ''), '-', '') = ?
+        ORDER BY id DESC
+    ");
+    $stmtBook->execute([$cleanPhone]);
+    $bookings = $stmtBook->fetchAll();
+
+    echo json_encode([
+        "status" => "success",
+        "phone" => $cleanPhone,
+        "deposits" => $deposits,
+        "bookings" => $bookings
+    ], JSON_UNESCAPED_UNICODE);
+} catch (Exception $e) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Lỗi truy vấn dữ liệu: " . $e->getMessage()
+    ], JSON_UNESCAPED_UNICODE);
+}
 ```
